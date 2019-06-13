@@ -10,10 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.flail.microtools.MicroTools;
-
 public class BaseUtilities extends LegacyUtils {
-	protected MicroTools plugin = MicroTools.getPlugin(MicroTools.class);
 
 	protected ItemStack addTag(ItemStack item, String key, String tag) {
 		return addLegacyTag(item, key, tag);

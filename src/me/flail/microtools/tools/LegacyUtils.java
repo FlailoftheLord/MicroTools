@@ -8,7 +8,7 @@ import org.bukkit.persistence.PersistentDataType;
 import me.flail.microtools.MicroTools;
 
 public class LegacyUtils {
-	protected MicroTools plugin = MicroTools.getPlugin(MicroTools.class);
+	protected MicroTools plugin = MicroTools.instance;
 
 	protected ItemStack addLegacyTag(ItemStack item, String key, String tag) {
 		ItemMeta meta = item.getItemMeta();
@@ -47,7 +47,7 @@ public class LegacyUtils {
 			ItemMeta meta = item.getItemMeta();
 			NamespacedKey nkey = new NamespacedKey(plugin, "MicroTools-" + key);
 
-				return meta.getPersistentDataContainer().has(nkey, PersistentDataType.STRING) ? true : false;
+			return meta.getPersistentDataContainer().has(nkey, PersistentDataType.STRING) ? true : false;
 		}
 		return false;
 	}

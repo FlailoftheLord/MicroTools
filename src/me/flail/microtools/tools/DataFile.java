@@ -7,16 +7,21 @@ import java.util.Set;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.flail.microtools.MicroTools;
+
 /**
  * A super-inflated, insanely overrated data handler for YAML files.
  * 
  * @author FlailoftheLord
  */
 public class DataFile extends Logger {
+	private MicroTools plugin;
+
 	private File file;
 	private FileConfiguration config = new YamlConfiguration();
 
 	public DataFile(String path) {
+		plugin = MicroTools.instance;
 		try {
 			file = new File(plugin.getDataFolder() + "/" + path);
 			if (!file.exists()) {
