@@ -54,6 +54,12 @@ public class Settings extends Logger {
 		values.put("Armor.Enchants.Shield", " ");
 		values.put("Armor.Enchants.Turtle_Helmet", " ");
 
+		for (String key : values.keySet()) {
+			if (!settings.hasValue(key)) {
+				settings.setValue(key, values.get(key));
+			}
+		}
+
 	}
 
 	private String header =  "-----------------------------------------------------------------\r\n" +
