@@ -26,7 +26,10 @@ public class MicroTools extends JavaPlugin {
 
 		settings = new DataFile("Settings.yml");
 
-		new Settings().load();
+		Settings sManager = new Settings();
+		sManager.load();
+		sManager.loadEnchantsFile();
+
 	}
 
 }
