@@ -80,7 +80,10 @@ public class Settings extends Logger {
 			"-----------------------------------------------------------------\r\n" +
 			"- - -\r\n"+
 			"The possible Default Tool types are \"wood\", \"stone\", \"iron\", \"gold\" and \"diamond\"\r\n" +
-			"And the valid Default Armor types are \"leather\", \"chain\", \"iron\", \"gold\" and \"diamond\"\r\n";
+			"And the valid Default Armor types are \"leather\", \"chain\", \"iron\", \"gold\" and \"diamond\"\r\n" +
+			"- - -\r\n" +
+			"Note that, if you enter an invalid value for the default tool material, the plugin will default to wooden tools\r\n" +
+			"A full list of enchants you can use with this plugin can be seen in the Enchants.yml file.\r\n";
 
 }
 
