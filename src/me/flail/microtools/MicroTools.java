@@ -11,6 +11,8 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.flail.microtools.listeners.PlayerListener;
+import me.flail.microtools.tool.ToolHandler;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Settings;
@@ -35,10 +37,10 @@ public class MicroTools extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		instance = this;
+		Settings sManager = new Settings();
 
 		settings = new DataFile("Settings.yml");
 
-		Settings sManager = new Settings();
 		sManager.load();
 		sManager.loadEnchantsFile();
 
@@ -47,6 +49,22 @@ public class MicroTools extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		Logger logger = new Logger();
+		ToolHandler tManager = new ToolHandler();
+
+		tManager.disableRecipes();
+
+		registerListeners();
+		registerCommands();
+
+	}
+
+	private void registerListeners() {
+		pm.registerEvents(new PlayerListener(), this);
+
+	}
+
+	private void registerCommands() {
+
 	}
 
 	/**

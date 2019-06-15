@@ -14,7 +14,7 @@ public class CommonUtilities extends BaseUtilities {
 
 	protected String chat(String message) {
 		message = message.toString();
-		message = message.replace("%prefix%", new Message("Prefix").stringValue());
+		message = message.replace("%prefix%", new DataFile("Messages.yml").getValue("Prefix"));
 
 		return ChatColor.translateAlternateColorCodes('&', message);
 	}
@@ -40,6 +40,13 @@ public class CommonUtilities extends BaseUtilities {
 		return chat(message);
 	}
 
+	/**
+	 * Replaces any placeholders provided in the displayname and lore of this ItemStack
+	 * 
+	 * @param item
+	 * @param placeholders
+	 * @return the new Item with the updated placeholders.
+	 */
 	public ItemStack itemPlaceholders(ItemStack item, Map<String, String> placeholders) {
 		if ((item != null) && item.hasItemMeta()) {
 			ItemMeta meta = item.getItemMeta();
@@ -60,6 +67,13 @@ public class CommonUtilities extends BaseUtilities {
 		return item;
 	}
 
+	/**
+	 * Updates the placeholders on all items in the inventory.
+	 * 
+	 * @param inv
+	 * @param placeholders
+	 * @return the new Inventory with the updated items.
+	 */
 	public Inventory updateItemPlaceholders(Inventory inv, Map<String, String> placeholders) {
 		if (inv != null) {
 			for (ItemStack item : inv.getContents()) {
@@ -70,6 +84,10 @@ public class CommonUtilities extends BaseUtilities {
 		return inv;
 	}
 
+	/**
+	 * Some simple checks i made for simpler code.
+	 * 
+	 */
 	public boolean msgCheck(String message, String text, String type) {
 		switch (type.toLowerCase()) {
 		case "starts":
@@ -84,10 +102,16 @@ public class CommonUtilities extends BaseUtilities {
 		}
 	}
 
+	/**
+	 * this is completely pointless... but it's still cool right?
+	 */
 	public String replaceText(String message, String text, String replacement) {
 		return message = message.replaceAll("(?i)" + Pattern.quote(text), replacement);
 	}
 
+	/**
+	 * converts an array to a single string.
+	 */
 	public String convertArray(String[] values, int start) {
 		StringBuilder builder = new StringBuilder();
 		while (start < values.length) {

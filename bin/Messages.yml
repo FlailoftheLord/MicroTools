@@ -1,0 +1,3 @@
+# Customize all messages here.
+Prefix: "&8(&2&lTools&8)"
+CantCraftMustUpgrade: "%prefix% &cYou can't craft this tool directly! You must upgrade your base tools to get to this level!"

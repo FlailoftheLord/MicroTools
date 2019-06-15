@@ -11,8 +11,7 @@ import me.flail.microtools.user.User;
 
 public class Message extends Logger {
 
-	private DataFile file = new DataFile("Messges.yml");
-	private String prefix = chat(plugin.getConfig().getString("Prefix"));
+	private DataFile file = new DataFile("Messages.yml");
 	private static List<String> message = new ArrayList<>();
 	String key;
 
@@ -137,7 +136,7 @@ public class Message extends Logger {
 	}
 
 	public String msgPrefix() {
-		return new String(prefix);
+		return new String(chat(file.getValue("Prefix")));
 	}
 
 	public String toSingleString() {

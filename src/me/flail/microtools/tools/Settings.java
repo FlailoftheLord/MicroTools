@@ -29,8 +29,8 @@ public class Settings extends Logger {
 	private void loadDefaultValues() {
 		Map<String, Object> values = new HashMap<>();
 
-		values.put("Tools.DefaultMaterial", "wood");
-		values.put("Tools.UpgradeChain", "wood,stone,iron,gold,diamond");
+		values.put("Tools.DefaultMaterial", "wooden");
+		values.put("Tools.UpgradeChain", "wooden,stone,iron,golden,diamond");
 		values.put("Tools.EnchantUpgradePerType", Boolean.valueOf(true));
 
 		values.put("Tools.UniversalEnchants", "unbreaking,mending");
@@ -45,7 +45,7 @@ public class Settings extends Logger {
 		values.put("Tools.Enchants.CrossBow", "multishot,quick_charge,piercing");
 
 		values.put("Armor.DefaultMaterial", "leather");
-		values.put("Armor.UpgradeChain", "leather,chain,iron,gold,diamond");
+		values.put("Armor.UpgradeChain", "leather,chainmail,iron,golden,diamond");
 		values.put("Armor.EnchantUpgradePerType", Boolean.valueOf(true));
 
 		values.put("Armor.UniversalEnchants",
@@ -78,8 +78,8 @@ public class Settings extends Logger {
 			"==================================================================#\r\n" +
 			"-----------------------------------------------------------------\r\n" +
 			"- - -\r\n"+
-			"The possible Default Tool types are \"wood\", \"stone\", \"iron\", \"gold\" and \"diamond\"\r\n" +
-			"And the valid Default Armor types are \"leather\", \"chain\", \"iron\", \"gold\" and \"diamond\"\r\n" +
+			"The possible Default Tool types are \"wooden\", \"stone\", \"iron\", \"golden\" and \"diamond\"\r\n" +
+			"And the valid Default Armor types are \"leather\", \"chainmail\", \"iron\", \"golden\" and \"diamond\"\r\n" +
 			"- - -\r\n" +
 			"Note that, if you enter an invalid value for the default tool material, the plugin will default to wooden tools\r\n" +
 			"A full list of enchants you can use with this plugin can be seen in the Enchants.yml file.\r\n"+

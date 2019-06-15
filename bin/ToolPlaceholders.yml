@@ -1,0 +1,8 @@
+# Here's a full list of all placeholders which you can use in the Configuration.
+Placeholders:
+- '%owner% - the owner of the tool/armor'
+- '%owner-uuid% - the owner''s uuid'
+- '%tool% - the name of the tool/armor'
+- '%item% - the item type'
+- '%tool-level% - the level of the tool''s current grade'
+- '%level% - the tool/armor''s overall level'
