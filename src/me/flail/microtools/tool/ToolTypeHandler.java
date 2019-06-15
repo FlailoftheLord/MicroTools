@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 
-import me.flail.microtools.tool.ToolType.Armor;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 
@@ -19,8 +17,7 @@ public class ToolTypeHandler extends Logger {
 
 	}
 
-	public void disableRecipes(ToolType defaultType, Armor defaultArmor) {
-		List<Recipe> recipes = new ArrayList<>();
+	public void disableRecipes() {
 		List<ItemStack> toolItems = new ArrayList<>();
 
 		for (Material m : ToolType.toolMaterials()) {
@@ -28,6 +25,9 @@ public class ToolTypeHandler extends Logger {
 		}
 
 		for (ItemStack item : toolItems) {
+			if (!ToolType.isDefault(item.getType())) {
+				plugin.removeRecipe(item);
+			}
 
 		}
 

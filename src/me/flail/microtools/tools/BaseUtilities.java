@@ -3,27 +3,63 @@ package me.flail.microtools.tools;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class BaseUtilities extends LegacyUtils {
 
+	/**
+	 * Add new NBT data to this Item.
+	 * 
+	 * @param item
+	 *                 the item to add the data to.
+	 * @param key
+	 *                 the key which you will store (and retrieve) the data.
+	 * @param tag
+	 *                 the data to set on the item.
+	 * @return the new ItemStack with the set data on it.
+	 */
 	protected ItemStack addTag(ItemStack item, String key, String tag) {
 		return addLegacyTag(item, key, tag);
 	}
 
-	protected ItemStack removeTag(ItemStack item, String key, String tag) {
-		return removeLegacyTag(item, key, tag);
+	/**
+	 * Removes the tag from the ItemStack
+	 * 
+	 * @param item
+	 * @param key
+	 *                 the key which the NBT tag is stored under.
+	 * @return the new ItemStack with the data removed.
+	 */
+	protected ItemStack removeTag(ItemStack item, String key) {
+		return removeLegacyTag(item, key);
 	}
 
+	/**
+	 * Gets the value stored via the NBT tag key.
+	 * <br>
+	 * It would be best to check {@link #hasTag()} before getting the tag.
+	 * 
+	 * @param item
+	 * @param key
+	 *                 the key to which the NBT data is stored.
+	 * @return value of the NBT tag if found.
+	 */
 	protected String getTag(ItemStack item, String key) {
 		return getLegacyTag(item, key);
 	}
 
+	/**
+	 * Checks if the ItemStack has the specified Tag key.
+	 * 
+	 * @param item
+	 *                 Item to check for NBT data tag.
+	 * @param key
+	 *                 String tag to check for.
+	 * @return true if found, otherwise false.
+	 */
 	protected boolean hasTag(ItemStack item, String key) {
 		return hasLegacyTag(item, key);
 	}
@@ -41,24 +77,12 @@ public class BaseUtilities extends LegacyUtils {
 		return "&" + c;
 	}
 
-	public ItemStack fillerItem(DataFile file) {
-		ItemStack item = new ItemStack(Material.AIR);
-		String filler = new DataFile("GuiConfig.yml").getValue("FillerItem").replaceAll("[0-9]", "").toUpperCase();
-
-		if (file.hasValue("Format.FillerItem")) {
-			filler = file.getValue("Format.FillerItem").replaceAll("[0-9]", "").toUpperCase();
-		}
-
-		if (Material.matchMaterial(filler) != null) {
-			item.setType(Material.matchMaterial(filler));
-			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName(" ");
-			item.setItemMeta(meta);
-		}
-
-		return item;
-	}
-
+	/**
+	 * @param mode
+	 *                 whether to check only hostile mobs, passives or both.
+	 * @return a full list of all EntityTypes which are valid Mobs. <br>
+	 *         (not entities like arrows and effects)
+	 */
 	protected List<EntityType> validMobs(String mode) {
 		List<EntityType> mobs = new ArrayList<>(16);
 
@@ -77,6 +101,9 @@ public class BaseUtilities extends LegacyUtils {
 		return mobs;
 	}
 
+	/**
+	 * @return a list of all mobs which are "passive" or "non-hostile"
+	 */
 	private List<EntityType> passiveMobs() {
 		List<EntityType> list = new ArrayList<>();
 		list.add(EntityType.BAT);
@@ -85,6 +112,7 @@ public class BaseUtilities extends LegacyUtils {
 		list.add(EntityType.COW);
 		list.add(EntityType.DOLPHIN);
 		list.add(EntityType.DONKEY);
+		list.add(EntityType.FOX);
 		list.add(EntityType.HORSE);
 		list.add(EntityType.IRON_GOLEM);
 		list.add(EntityType.LLAMA);
@@ -100,15 +128,20 @@ public class BaseUtilities extends LegacyUtils {
 		list.add(EntityType.SKELETON_HORSE);
 		list.add(EntityType.SNOWMAN);
 		list.add(EntityType.SQUID);
+		list.add(EntityType.TRADER_LLAMA);
 		list.add(EntityType.TROPICAL_FISH);
 		list.add(EntityType.TURTLE);
 		list.add(EntityType.VILLAGER);
+		list.add(EntityType.WANDERING_TRADER);
 		list.add(EntityType.WOLF);
 		list.add(EntityType.ZOMBIE_HORSE);
 
 		return list;
 	}
 
+	/**
+	 * @return a list of all mobs which are "hostiles"
+	 */
 	private List<EntityType> hostileMobs() {
 		List<EntityType> list = new ArrayList<>();
 		list.add(EntityType.BLAZE);
@@ -126,7 +159,9 @@ public class BaseUtilities extends LegacyUtils {
 		list.add(EntityType.MAGMA_CUBE);
 		list.add(EntityType.PHANTOM);
 		list.add(EntityType.PIG_ZOMBIE);
+		list.add(EntityType.PILLAGER);
 		list.add(EntityType.PUFFERFISH);
+		list.add(EntityType.RAVAGER);
 		list.add(EntityType.SHULKER);
 		list.add(EntityType.SILVERFISH);
 		list.add(EntityType.SKELETON);
@@ -143,11 +178,18 @@ public class BaseUtilities extends LegacyUtils {
 		return list;
 	}
 
+	/**
+	 * A small enchant converter for the sake of keeping the names similar.
+	 */
 	public Enchantment fromEnch(Enchants ench) {
-
 		return Enchantment.getByKey(NamespacedKey.minecraft(ench.toString().toLowerCase()));
 	}
 
+	/**
+	 * All Vanilla enchants with the friendly names.
+	 * 
+	 * @author FlailoftheLord
+	 */
 	public enum Enchants {
 		SHARPNESS, SWEEPING_EDGE, KNOCKBACK, LOOTING, SMITE, BANE_OF_ARTHROPODS, EFFICIENCY, UNBREAKING, LOYALTY, RIPTIDE, FORTUNE,
 		CHANNELING, IMPALING, MENDING, PROTECTION, FIRE_PROTECTION, BLAST_PROTECTION, PROJECTILE_PROTECTION, FIRE_ASPECT, POWER,

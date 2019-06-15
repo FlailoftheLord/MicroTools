@@ -11,8 +11,8 @@ import org.bukkit.ChatColor;
 
 /**
  * Basically, make all your classes extend this one.
- * Contains all the basic utilities all bundled neatly into one. (including an instance of the
- * plugin)
+ * Contains all the basic utilities all bundled neatly into one. (including an instance of the main
+ * plugin class)
  * 
  * @author FlailoftheLord
  */

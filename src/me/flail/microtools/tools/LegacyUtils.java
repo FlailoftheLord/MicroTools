@@ -20,7 +20,7 @@ public class LegacyUtils {
 		return item;
 	}
 
-	protected ItemStack removeLegacyTag(ItemStack item, String key, String tag) {
+	protected ItemStack removeLegacyTag(ItemStack item, String key) {
 		ItemMeta meta = item.getItemMeta();
 		NamespacedKey nkey = new NamespacedKey(plugin, "MicroTools-" + key);
 

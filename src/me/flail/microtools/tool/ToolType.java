@@ -30,6 +30,13 @@ public enum ToolType {
 		return false;
 	}
 
+	public static boolean isDefault(Material item) {
+		if (fromMaterial(item).equals(defaultToolType()) || Armor.fromMaterial(item).equals(Armor.defaultArmorType())) {
+			return true;
+		}
+
+		return false;
+	}
 
 	public static ToolType defaultToolType() {
 		String type = plugin.settings.getValue("Tools.DefaultMaterial").toLowerCase();
@@ -72,12 +79,12 @@ public enum ToolType {
 			case "diamond":
 				return DIAMOND;
 			default:
-				return WOOD;
+				return null;
 
 			}
 
 		}
-		return WOOD;
+		return null;
 	}
 
 	public static List<String> toolAttributes() {
@@ -152,12 +159,12 @@ public enum ToolType {
 				case "diamond":
 					return Armor.DIAMOND;
 				default:
-					return Armor.LEATHER;
+					return null;
 
 				}
 
 			}
-			return Armor.LEATHER;
+			return null;
 		}
 
 	}
