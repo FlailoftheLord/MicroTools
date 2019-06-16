@@ -20,6 +20,16 @@ public enum MicroTool {
 			WOODEN, STONE, IRON, GOLDEN, DIAMOND;
 		}
 
+		public static Material getDefault(Tool type) {
+			for (Material m : materials()) {
+				if (m.toString().endsWith(type.toString())) {
+					return m;
+				}
+			}
+
+			return null;
+		}
+
 		public static List<Material> materials() {
 			List<Material> list = new LinkedList<>();
 			for (MicroTool.Tool.type type : Tool.type.values()) {
@@ -40,6 +50,16 @@ public enum MicroTool {
 			LEATHER, CHAINMAIL, IRON, GOLDEN, DIAMOND;
 		}
 
+		public static Material getDefault(Armor type) {
+			for (Material m : materials()) {
+				if (m.toString().endsWith(type.toString())) {
+					return m;
+				}
+			}
+
+			return null;
+		}
+
 		public static List<Material> materials() {
 			List<Material> list = new LinkedList<>();
 			for (MicroTool.Armor.type type : Armor.type.values()) {
@@ -53,9 +73,19 @@ public enum MicroTool {
 
 	}
 
-	public static Material fromString(String type) {
+	public static boolean isDefault(Material type) {
+		for (Material m : defaultTool()) {
+			if (m == type) {
+				return true;
+			}
+		}
+		for (Material m : defaultArmor()) {
+			if (m == type) {
+				return true;
+			}
+		}
 
-		return null;
+		return false;
 	}
 
 	public static List<Material> defaultTool() {

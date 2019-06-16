@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.tools.Logger;
@@ -23,6 +24,10 @@ public class Tool extends Logger {
 
 	public User owner() {
 		return owner;
+	}
+
+	public Material type() {
+		return toolItem.getType();
 	}
 
 	public Map<String, Integer> enchants() {
