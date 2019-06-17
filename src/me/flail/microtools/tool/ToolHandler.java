@@ -8,11 +8,10 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import me.flail.microtools.tool.types.MicroTool;
-import me.flail.microtools.tool.types.MicroTool.Armor;
-import me.flail.microtools.tool.types.MicroTool.Tool;
+import me.flail.microtools.tool.types.ToolType;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
+import me.flail.microtools.user.User;
 
 public class ToolHandler extends Logger {
 	private DataFile settings;
@@ -26,30 +25,25 @@ public class ToolHandler extends Logger {
 
 	public void disableRecipes() {
 		List<ItemStack> toolItems = new ArrayList<>();
+		List<Material> materials = new ArrayList<>();
 
-		for (Material m : MicroTool.materials()) {
+		for (Material m : ToolType.materials()) {
 			toolItems.add(new ItemStack(m));
 		}
 
 		for (ItemStack item : toolItems) {
-			if ((item != null) && !MicroTool.isDefault(item.getType())) {
+			if ((item != null) && !ToolType.isDefault(item.getType())) {
 				plugin.removeRecipe(item);
+				materials.add(item.getType());
 			}
 
 		}
 
+		plugin.disablePlayerRecipes(materials);
 	}
 
-	public static ItemStack newArmor(Armor type) {
-		ItemStack item = new ItemStack(Armor.getDefault(type));
-
-		return item;
-	}
-
-	public static ItemStack newTool(Tool type) {
-		ItemStack item = new ItemStack(Tool.getDefault(type));
-
-		return null;
+	public static MicroTool newTool(User user, Material type) {
+		return new MicroTool(new ItemStack(type)).setOwner(user);
 	}
 
 }

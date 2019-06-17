@@ -1,10 +1,13 @@
 package me.flail.microtools;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -34,6 +37,8 @@ public class MicroTools extends JavaPlugin {
 	public Map<UUID, User> userMap = new HashMap<>();
 	public DataFile settings;
 
+	private List<Material> disabledRecipes = new ArrayList<>();
+
 	@Override
 	public void onLoad() {
 		instance = this;
@@ -55,11 +60,11 @@ public class MicroTools extends JavaPlugin {
 
 		registerListeners();
 		registerCommands();
-
 	}
 
 	private void registerListeners() {
 		pm.registerEvents(new PlayerListener(), this);
+		// pm.registerEvents(new RecipeControl(disabledRecipes), this);
 
 	}
 
@@ -83,7 +88,17 @@ public class MicroTools extends JavaPlugin {
 			}
 
 		}
+	}
 
+	/**
+	 * Disables all recipes for this Material for all players.
+	 * 
+	 * @param list
+	 *                 List of all Materials to disable recipes for.
+	 */
+	public void disablePlayerRecipes(List<Material> list) {
+		disabledRecipes.clear();
+		disabledRecipes.addAll(list);
 	}
 
 }

@@ -3,6 +3,7 @@ package me.flail.microtools.user;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.GameMode;
@@ -43,17 +44,6 @@ public class User extends UserData {
 
 	public UUID uuid() {
 		return playerUuid;
-	}
-
-	public int rank() {
-		if (isOnline()) {
-			for (int r = 100; r > -1; --r) {
-				if (hasPermission("slashplayer.rank." + r)) {
-					return r;
-				}
-			}
-		}
-		return 0;
 	}
 
 	public String id() {
@@ -143,10 +133,6 @@ public class User extends UserData {
 		return dataFile().getBoolean("Reported");
 	}
 
-	public boolean isStaff() {
-		return hasPermission("slashplayer.staff");
-	}
-
 	public boolean hasPermission(String permission) {
 		if (isOnline()) {
 			return player().hasPermission(permission);
@@ -181,29 +167,17 @@ public class User extends UserData {
 		plugin.userMap.put(uuid(), this);
 	}
 
-	public DataFile reportedPlayerList() {
-		return new DataFile("ReportedPlayers.yml");
-	}
-
-
-
 	public void toggleFly(User operator) {
 		if (isOnline()) {
 			if (player().getAllowFlight()) {
 				player().setFlying(false);
 				player().setAllowFlight(false);
 
-				new Message("FlyOff").send(this, operator);
-				new Message("PlayerFlyOff").send(operator, operator);
-
 				return;
 			}
 
 			player().setAllowFlight(true);
 			player().setFlying(true);
-
-			new Message("FlyOn").send(this, operator);
-			new Message("PlayerFlyOn").send(operator, operator);
 			return;
 		}
 
@@ -328,6 +302,19 @@ public class User extends UserData {
 		item = this.addTag(item, "user", id());
 
 		return item;
+	}
+
+	/**
+	 * A Mapping of common user placeholders.
+	 */
+	public Map<String, String> userPl() {
+		Map<String, String> pl = new HashMap<>();
+		pl.put("%player%", name());
+		pl.put("%uuid%", id());
+		pl.put("%gamemode%", gamemode());
+
+
+		return pl;
 	}
 
 }

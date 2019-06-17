@@ -1,14 +1,16 @@
 package me.flail.microtools.tool.types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Material;
 
 import me.flail.microtools.MicroTools;
 
-public enum MicroTool {
+public enum ToolType {
 	FLINT_AND_STEEL, SHIELD, BOW, CROSSBOW, SHEARS, FISHING_ROD;
 
 	static MicroTools plugin = MicroTools.instance;
@@ -18,6 +20,18 @@ public enum MicroTool {
 
 		public enum type {
 			WOODEN, STONE, IRON, GOLDEN, DIAMOND;
+		}
+
+		public static Map<Integer, String> upgradeOrder() {
+			Map<Integer, String> map = new HashMap<>();
+			int order = 0;
+
+			for (String s : plugin.settings.getValue("Tools.UpgradeChain").split(",")) {
+				map.put(Integer.valueOf(order), s);
+				order++;
+			}
+
+			return map;
 		}
 
 		public static Material getDefault(Tool type) {
@@ -32,8 +46,8 @@ public enum MicroTool {
 
 		public static List<Material> materials() {
 			List<Material> list = new LinkedList<>();
-			for (MicroTool.Tool.type type : Tool.type.values()) {
-				for (MicroTool.Tool tool : Tool.values()) {
+			for (ToolType.Tool.type type : Tool.type.values()) {
+				for (ToolType.Tool tool : Tool.values()) {
 					list.add(Material.valueOf(type.toString() + "_" + tool.toString()));
 				}
 			}
@@ -60,10 +74,22 @@ public enum MicroTool {
 			return null;
 		}
 
+		public static Map<Integer, String> upgradeOrder() {
+			Map<Integer, String> map = new HashMap<>();
+			int order = 0;
+
+			for (String s : plugin.settings.getValue("Armor.UpgradeChain").split(",")) {
+				map.put(Integer.valueOf(order), s);
+				order++;
+			}
+
+			return map;
+		}
+
 		public static List<Material> materials() {
 			List<Material> list = new LinkedList<>();
-			for (MicroTool.Armor.type type : Armor.type.values()) {
-				for (MicroTool.Armor armor : Armor.values()) {
+			for (ToolType.Armor.type type : Armor.type.values()) {
+				for (ToolType.Armor armor : Armor.values()) {
 					list.add(Material.valueOf(type.toString() + "_" + armor.toString()));
 				}
 			}
@@ -86,6 +112,10 @@ public enum MicroTool {
 		}
 
 		return false;
+	}
+
+	public static boolean isValid(Material type) {
+		return list().contains(type);
 	}
 
 	public static List<Material> defaultTool() {
@@ -115,27 +145,27 @@ public enum MicroTool {
 		return list;
 	}
 
+	/**
+	 * @return A complete list of all Tool, Armor & Miscelaneous materials.
+	 */
 	public static List<Material> materials() {
 		List<Material> list = new LinkedList<>();
 
 		list.addAll(Tool.materials());
 		list.addAll(Armor.materials());
 
-		for (MicroTool tool : MicroTool.values()) {
+		for (ToolType tool : ToolType.values()) {
 			list.add(Material.valueOf(tool.toString()));
 		}
 
 		return list;
 	}
 
+	/**
+	 * Same as {@link #materials()}
+	 */
 	public static List<Material> list() {
-		List<Material> list = new LinkedList<>();
-
-		for (Material m : materials()) {
-			list.add(m);
-		}
-
-		return list;
+		return materials();
 	}
 
 

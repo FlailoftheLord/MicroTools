@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.flail.microtools.tool.ToolType;
+import me.flail.microtools.tool.types.IToolType;
 import me.flail.microtools.user.User;
 
 public class Settings extends Logger {
@@ -39,7 +39,7 @@ public class Settings extends Logger {
 		values.put("Tools.Enchants.Pickaxe", "efficiency,fortune,silk_touch");
 		values.put("Tools.Enchants.Axe", "efficiency,fortune,looting,knockback,sharpness");
 		values.put("Tools.Enchants.Hoe", "efficiency");
-		values.put("Tools.Encahnts.Shovel", "efficiency,silk_touch");
+		values.put("Tools.Enchants.Shovel", "efficiency,silk_touch");
 		values.put("Tools.Enchants.Bow", "power,punch,flame");
 		values.put("Tools.Enchants.Trident", "impaling,loyalty,riptide,channeling");
 		values.put("Tools.Enchants.CrossBow", "multishot,quick_charge,piercing");
@@ -95,7 +95,7 @@ public class Settings extends Logger {
 		}
 
 		values.put("Enchantments", enchNames);
-		values.put("Attributes", ToolType.toolAttributes());
+		values.put("Attributes", IToolType.toolAttributes());
 
 		setValues(file, values);
 	}

@@ -1,4 +1,4 @@
-package me.flail.microtools.tool;
+package me.flail.microtools.tool.types;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.bukkit.Material;
 
 import me.flail.microtools.MicroTools;
 
-public class ToolType {
+public class IToolType {
 	static MicroTools plugin = MicroTools.instance;
 
 	public static boolean isArmor(Material m) {
