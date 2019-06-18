@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.flail.microtools.tool.ToolHandler;
+import me.flail.microtools.tool.MicroTool;
 import me.flail.microtools.tool.types.ToolType;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
@@ -28,8 +28,9 @@ public class PlayerListener extends Logger implements Listener {
 				new Message("CantCraftMustUpgrade").send(user, null);
 				return;
 			}
+			MicroTool tool = new MicroTool(item).setOwner(user);
 
-			event.setCurrentItem(new ToolHandler().newTool(user, item.getType()));
+			event.setCurrentItem(tool.item());
 
 		}
 

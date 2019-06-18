@@ -1,13 +1,16 @@
 package me.flail.microtools.tool;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import me.flail.microtools.tool.types.ToolType;
 import me.flail.microtools.tool.types.ToolType.Armor;
@@ -20,6 +23,9 @@ public class MicroTool extends Logger {
 	private User owner;
 	private ItemStack toolItem;
 
+	/**
+	 * Use this to generate a new MicroTool from an existing ItemStack.
+	 */
 	public MicroTool(ItemStack item) {
 		toolItem = item;
 		if (!this.hasTag(toolItem, "user")) {
@@ -28,15 +34,42 @@ public class MicroTool extends Logger {
 
 		owner = new User(UUID.fromString(this.getTag(toolItem, "user")));
 
+		create();
 	}
 
+	/**
+	 * Generates the new Tool from the provided ItemStack.
+	 */
 	private void create() {
+		if (hasTag("tool")) {
+			return;
+		}
+
 		DataFile conf = new DataFile("Configuration.yml");
 		List<String> lore = conf.getList("Tool.Item.Lore");
 		String name = conf.getValue("Tool.Item.Name");
 
+		addTag("tool", ChatColor.stripColor(chat(name)));
+		addTag("tool-type", toolItem.getType().toString());
+		addTag("level", "0");
+		addTag("tool-level", "0");
+
+		ItemMeta meta = toolItem.getItemMeta();
+
+		meta.setDisplayName(chat(name));
+		meta.setLore(lore);
+
+		toolItem.setItemMeta(meta);
+
+		updatePlaceholders(this.placeholders());
+
+		setNextUpgrade();
+
 	}
 
+	/**
+	 * Checks if the ItemStack is a valid tool.
+	 */
 	public boolean isValid() {
 		return ToolType.materials().contains(type());
 	}
@@ -48,6 +81,7 @@ public class MicroTool extends Logger {
 	public MicroTool setOwner(User user) {
 		owner = user;
 
+		removeTag("user");
 		addTag("user", owner.id());
 		return this;
 	}
@@ -72,11 +106,22 @@ public class MicroTool extends Logger {
 		return toolItem.getType();
 	}
 
-	public int upgradeLevel() {
-		return Integer.parseInt(getTag("level").replace("[^0-9]", ""));
+	public String getName() {
+		if (toolItem.hasItemMeta()) {
+			return toolItem.getItemMeta().getDisplayName();
+		}
+		return type().toString().toLowerCase();
 	}
 
-	public void setNextUpgrade(String value) {
+	public int upgradeLevel() {
+		return Integer.parseInt(getTag("level").replaceAll("[^0-9]", ""));
+	}
+
+	public int gradeLevel() {
+		return Integer.parseInt(getTag("tool-level").replaceAll("[^0-9]", ""));
+	}
+
+	public void setNextUpgrade() {
 		if (!isMisc()) {
 			Map<Integer, String> upgrades = ToolType.Tool.upgradeOrder();
 
@@ -100,6 +145,10 @@ public class MicroTool extends Logger {
 			return this;
 		}
 
+		int level = upgradeLevel();
+		removeTag("level");
+		addTag("level", level + 1 + "");
+
 		if (isArmor()) {
 
 			return this;
@@ -112,7 +161,6 @@ public class MicroTool extends Logger {
 		if (increment < 0) {
 			increment = Integer.MAX_VALUE;
 		}
-
 
 		return this;
 	}
@@ -149,4 +197,17 @@ public class MicroTool extends Logger {
 	public void updatePlaceholders(Map<String, String> pl) {
 		toolItem = this.itemPlaceholders(toolItem, pl);
 	}
+
+	public Map<String, String> placeholders() {
+		Map<String, String> map = new HashMap<>();
+		map.put("%level%", upgradeLevel() + "");
+		map.put("%owner%", owner.name());
+		map.put("%owner-uuid%", owner.id());
+		map.put("%tool-level%", gradeLevel() + "");
+		map.put("%tool%", this.getName());
+		map.put("%item%", type().toString());
+
+		return map;
+	}
+
 }
