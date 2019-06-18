@@ -100,6 +100,13 @@ public enum ToolType {
 	}
 
 	public static boolean isDefault(Material type) {
+		for (ToolType t : ToolType.values()) {
+			if (type == Material.matchMaterial(t.toString())) {
+				return true;
+			}
+
+		}
+
 		for (Material m : defaultTool()) {
 			if (m == type) {
 				return true;

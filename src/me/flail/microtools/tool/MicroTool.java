@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,22 +16,20 @@ import me.flail.microtools.tool.types.ToolType.Armor;
 import me.flail.microtools.tool.types.ToolType.Tool;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
+import me.flail.microtools.tools.Message;
 import me.flail.microtools.user.User;
 
 public class MicroTool extends Logger {
-	private User owner;
+	private User owner = null;
 	private ItemStack toolItem;
 
 	/**
 	 * Use this to generate a new MicroTool from an existing ItemStack.
+	 * Always be sure to set the Owner of this tool by calling {@link #setOwner(User owner)}
 	 */
-	public MicroTool(ItemStack item) {
+	public MicroTool(User owner, ItemStack item) {
 		toolItem = item;
-		if (!this.hasTag(toolItem, "user")) {
-			return;
-		}
-
-		owner = new User(UUID.fromString(this.getTag(toolItem, "user")));
+		this.owner = owner;
 
 		create();
 	}
@@ -44,6 +41,8 @@ public class MicroTool extends Logger {
 		if (hasTag("tool")) {
 			return;
 		}
+
+		this.setOwner(owner);
 
 		DataFile conf = new DataFile("Configuration.yml");
 		List<String> lore = conf.getList("Tool.Item.Lore");
@@ -78,11 +77,11 @@ public class MicroTool extends Logger {
 		return owner;
 	}
 
-	public MicroTool setOwner(User user) {
-		owner = user;
+	public MicroTool setOwner(User newOwner) {
+		owner = newOwner;
 
-		removeTag("user");
-		addTag("user", owner.id());
+		removeTag("owner");
+		addTag("owner", owner.id());
 		return this;
 	}
 
@@ -201,8 +200,13 @@ public class MicroTool extends Logger {
 	public Map<String, String> placeholders() {
 		Map<String, String> map = new HashMap<>();
 		map.put("%level%", upgradeLevel() + "");
-		map.put("%owner%", owner.name());
-		map.put("%owner-uuid%", owner.id());
+		if (owner == null) {
+			map.put("%owner%", new Message("ToolDoesntHaveOwner").stringValue());
+			map.put("%owner-uuid%", "");
+		} else {
+			map.put("%owner%", owner.name());
+			map.put("%owner-uuid%", owner.id());
+		}
 		map.put("%tool-level%", gradeLevel() + "");
 		map.put("%tool%", this.getName());
 		map.put("%item%", type().toString());

@@ -42,8 +42,8 @@ public class ToolHandler extends Logger {
 		plugin.disablePlayerRecipes(materials);
 	}
 
-	public static MicroTool newTool(User user, Material type) {
-		return new MicroTool(new ItemStack(type)).setOwner(user);
+	public static MicroTool newTool(User user, ItemStack item) {
+		return new MicroTool(user, item);
 	}
 
 }

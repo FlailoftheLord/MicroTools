@@ -1,9 +1,14 @@
 package me.flail.microtools.listeners;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,10 +33,29 @@ public class PlayerListener extends Logger implements Listener {
 				new Message("CantCraftMustUpgrade").send(user, null);
 				return;
 			}
-			MicroTool tool = new MicroTool(item).setOwner(user);
+			MicroTool tool = new MicroTool(user, item);
 
 			event.setCurrentItem(tool.item());
 
+		}
+
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void playerDeath(PlayerDeathEvent event) {
+		boolean keepOnDeath = plugin.settings.getBoolean("General.KeepOnDeath");
+		if (keepOnDeath) {
+			User user = new User(event.getEntity().getUniqueId());
+
+			List<ItemStack> keptItems = new ArrayList<>();
+			List<ItemStack> items = event.getDrops();
+			for (ItemStack item : items) {
+				if (ToolType.isValid(item.getType())) {
+					keptItems.add(item);
+				}
+			}
+
+			user.player().getInventory().addItem(items.toArray(new ItemStack[] {}));
 		}
 
 	}

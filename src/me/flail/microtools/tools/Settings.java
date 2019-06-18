@@ -29,6 +29,12 @@ public class Settings extends Logger {
 	private void loadDefaultValues() {
 		Map<String, Object> values = new HashMap<>();
 
+		values.put("General.KeepOnDeath", Boolean.valueOf(true));
+		values.put("General.GradesPerLevel", "6400");
+		values.put("General.LevelScaling", "350");
+		values.put("General.AddEnchantsAtLevel", "1");
+		values.put("General.UpgradeEnchantsBeforeLevel", Boolean.valueOf(true));
+
 		values.put("Tools.DefaultMaterial", "wooden");
 		values.put("Tools.UpgradeChain", "wooden,stone,iron,golden,diamond");
 		values.put("Tools.EnchantUpgradePerType", Boolean.valueOf(true));
@@ -83,7 +89,11 @@ public class Settings extends Logger {
 			"- - -\r\n" +
 			"Note that, if you enter an invalid value for the default tool material, the plugin will default to wooden tools\r\n" +
 			"A full list of enchants you can use with this plugin can be seen in the Enchants.yml file.\r\n"+
-			"When listing enchants, seperate them with a comma ( , )\r\n";
+			"When listing enchants, seperate them with a comma ( , )\r\n" +
+			"- - -\r\n" +
+			"GradesPerLevel is how many Grade points go into each level.\r\n" +
+			"Grades are increased each time a tool (or armor) is used\r\n" +
+			"LevelScaling defines how many additional Grade points from the previous cost it takes to get to the next level\r\n";
 
 	public void loadEnchantsFile() {
 		DataFile file = new DataFile("Enchants.yml");

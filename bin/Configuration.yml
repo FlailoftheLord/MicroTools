@@ -3,9 +3,11 @@
 
 Tool:
   Item:
-    Name: "&7&l%owner%'s %type%"
+    Name: "&7&l%owner%'s %item%"
     Lore:
     - ""
     - "&aOwner&8: &7%owner%"
     - "&aLevel&8: &7%tool-level%"
+    - ""
+    - "&8right-click to update info"
     

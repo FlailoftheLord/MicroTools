@@ -13,8 +13,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class CommonUtilities extends BaseUtilities {
 
 	protected String chat(String message) {
+		DataFile messages = new DataFile("Messages.yml");
 		message = message.toString();
-		message = message.replace("%prefix%", new DataFile("Messages.yml").getValue("Prefix"));
+		message = message.replace("%prefix%", messages.getValue("Prefix"));
 
 		return ChatColor.translateAlternateColorCodes('&', message);
 	}

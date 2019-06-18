@@ -15,6 +15,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.flail.microtools.listeners.PlayerListener;
+import me.flail.microtools.listeners.ToolListener;
 import me.flail.microtools.tool.ToolHandler;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
@@ -64,6 +65,7 @@ public class MicroTools extends JavaPlugin {
 
 	private void registerListeners() {
 		pm.registerEvents(new PlayerListener(), this);
+		pm.registerEvents(new ToolListener(), this);
 		// pm.registerEvents(new RecipeControl(disabledRecipes), this);
 
 	}
