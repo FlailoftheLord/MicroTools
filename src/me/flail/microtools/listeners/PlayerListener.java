@@ -37,6 +37,7 @@ public class PlayerListener extends Logger implements Listener {
 
 			event.setCurrentItem(tool.item());
 
+
 		}
 
 	}
