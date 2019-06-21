@@ -2,6 +2,7 @@ package me.flail.microtools.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +31,14 @@ public class ToolListener extends Logger implements Listener {
 
 				event.setCancelled(true);
 			}
+
+		}
+
+	}
+
+	@EventHandler
+	public void interact(BlockIgniteEvent event) {
+		if (!event.isCancelled()) {
 
 		}
 

@@ -36,6 +36,7 @@ public class MicroTools extends JavaPlugin {
 	public Server server = getServer();
 	public PluginManager pm = server.getPluginManager();
 	public Map<UUID, User> userMap = new HashMap<>();
+
 	public DataFile settings;
 
 	private List<Material> disabledRecipes = new ArrayList<>();

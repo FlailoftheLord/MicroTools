@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -57,6 +58,9 @@ public class MicroTool extends Logger {
 
 		meta.setDisplayName(chat(name));
 		meta.setLore(lore);
+
+		meta.setUnbreakable(true);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
 		toolItem.setItemMeta(meta);
 

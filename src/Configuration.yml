@@ -11,3 +11,35 @@ Tool:
     - ""
     - "&8right-click to update info"
     
+Stats:
+  Item:
+    Damage:
+      Display: "&9Attack Damage"
+      ScalePerLevel: 1.0
+    Armor:
+      Display: "&bArmor Strengh"
+      ScalePerLevel: 1.0
+    BonusHP:
+      Display: "&cBonus Health points"
+      ScalePerLevel: 0.1
+    MovementSpeed:
+      Display: "&bMovement Speed"
+      ScalePerLevel: 0.1
+  Skills:
+    LootBonus:
+      Display: "&eLoot Bonus Percent"
+      ScalePerLevel: 0.2
+    IgniteOnHit:
+      Display: "&6Target Ignite Chance"
+      ScalePerLevel: 0.5
+    SpeedOnHit:
+      Display: "&cRage"
+      ScalePerLevel: 0.1
+    DamageStacking:
+      Display: "&cFury"
+      ScalePerLevel: 0.1
+    
+      
+      
+      
+    
