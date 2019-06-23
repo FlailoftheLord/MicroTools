@@ -191,18 +191,6 @@ public class BaseUtilities extends LegacyUtils {
 	 * @author FlailoftheLord
 	 */
 	public enum Enchants {
-		SHARPNESS, SWEEPING_EDGE, KNOCKBACK, LOOTING, SMITE, BANE_OF_ARTHROPODS, EFFICIENCY, UNBREAKING, LOYALTY, RIPTIDE, FORTUNE,
-		CHANNELING, IMPALING, MENDING, PROTECTION, FIRE_PROTECTION, BLAST_PROTECTION, PROJECTILE_PROTECTION, FIRE_ASPECT, POWER,
-		PUNCH, FLAME, AQUA_AFFINITY, FROST_WALKER, DEPTH_STRIDER, RESPIRATION, QUICK_CHARGE, PIERCING, MULTISHOT, THORNS, INFINITY,
-		CURSE_OF_BINDING, CURSE_OF_VANISHING, SILK_TOUCH, LUCK_OF_THE_SEA, LURE, FEATHER_FALLING;
-
-		public static Enchants fromString(String value) {
-			return Enchants.valueOf(value.toUpperCase().replace(" ", "_"));
-		}
-
-		public static Enchantment toEnchantment(Enchants e) {
-			return fromEnch(e);
-		}
 
 	}
 

@@ -1,4 +1,4 @@
-package me.flail.microtools.tool.types;
+package me.flail.microtools.tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,47 +57,6 @@ public enum ToolType {
 
 	}
 
-	public enum Armor {
-		BOOTS, CHESTPLATE, HELMET, LEGGINGS;
-
-		public enum type {
-			LEATHER, CHAINMAIL, IRON, GOLDEN, DIAMOND;
-		}
-
-		public static Material getDefault(Armor type) {
-			for (Material m : materials()) {
-				if (m.toString().endsWith(type.toString())) {
-					return m;
-				}
-			}
-
-			return null;
-		}
-
-		public static Map<Integer, String> upgradeOrder() {
-			Map<Integer, String> map = new HashMap<>();
-			int order = 0;
-
-			for (String s : plugin.settings.getValue("Armor.UpgradeChain").split(",")) {
-				map.put(Integer.valueOf(order), s);
-				order++;
-			}
-
-			return map;
-		}
-
-		public static List<Material> materials() {
-			List<Material> list = new LinkedList<>();
-			for (ToolType.Armor.type type : Armor.type.values()) {
-				for (ToolType.Armor armor : Armor.values()) {
-					list.add(Material.valueOf(type.toString() + "_" + armor.toString()));
-				}
-			}
-
-			return list;
-		}
-
-	}
 
 	public static boolean isDefault(Material type) {
 		for (ToolType t : ToolType.values()) {
@@ -108,11 +67,6 @@ public enum ToolType {
 		}
 
 		for (Material m : defaultTool()) {
-			if (m == type) {
-				return true;
-			}
-		}
-		for (Material m : defaultArmor()) {
 			if (m == type) {
 				return true;
 			}
@@ -139,18 +93,7 @@ public enum ToolType {
 
 	}
 
-	public static List<Material> defaultArmor() {
-		String type = plugin.settings.getValue("Armor.DefaultMaterial").toUpperCase() + "_";
-		List<Material> list = new ArrayList<>();
 
-		for (Material m : Armor.materials()) {
-			if (m.toString().startsWith(type)) {
-				list.add(m);
-			}
-		}
-
-		return list;
-	}
 
 	/**
 	 * @return A complete list of all Tool, Armor & Miscelaneous materials.
@@ -159,7 +102,6 @@ public enum ToolType {
 		List<Material> list = new LinkedList<>();
 
 		list.addAll(Tool.materials());
-		list.addAll(Armor.materials());
 
 		for (ToolType tool : ToolType.values()) {
 			list.add(Material.valueOf(tool.toString()));

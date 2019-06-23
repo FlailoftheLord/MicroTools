@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.flail.microtools.tool.MicroTool;
+import me.flail.microtools.mct.MicroTool;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.user.User;
 

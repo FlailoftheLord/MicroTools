@@ -1,4 +1,4 @@
-package me.flail.microtools.tool;
+package me.flail.microtools.mct;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,9 +12,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.flail.microtools.tool.types.ToolType;
-import me.flail.microtools.tool.types.ToolType.Armor;
-import me.flail.microtools.tool.types.ToolType.Tool;
+import me.flail.microtools.mct.Enchants.EnchantType;
+import me.flail.microtools.tool.ToolType;
+import me.flail.microtools.tool.ToolType.Tool;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
@@ -94,7 +94,7 @@ public class MicroTool extends Logger {
 	}
 
 	public boolean isArmor() {
-		return Armor.materials().contains(type());
+		return false;
 	}
 
 	public boolean isTool() {
@@ -129,7 +129,7 @@ public class MicroTool extends Logger {
 			Map<Integer, String> upgrades = ToolType.Tool.upgradeOrder();
 
 			if (isArmor()) {
-				upgrades = ToolType.Armor.upgradeOrder();
+
 			}
 
 			if ((upgradeLevel() + 1) > upgrades.size()) {
@@ -168,12 +168,12 @@ public class MicroTool extends Logger {
 		return this;
 	}
 
-	public Map<Enchants, Integer> enchants() {
-		Map<Enchants, Integer> map = new TreeMap<>();
+	public Map<EnchantType, Integer> enchants() {
+		Map<EnchantType, Integer> map = new TreeMap<>();
 
 		if (toolItem.hasItemMeta() && toolItem.getItemMeta().hasEnchants()) {
 			for (Enchantment e : toolItem.getEnchantments().keySet()) {
-				map.put(Enchants.fromString(e.getKey().getKey()), Integer.valueOf(toolItem.getItemMeta().getEnchantLevel(e)));
+				map.put(EnchantType.fromString(e.getKey().getKey()), Integer.valueOf(toolItem.getItemMeta().getEnchantLevel(e)));
 			}
 
 		}

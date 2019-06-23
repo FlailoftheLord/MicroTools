@@ -16,7 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.flail.microtools.listeners.PlayerListener;
 import me.flail.microtools.listeners.ToolListener;
-import me.flail.microtools.tool.ToolHandler;
+import me.flail.microtools.mct.MctHandler;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Settings;
@@ -56,7 +56,7 @@ public class MicroTools extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		Logger logger = new Logger();
-		ToolHandler tManager = new ToolHandler();
+		MctHandler tManager = new MctHandler();
 
 		tManager.disableRecipes();
 

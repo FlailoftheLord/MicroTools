@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.flail.microtools.tool.types.IToolType;
+import me.flail.microtools.tool.IToolType;
 import me.flail.microtools.user.User;
 
 public class Settings extends Logger {
