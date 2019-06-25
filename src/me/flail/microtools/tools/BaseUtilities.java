@@ -2,9 +2,8 @@ package me.flail.microtools.tools;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
-import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -178,20 +177,37 @@ public class BaseUtilities extends LegacyUtils {
 		return list;
 	}
 
-	/**
-	 * A small enchant converter for the sake of keeping the names similar.
-	 */
-	public static Enchantment fromEnch(Enchants ench) {
-		return Enchantment.getByKey(NamespacedKey.minecraft(ench.toString().toLowerCase()));
+	private TreeMap<Integer, String> map = new TreeMap<>();
+
+	public String romanNumeral(int number) {
+		if (number == 0) {
+			return "0";
+		}
+
+		map.clear();
+		map.put(i(1000), "M");
+		map.put(i(900), "CM");
+		map.put(i(500), "D");
+		map.put(i(400), "CD");
+		map.put(i(100), "C");
+		map.put(i(90), "XC");
+		map.put(i(50), "L");
+		map.put(i(40), "XL");
+		map.put(i(10), "X");
+		map.put(i(9), "IX");
+		map.put(i(5), "V");
+		map.put(i(4), "IV");
+		map.put(i(1), "I");
+
+		int n = map.floorKey(i(number)).intValue();
+		if (number == n) {
+			return map.get(i(number));
+		}
+		return map.get(i(n)) + romanNumeral(number - n);
 	}
 
-	/**
-	 * All Vanilla enchants with the friendly names.
-	 * 
-	 * @author FlailoftheLord
-	 */
-	public enum Enchants {
-
+	private Integer i(int n) {
+		return Integer.valueOf(n);
 	}
 
 }

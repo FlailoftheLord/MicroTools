@@ -9,6 +9,8 @@ import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
@@ -55,6 +57,8 @@ public class MicroTools extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		long startTime = System.currentTimeMillis();
+
 		Logger logger = new Logger();
 		MctHandler tManager = new MctHandler();
 
@@ -62,16 +66,20 @@ public class MicroTools extends JavaPlugin {
 
 		registerListeners();
 		registerCommands();
+
+		logger.console("&7MicroTools is Enabled &8(&7took " + (System.currentTimeMillis() - startTime) + "ms&8)");
 	}
 
 	private void registerListeners() {
 		pm.registerEvents(new PlayerListener(), this);
 		pm.registerEvents(new ToolListener(), this);
-		// pm.registerEvents(new RecipeControl(disabledRecipes), this);
 
 	}
 
 	private void registerCommands() {
+		for (String cmd : getDescription().getCommands().keySet()) {
+			getCommand(cmd).setExecutor(this);
+		}
 
 	}
 
@@ -102,6 +110,11 @@ public class MicroTools extends JavaPlugin {
 	public void disablePlayerRecipes(List<Material> list) {
 		disabledRecipes.clear();
 		disabledRecipes.addAll(list);
+	}
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		return new MctCommand(sender, command).run(args);
 	}
 
 }

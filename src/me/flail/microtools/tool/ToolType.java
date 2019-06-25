@@ -18,7 +18,7 @@ public enum ToolType {
 	public enum Tool {
 		AXE, HOE, PICKAXE, SHOVEL, SWORD;
 
-		public enum type {
+		public enum Type {
 			WOODEN, STONE, IRON, GOLDEN, DIAMOND;
 		}
 
@@ -44,22 +44,11 @@ public enum ToolType {
 			return null;
 		}
 
-		public static List<Material> materials() {
-			List<Material> list = new LinkedList<>();
-			for (ToolType.Tool.type type : Tool.type.values()) {
-				for (ToolType.Tool tool : Tool.values()) {
-					list.add(Material.valueOf(type.toString() + "_" + tool.toString()));
-				}
-			}
-
-			return list;
-		}
-
 	}
 
 
 	public static boolean isDefault(Material type) {
-		for (ToolType t : ToolType.values()) {
+		for (ToolType t : values()) {
 			if (type == Material.matchMaterial(t.toString())) {
 				return true;
 			}
@@ -76,14 +65,14 @@ public enum ToolType {
 	}
 
 	public static boolean isValid(Material type) {
-		return list().contains(type);
+		return materials().contains(type);
 	}
 
 	public static List<Material> defaultTool() {
 		String type = plugin.settings.getValue("Tools.DefaultMaterial").toUpperCase() + "_";
 		List<Material> list = new ArrayList<>();
 
-		for (Material m : Tool.materials()) {
+		for (Material m : materials()) {
 			if (m.toString().startsWith(type)) {
 				list.add(m);
 			}
@@ -101,21 +90,17 @@ public enum ToolType {
 	public static List<Material> materials() {
 		List<Material> list = new LinkedList<>();
 
-		list.addAll(Tool.materials());
+		for (ToolType.Tool.Type type : Tool.Type.values()) {
+			for (ToolType.Tool tool : Tool.values()) {
+				list.add(Material.valueOf(type.toString() + "_" + tool.toString()));
+			}
+		}
 
-		for (ToolType tool : ToolType.values()) {
+		for (ToolType tool : values()) {
 			list.add(Material.valueOf(tool.toString()));
 		}
 
 		return list;
 	}
-
-	/**
-	 * Same as {@link #materials()}
-	 */
-	public static List<Material> list() {
-		return materials();
-	}
-
 
 }

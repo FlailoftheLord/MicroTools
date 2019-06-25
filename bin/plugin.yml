@@ -6,11 +6,7 @@ description: A complete tool upgrading gameplay plugin for SpigotMC
 main: me.flail.microtools.MicroTools
 version: 1.0.0
 api-version: 1.14
-load: STARTUP
-softdepend:
-- MicroCommands
-- SlashPlayer
-- mcMMO
+softdepend: [MicroCommands, SlashPlayer, MicroItems, mcMMO]
 
 commands:
   microtools:

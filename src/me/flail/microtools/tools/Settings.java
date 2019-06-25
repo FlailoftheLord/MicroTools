@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.tool.IToolType;
 import me.flail.microtools.user.User;
 
@@ -86,7 +87,10 @@ public class Settings extends Logger {
 			"- - -\r\n"+
 			"The possible Default Tool types are \"wooden\", \"stone\", \"iron\", \"golden\" and \"diamond\"\r\n" +
 			"And the valid Default Armor types are \"leather\", \"chainmail\", \"iron\", \"golden\" and \"diamond\"\r\n" +
-			"- - -\r\n" +
+			"Also, all Dyed Leather Armor types are their own individual Armor type.\r\n" +
+			" ColoredArmor types: \r\n" +
+			"WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE" +
+			"\r\n- - -\r\n" +
 			"Note that, if you enter an invalid value for the default tool material, the plugin will default to wooden tools\r\n" +
 			"A full list of enchants you can use with this plugin can be seen in the Enchants.yml file.\r\n"+
 			"When listing enchants, seperate them with a comma ( , )\r\n" +
@@ -100,7 +104,7 @@ public class Settings extends Logger {
 		Map<String, Object> values = new HashMap<>();
 
 		List<String> enchNames = new ArrayList<>();
-		for (Enchants e : Enchants.values()) {
+		for (Enum<?> e : EnchantType.all()) {
 			enchNames.add(e.toString().toLowerCase());
 		}
 

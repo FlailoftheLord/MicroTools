@@ -5,21 +5,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import me.flail.microtools.armor.ArmorType;
+import me.flail.microtools.armor.ArmorType.Armor;
+import me.flail.microtools.armor.ArmorType.Armor.ColorType;
 import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.tool.ToolType;
-import me.flail.microtools.tool.ToolType.Tool;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
+import me.flail.microtools.tools.NotNull;
 import me.flail.microtools.user.User;
 
+/**
+ * Represents the core of this plugin.
+ * The MicroTool represents any ItemStack which is a piece of Armor or a Tool, which can be worn
+ * and/or used by a player.
+ * <br>
+ * <br>
+ * There are (and will be) plenty of ways to completely customize and control all statistics,
+ * enchantments and attributes of each MicroTool.
+ * 
+ * @author FlailoftheLord
+ */
 public class MicroTool extends Logger {
 	private User owner = null;
 	private ItemStack toolItem;
@@ -33,6 +50,36 @@ public class MicroTool extends Logger {
 		this.owner = owner;
 
 		create();
+	}
+
+	public static MicroTool fromMaterial(@NotNull Material m, User owner, @Nullable Armor.ColorType color) {
+		ItemStack item = new ItemStack(m);
+
+		if ((color != null) && item.hasItemMeta()) {
+			if (item.getItemMeta() instanceof LeatherArmorMeta) {
+				LeatherArmorMeta aMeta = (LeatherArmorMeta) item.getItemMeta();
+				aMeta.setColor(ArmorType.getColor(color));
+
+				item.setItemMeta(aMeta);
+			}
+
+		}
+
+		if (owner != null) {
+			return new MicroTool(owner, item);
+		}
+
+		return new MicroTool(null, item);
+	}
+
+	public void setColor(ColorType color) {
+		if (toolItem.getItemMeta() instanceof LeatherArmorMeta) {
+			LeatherArmorMeta aMeta = (LeatherArmorMeta) toolItem.getItemMeta();
+			aMeta.setColor(ArmorType.getColor(color));
+
+			toolItem.setItemMeta(aMeta);
+		}
+
 	}
 
 	/**
@@ -77,10 +124,23 @@ public class MicroTool extends Logger {
 		return ToolType.materials().contains(type());
 	}
 
+	/**
+	 * Get the User who owns this tool.
+	 * The owner of this tool is the only player allowed to use or hold it in their inventory.
+	 * 
+	 * @return the owner of this MicroTool.
+	 */
 	public User owner() {
 		return owner;
 	}
 
+	/**
+	 * Sets the new Owner for this MicroTool.
+	 * 
+	 * @param newOwner
+	 *                     the new {@link User} user to set as the owner of this tool.
+	 * @return the new tool with it's updated owner.
+	 */
 	public MicroTool setOwner(User newOwner) {
 		owner = newOwner;
 
@@ -89,18 +149,30 @@ public class MicroTool extends Logger {
 		return this;
 	}
 
+	/**
+	 * @return the Raw ItemStack which this MicroTool represents.
+	 */
 	public ItemStack item() {
 		return toolItem;
 	}
 
+	/**
+	 * @return true if this {@link #type()} is a valid ArmorType. false otherwise.
+	 */
 	public boolean isArmor() {
-		return false;
+		return ArmorType.materials().contains(type());
 	}
 
+	/**
+	 * @return true if this {@link #type()} is a valid ToolType. false otherwise.
+	 */
 	public boolean isTool() {
-		return Tool.materials().contains(type());
+		return ToolType.materials().contains(type());
 	}
 
+	/**
+	 * @return true if, somehow, the type is neither Armor nor Tool.
+	 */
 	public boolean isMisc() {
 		return !isTool() && !isArmor() && ToolType.materials().contains(type());
 	}
