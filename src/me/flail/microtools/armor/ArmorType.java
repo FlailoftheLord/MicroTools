@@ -41,10 +41,11 @@ public enum ArmorType {
 		try {
 			return Color.class.cast(Color.class.getField(name.toString()));
 		} catch (Exception e) {
-			logger.console("&cInvalid Color: " + name);
-			return Color.fromRGB(3);
+			logger.console("&cInvalid Color&8: &7" + name);
 		}
 
+		logger.console("&cDefaulting to Color&8: &7" + Color.fromRGB(3).toString());
+		return Color.fromRGB(3);
 	}
 
 	public static List<Material> materials() {
