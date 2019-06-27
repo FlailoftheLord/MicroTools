@@ -26,6 +26,8 @@ public enum ArmorType {
 
 		public enum ColorType {
 			WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE;
+
+			public static String values = "WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE ";
 		}
 
 		public List<Material> defaultType() {

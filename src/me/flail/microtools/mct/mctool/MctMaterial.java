@@ -1,4 +1,6 @@
-package me.flail.microtools.mct;
+package me.flail.microtools.mct.mctool;
+
+import me.flail.microtools.armor.ArmorType.Armor.ColorType;
 
 public class MctMaterial {
 
@@ -57,6 +59,50 @@ public class MctMaterial {
 	public static final String DIAMOND_CHESTPLATE = "DIAMOND_CHESTPLATE";
 	public static final String DIAMOND_LEGGINGS = "DIAMOND_LEGGINGS";
 	public static final String DIAMOND_BOOTS = "DIAMOND_BOOTS";
+
+	/**
+	 * Get a colored Helmet.
+	 * <br>
+	 * <br>
+	 * Valid colors are: {@link me.flail.microtools.armor.ArmorType.Armor.ColorType#values}<br>
+	 * <code> WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE</code>
+	 */
+	public static final String HELMET(ColorType color) {
+		return color.toString() + "_HELMET";
+	}
+
+	/**
+	 * Get a colored Chestplate.
+	 * <br>
+	 * <br>
+	 * Valid colors are: {@link me.flail.microtools.armor.ArmorType.Armor.ColorType#values}<br>
+	 * <code> WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE</code>
+	 */
+	public static final String CHESTPLATE(ColorType color) {
+		return color.toString() + "_CHESTPLATE";
+	}
+
+	/**
+	 * Get colored leggings.
+	 * <br>
+	 * <br>
+	 * Valid colors are: {@link me.flail.microtools.armor.ArmorType.Armor.ColorType#values}<br>
+	 * <code> WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE</code>
+	 */
+	public static final String LEGGINGS(ColorType color) {
+		return color.toString() + "_LEGGINGS";
+	}
+
+	/**
+	 * Get colored boots.
+	 * <br>
+	 * <br>
+	 * Valid colors are: {@link me.flail.microtools.armor.ArmorType.Armor.ColorType#values}<br>
+	 * <code> WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE</code>
+	 */
+	public static final String BOOTS(ColorType color) {
+		return color.toString() + "_BOOTS";
+	}
 
 
 

@@ -1,18 +1,14 @@
-package me.flail.microtools.mct;
+package me.flail.microtools.mct.mctool;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.annotation.Nullable;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import me.flail.microtools.armor.ArmorType;
@@ -20,8 +16,6 @@ import me.flail.microtools.armor.ArmorType.Armor;
 import me.flail.microtools.armor.ArmorType.Armor.ColorType;
 import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.tool.ToolType;
-import me.flail.microtools.tools.DataFile;
-import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
 import me.flail.microtools.tools.NotNull;
 import me.flail.microtools.user.User;
@@ -37,19 +31,34 @@ import me.flail.microtools.user.User;
  * 
  * @author FlailoftheLord
  */
-public class MicroTool extends Logger {
+public class MicroTool extends MctData {
 	private User owner = null;
 	private ItemStack toolItem;
+	private MctData itemData;
 
 	/**
-	 * Use this to generate a new MicroTool from an existing ItemStack.
+	 * Use {@link #fromItem(ItemStack)} to generate a new MicroTool from an existing ItemStack.
 	 * Always be sure to set the Owner of this tool by calling {@link #setOwner(User owner)}
 	 */
-	public MicroTool(User owner, ItemStack item) {
+	protected MicroTool(ItemStack item) {
+		super(item);
 		toolItem = item;
-		this.owner = owner;
+
+		itemData = new MctData(toolItem);
 
 		create();
+	}
+
+	/**
+	 * Generates a new MicroTool from this ItemStack.
+	 * <br>
+	 * Remember to set the Tool's owner when applying this to a player! ({@link #setOwner(User)})
+	 * 
+	 * @param item
+	 * @return the newly generated MicroTool, without an owner specified.
+	 */
+	public static MicroTool fromItem(ItemStack item) {
+		return new MicroTool(item);
 	}
 
 	public static MicroTool fromMaterial(@NotNull Material m, User owner, @Nullable Armor.ColorType color) {
@@ -65,11 +74,19 @@ public class MicroTool extends Logger {
 
 		}
 
+		MicroTool tool = new MicroTool(item);
 		if (owner != null) {
-			return new MicroTool(owner, item);
+			tool = tool.setOwner(owner);
 		}
 
-		return new MicroTool(null, item);
+		return tool;
+	}
+
+	@Override
+	protected void create() {
+		updatePlaceholders(this.placeholders());
+
+		setNextUpgrade();
 	}
 
 	public void setColor(ColorType color) {
@@ -82,40 +99,7 @@ public class MicroTool extends Logger {
 
 	}
 
-	/**
-	 * Generates the new Tool from the provided ItemStack.
-	 */
-	private void create() {
-		if (hasTag("tool")) {
-			return;
-		}
 
-		this.setOwner(owner);
-
-		DataFile conf = new DataFile("Configuration.yml");
-		List<String> lore = conf.getList("Tool.Item.Lore");
-		String name = conf.getValue("Tool.Item.Name");
-
-		addTag("tool", ChatColor.stripColor(chat(name)));
-		addTag("tool-type", toolItem.getType().toString());
-		addTag("level", "0");
-		addTag("tool-level", "0");
-
-		ItemMeta meta = toolItem.getItemMeta();
-
-		meta.setDisplayName(chat(name));
-		meta.setLore(lore);
-
-		meta.setUnbreakable(true);
-		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-
-		toolItem.setItemMeta(meta);
-
-		updatePlaceholders(this.placeholders());
-
-		setNextUpgrade();
-
-	}
 
 	/**
 	 * Checks if the ItemStack is a valid tool.
@@ -154,6 +138,13 @@ public class MicroTool extends Logger {
 	 */
 	public ItemStack item() {
 		return toolItem;
+	}
+
+	/**
+	 * @return this tool's MctData.
+	 */
+	public MctData getData() {
+		return itemData;
 	}
 
 	/**
@@ -253,25 +244,7 @@ public class MicroTool extends Logger {
 		return map;
 	}
 
-	public void addTag(String key, String value) {
-		toolItem = addTag(toolItem, key, value);
-	}
 
-	public void removeTag(String key) {
-		toolItem = removeTag(toolItem, key);
-	}
-
-	public String getTag(String key) {
-		return getTag(toolItem, key);
-	}
-
-	public boolean hasTag(String key) {
-		return hasTag(toolItem, key);
-	}
-
-	public void updatePlaceholders(Map<String, String> pl) {
-		toolItem = this.itemPlaceholders(toolItem, pl);
-	}
 
 	public Map<String, String> placeholders() {
 		Map<String, String> map = new HashMap<>();
