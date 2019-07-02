@@ -118,6 +118,10 @@ public class MicroTool extends MctData {
 		return owner;
 	}
 
+	public boolean hasOwner() {
+		return hasTag("owner");
+	}
+
 	/**
 	 * Sets the new Owner for this MicroTool.
 	 * 

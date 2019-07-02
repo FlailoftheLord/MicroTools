@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import me.flail.microtools.listeners.PlayerListener;
 import me.flail.microtools.listeners.ToolListener;
@@ -36,6 +37,7 @@ public class MicroTools extends JavaPlugin {
 	public static MicroTools instance;
 
 	public Server server = getServer();
+	public BukkitScheduler scheduler = server.getScheduler();
 	public PluginManager pm = server.getPluginManager();
 	public Map<UUID, User> userMap = new HashMap<>();
 

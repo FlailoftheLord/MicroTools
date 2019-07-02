@@ -44,7 +44,7 @@ public class MctHandler extends Logger {
 	}
 
 	public static MicroTool newTool(User user, ItemStack item) {
-		return new MicroTool(user, item);
+		return MicroTool.fromItem(item).setOwner(user);
 	}
 
 }
