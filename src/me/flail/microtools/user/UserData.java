@@ -15,6 +15,10 @@ public class UserData extends Logger {
 	protected UUID playerUuid;
 	private DataFile file;
 
+	public enum KickReason {
+		BANNED, MUTED, WARNING, CUSTOM
+	}
+
 	protected UserData(UUID playerUuid) {
 		this.playerUuid = playerUuid;
 		file = new DataFile("/PlayerData/" + playerUuid + ".yml");

@@ -188,7 +188,7 @@ public class MicroTool extends MctData {
 	}
 
 	public void setNextUpgrade() {
-		if (!isMisc()) {
+		if (!isMisc() && isValid()) {
 			Map<Integer, String> upgrades = ToolType.Tool.upgradeOrder();
 
 			if (isArmor()) {
@@ -206,6 +206,11 @@ public class MicroTool extends MctData {
 	}
 
 	public MicroTool upgrade(String upgrade) {
+		if (!hasTag("upgrade") && hasOwner()) {
+			owner.sendMessage("&cThis tool has no available upgrades!");
+			return this;
+		}
+
 		if (getTag("upgrade").equalsIgnoreCase("max")) {
 			console("Item is at max upgrades, and cannot be upgraded further: " + type().toString());
 			return this;

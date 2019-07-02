@@ -3,6 +3,7 @@ package me.flail.microtools.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,11 +22,9 @@ public class ToolListener extends Logger implements Listener {
 		if (click.equals(ClickType.RIGHT) || click.equals(ClickType.SHIFT_RIGHT)) {
 			if (hasTag(item, "tool")) {
 				User user = new User(event.getWhoClicked().getUniqueId());
-				MicroTool tool = new MicroTool(user, item);
+				MicroTool tool = MicroTool.fromItem(item);
 
-				if (!tool.hasTag("owner")) {
-					tool = tool.setOwner(user);
-				}
+				tool = tool.setOwner(user);
 
 				tool.updatePlaceholders(tool.placeholders());
 
@@ -33,6 +32,12 @@ public class ToolListener extends Logger implements Listener {
 			}
 
 		}
+
+	}
+
+	@EventHandler
+	public void pickUp(EntityPickupItemEvent event) {
+
 
 	}
 

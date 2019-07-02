@@ -25,10 +25,6 @@ import me.flail.microtools.tools.Time;
  */
 public class User extends UserData {
 
-	public enum KickReason {
-		BANNED, MUTED, WARNING, CUSTOM
-	}
-
 	public User(UUID uuid) {
 		super(uuid);
 	}
@@ -153,6 +149,9 @@ public class User extends UserData {
 		return offlinePlayer().isOnline();
 	}
 
+	/**
+	 * @return this User's online status as "online" or "offline"
+	 */
 	public String onlineStatus() {
 		return isOnline() ? "online" : "offline";
 	}
@@ -191,7 +190,15 @@ public class User extends UserData {
 
 	public void ouch() {
 		player().damage(0.1);
-		player().sendMessage(chat("&4&l<3"));
+		sendMessage(chat("&4&l<3"));
+	}
+
+	public boolean sendMessage(String message) {
+		if (isOnline()) {
+			player().sendMessage(chat(message));
+		}
+
+		return isOnline();
 	}
 
 	public void kill(Message message) {

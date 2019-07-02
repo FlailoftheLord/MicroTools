@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -27,13 +26,13 @@ public class PlayerListener extends Logger implements Listener {
 
 		if (ToolType.materials().contains(item.getType())) {
 			if (!ToolType.isDefault(item.getType())) {
-				event.setResult(Result.DENY);
+						event.setCancelled(true);
 				user.player().closeInventory();
 
 				new Message("CantCraftMustUpgrade").send(user, null);
 				return;
 			}
-			MicroTool tool = new MicroTool(user, item);
+			MicroTool tool = MicroTool.fromItem(item);
 
 			event.setCurrentItem(tool.item());
 
@@ -56,7 +55,12 @@ public class PlayerListener extends Logger implements Listener {
 				}
 			}
 
-			user.player().getInventory().addItem(items.toArray(new ItemStack[] {}));
+			plugin.server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+				user.player().spigot().respawn();
+
+				user.player().getInventory().addItem(items.toArray(new ItemStack[] {}));
+			}, 64L);
+
 		}
 
 	}
