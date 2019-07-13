@@ -185,11 +185,11 @@ public class MicroTool extends MctData {
 	}
 
 	public int upgradeLevel() {
-		return Integer.parseInt(getTag("level").replaceAll("[^0-9]", ""));
+		return hasTag("level") ? Integer.parseInt(getTag("level").replaceAll("[^0-9]", "")) : 0;
 	}
 
 	public int gradeLevel() {
-		return Integer.parseInt(getTag("tool-level").replaceAll("[^0-9]", ""));
+		return hasTag("tool-level") ? Integer.parseInt(getTag("tool-level").replaceAll("[^0-9]", "")) : 0;
 	}
 
 	public void setNextUpgrade() {

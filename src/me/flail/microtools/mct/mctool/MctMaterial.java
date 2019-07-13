@@ -1,8 +1,23 @@
 package me.flail.microtools.mct.mctool;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Material;
+
+import me.flail.microtools.armor.ArmorType;
 import me.flail.microtools.armor.ArmorType.Armor.ColorType;
+import me.flail.microtools.tool.ToolType;
 
 public class MctMaterial {
+
+	public static final String FLINT_AND_STEEL = "FLINT_AND_STEEL";
+	public static final String BOW = "BOW";
+	public static final String CROSSBOW = "CROSSBOW";
+	public static final String SHEARS = "SHEARS";
+	public static final String FISHING_ROD = "FISHING_ROD";
+	public static final String TURTLE_HELMET = "TURTLE_HELMET";
+	public static final String SHIELD = "SHIELD";
 
 	public static final String WOODEN_AXE = "WOODEN_AXE";
 	public static final String WOODEN_HOE = "WOODEN_HOE";
@@ -106,6 +121,18 @@ public class MctMaterial {
 
 
 	public interface MicroType {
+
+		/**
+		 * @return A full list of all Materials, both ArmorType and ToolType
+		 */
+		static List<Material> allMaterials() {
+			List<Material> list = new ArrayList<>();
+
+			list.addAll(ToolType.materials());
+			list.addAll(ArmorType.materials());
+
+			return list;
+		}
 
 	}
 

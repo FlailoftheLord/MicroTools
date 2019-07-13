@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
 import me.flail.microtools.mct.mctool.MicroTool;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
@@ -26,11 +27,13 @@ public class ToolListener extends Logger implements Listener {
 		ClickType click = event.getClick();
 
 		if (click.equals(ClickType.RIGHT) || click.equals(ClickType.SHIFT_RIGHT)) {
-			if (hasTag(item, "tool")) {
+			if (hasTag(item, "tool") || MicroType.allMaterials().contains(item.getType())) {
 				User user = new User(event.getWhoClicked().getUniqueId());
 				MicroTool tool = MicroTool.fromItem(item);
 
-				tool = tool.setOwner(user);
+				if (!tool.hasOwner()) {
+					tool = tool.setOwner(user);
+				}
 
 				tool.updatePlaceholders(tool.placeholders());
 
