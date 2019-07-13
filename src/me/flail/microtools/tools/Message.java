@@ -58,32 +58,36 @@ public class Message extends Logger {
 	 *                      subject. Used for placeholders.
 	 */
 	public void send(User recipient, @Nullable User operator) {
-		if (!message.isEmpty() && (message.get(0) != null)) {
-			for (String msg : message) {
-				if (operator != null) {
-					msg = msg.replace("%operator%", operator.name()).replace("%reporter%", operator.name());
-				}
+		if (recipient.isOnline() && !recipient.hasMessageCooldown(key)) {
 
-				if (recipient.isOnline()) {
+			if (!message.isEmpty() && (message.get(0) != null)) {
+				for (String msg : message) {
+					if (operator != null) {
+						msg = msg.replace("%operator%", operator.name());
+					}
+
 					recipient.player().sendMessage(chat(msg));
 				}
+
+				return;
 			}
-			return;
+
+			console("&cThe following message doesn't exist in your &7Messages.yml &cfile.  &f" + key);
+			console("&cPlease be sure to add it to your Messages.yml file!");
+			console("&cAdd this:  &7" + key + ": \"message goes inside these quotes\"");
+
 		}
 
-		console("&cThe following message doesn't exist in your &7Messages.yml &cfile.  &f" + key);
-		console("&cPlease be sure to add it to your Messages.yml file!");
-		console("&cAdd this:  &7" + key + ": \"message goes inside these quotes\"");
 	}
 
 	public void broadcast(User recipient, @Nullable User operator) {
 		if (!message.isEmpty() && (message.get(0) != null)) {
 			for (String msg : message) {
 				if (operator != null) {
-					msg = msg.replace("%operator%", operator.name()).replace("%reporter%", operator.name());
+					msg = msg.replace("%operator%", operator.name());
 				}
 
-				plugin.server.broadcast(msg, "slashplayer.notify");
+				plugin.server.broadcast(msg, "microtools.notify");
 			}
 			return;
 		}
@@ -97,7 +101,7 @@ public class Message extends Logger {
 		if (!message.isEmpty() && (message.get(0) != null)) {
 			for (String msg : message) {
 				if (operator != null) {
-					msg = msg.replace("%operator%", operator.name()).replace("%reporter%", operator.name());
+					msg = msg.replace("%operator%", operator.name());
 				}
 
 				console(msg);
@@ -110,7 +114,7 @@ public class Message extends Logger {
 		if (!message.isEmpty() && (message.get(0) != null)) {
 			for (String msg : message) {
 				if (operator != null) {
-					msg = msg.replace("%operator%", operator.name()).replace("%reporter%", operator.name());
+					msg = msg.replace("%operator%", operator.name());
 				}
 
 				log(msg);

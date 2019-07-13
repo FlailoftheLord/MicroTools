@@ -1,15 +1,4 @@
-# You can customize everything about how the Tools and Armor items are displayed.
-# For a full list of placeholders, check the ToolPlaceholders.yml file.
-
-Tool:
-  Item:
-    Name: "&7&l%owner%'s %item%"
-    Lore:
-    - ""
-    - "&aOwner&8: &7%owner%"
-    - "&aLevel&8: &7%tool-level%"
-    - ""
-    - "&8right-click to update info"
+# Stuff
     
 Stats:
   Item:

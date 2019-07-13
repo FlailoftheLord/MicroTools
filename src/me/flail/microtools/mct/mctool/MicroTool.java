@@ -1,6 +1,7 @@
 package me.flail.microtools.mct.mctool;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,6 +16,7 @@ import me.flail.microtools.armor.ArmorType;
 import me.flail.microtools.armor.ArmorType.Armor;
 import me.flail.microtools.armor.ArmorType.Armor.ColorType;
 import me.flail.microtools.mct.Enchants.EnchantType;
+import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
 import me.flail.microtools.tool.ToolType;
 import me.flail.microtools.tools.Message;
 import me.flail.microtools.tools.NotNull;
@@ -46,7 +48,7 @@ public class MicroTool extends MctData {
 
 		itemData = new MctData(toolItem);
 
-		create();
+		createItem();
 	}
 
 	/**
@@ -83,11 +85,12 @@ public class MicroTool extends MctData {
 		return tool;
 	}
 
-	@Override
-	protected void create() {
+	protected void createItem() {
 		updatePlaceholders(this.placeholders());
 
 		setNextUpgrade();
+
+		create();
 	}
 
 	public void setColor(ColorType color) {
@@ -99,8 +102,6 @@ public class MicroTool extends MctData {
 		}
 
 	}
-
-
 
 	/**
 	 * Checks if the ItemStack is a valid tool.
@@ -131,11 +132,48 @@ public class MicroTool extends MctData {
 	 * @return the new tool with it's updated owner.
 	 */
 	public MicroTool setOwner(User newOwner) {
+		if (newOwner == null) {
+			owner = null;
+			setClaimed(false);
+
+			return this;
+		}
+
 		owner = newOwner;
 
-		removeTag("owner");
+		setClaimed(true);
 		addTag("owner", owner.id());
 		return this;
+	}
+
+	/**
+	 * Removes all Owner data for this tool. Reverting it back to an un-owned, un-claimed MicroTool.
+	 */
+	public void setClaimed(boolean claimStatus) {
+		removeTag("owner");
+		removeTag("user");
+
+		List<String> lore = itemData.getLore();
+
+		String claimed = lore.get(lore.size() - 1);
+		if (claimed.equalsIgnoreCase(chat(MctData.UNCLAIMED_TOOL_TEXT))) {
+			if (claimStatus) {
+				lore.remove(lore.get(lore.size() - 1));
+
+				removeTag("unclaimed");
+				itemData.setLore(lore);
+			}
+
+			return;
+		}
+
+		if (!claimStatus) {
+			lore.add(chat(MctData.UNCLAIMED_TOOL_TEXT));
+
+			addTag("unclaimed", "true");
+			itemData.setLore(lore);
+		}
+
 	}
 
 	/**
@@ -170,7 +208,7 @@ public class MicroTool extends MctData {
 	 * @return true if, somehow, the type is neither Armor nor Tool.
 	 */
 	public boolean isMisc() {
-		return !isTool() && !isArmor() && ToolType.materials().contains(type());
+		return !isTool() && !isArmor() && MicroType.allMaterials().contains(type());
 	}
 
 	public Material type() {
@@ -188,8 +226,8 @@ public class MicroTool extends MctData {
 		return hasTag("level") ? Integer.parseInt(getTag("level").replaceAll("[^0-9]", "")) : 0;
 	}
 
-	public int gradeLevel() {
-		return hasTag("tool-level") ? Integer.parseInt(getTag("tool-level").replaceAll("[^0-9]", "")) : 0;
+	public String gradeLevel() {
+		return hasTag("grade") ? getTag("grade").replaceAll("[0-9]", "") : "BASIC";
 	}
 
 	public void setNextUpgrade() {
@@ -235,7 +273,7 @@ public class MicroTool extends MctData {
 
 	public MicroTool upgradeEnchants(int increment) {
 		if (increment < 0) {
-			increment = Integer.MAX_VALUE;
+			increment = 1;
 		}
 
 		return this;
@@ -266,7 +304,7 @@ public class MicroTool extends MctData {
 			map.put("%owner%", owner.name());
 			map.put("%owner-uuid%", owner.id());
 		}
-		map.put("%tool-level%", gradeLevel() + "");
+		map.put("%tool-grade%", gradeLevel() + "");
 		map.put("%tool%", this.getName());
 		map.put("%item%", type().toString());
 

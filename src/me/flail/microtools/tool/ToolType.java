@@ -16,6 +16,8 @@ public enum ToolType implements MicroType {
 
 	static MicroTools plugin = MicroTools.instance;
 
+	public static final String DEFAULT_TYPE = "WOODEN";
+
 	public enum Tool {
 		AXE, HOE, PICKAXE, SHOVEL, SWORD;
 
@@ -25,12 +27,12 @@ public enum ToolType implements MicroType {
 
 		public static Map<Integer, String> upgradeOrder() {
 			Map<Integer, String> map = new HashMap<>();
-			int order = 0;
 
-			for (String s : plugin.settings.getValue("Tools.UpgradeChain").split(",")) {
-				map.put(Integer.valueOf(order), s);
-				order++;
-			}
+			map.put(0, "wooden");
+			map.put(1, "stone");
+			map.put(2, "iron");
+			map.put(3, "golden");
+			map.put(4, "diamond");
 
 			return map;
 		}
@@ -70,7 +72,7 @@ public enum ToolType implements MicroType {
 	}
 
 	public static List<Material> defaultTool() {
-		String type = plugin.settings.getValue("Tools.DefaultMaterial").toUpperCase() + "_";
+		String type = DEFAULT_TYPE + "_";
 		List<Material> list = new ArrayList<>();
 
 		for (Material m : materials()) {

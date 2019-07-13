@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import org.bukkit.Material;
@@ -40,6 +42,8 @@ public class MicroTools extends JavaPlugin {
 	public BukkitScheduler scheduler = server.getScheduler();
 	public PluginManager pm = server.getPluginManager();
 	public Map<UUID, User> userMap = new HashMap<>();
+
+	public Map<UUID, Set<String>> msgCooldowns = new TreeMap<>();
 
 	public DataFile settings;
 

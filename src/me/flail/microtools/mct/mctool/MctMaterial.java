@@ -119,6 +119,17 @@ public class MctMaterial {
 		return color.toString() + "_BOOTS";
 	}
 
+	public static String friendlyName(Material material) {
+		String name = "";
+
+		for (String s : material.toString().toLowerCase().split("_")) {
+
+			s = s.replace(s.charAt(0) + "", (s.charAt(0) + "").toUpperCase());
+			name = name.concat(s + " ");
+		}
+
+		return name;
+	}
 
 	public interface MicroType {
 

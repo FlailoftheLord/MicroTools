@@ -35,8 +35,6 @@ public class Settings extends Logger {
 		values.put("General.AddEnchantsAtLevel", "1");
 		values.put("General.UpgradeEnchantsBeforeLevel", Boolean.valueOf(true));
 
-		values.put("Tools.DefaultMaterial", "wooden");
-		values.put("Tools.UpgradeChain", "wooden,stone,iron,golden,diamond");
 		values.put("Tools.EnchantUpgradePerType", Boolean.valueOf(true));
 
 		values.put("Tools.UniversalEnchants", "unbreaking,mending");
@@ -50,8 +48,6 @@ public class Settings extends Logger {
 		values.put("Tools.Enchants.Trident", "impaling,loyalty,riptide,channeling");
 		values.put("Tools.Enchants.CrossBow", "multishot,quick_charge,piercing");
 
-		values.put("Armor.DefaultMaterial", "leather");
-		values.put("Armor.UpgradeChain", "leather,chainmail,iron,golden,diamond");
 		values.put("Armor.EnchantUpgradePerType", Boolean.valueOf(true));
 
 		values.put("Armor.UniversalEnchants",

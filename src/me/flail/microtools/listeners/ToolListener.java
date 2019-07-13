@@ -65,10 +65,13 @@ public class ToolListener extends Logger implements Listener {
 				tool.updatePlaceholders(tool.placeholders());
 				return;
 			}
-			if (!tool.owner().id().equals(user.id())) {
+			if (tool.hasOwner() && !tool.getTag("owner").equalsIgnoreCase(user.id())) {
 				event.setCancelled(true);
 
 				new Message("CannotPickupTool").send(user, null);
+
+				user.setMessageCooldown("CannotPickupTool", 16);
+
 			}
 
 		}

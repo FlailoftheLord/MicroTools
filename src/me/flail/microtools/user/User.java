@@ -2,10 +2,13 @@ package me.flail.microtools.user;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -164,6 +167,32 @@ public class User extends UserData {
 		}
 
 		plugin.userMap.put(uuid(), this);
+	}
+
+	public void setMessageCooldown(String messageKey, int duration) {
+		Set<String> msgs = new HashSet<>();
+		if (plugin.msgCooldowns.containsKey(uuid())) {
+			msgs = plugin.msgCooldowns.get(uuid());
+		}
+
+		if (!msgs.contains(messageKey)) {
+			msgs.add(messageKey);
+
+
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+				Set<String> newSet = new HashSet<>();
+				newSet.addAll(plugin.msgCooldowns.get(uuid()));
+
+				newSet.remove(messageKey);
+				plugin.msgCooldowns.put(uuid(), newSet);
+			}, duration * 20L);
+
+		}
+
+	}
+
+	public boolean hasMessageCooldown(String messageKey) {
+		return plugin.msgCooldowns.containsKey(uuid()) ? plugin.msgCooldowns.get(uuid()).contains(messageKey) : false;
 	}
 
 	public void toggleFly(User operator) {

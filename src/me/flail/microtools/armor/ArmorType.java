@@ -1,5 +1,6 @@
 package me.flail.microtools.armor;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +18,8 @@ public enum ArmorType implements MicroType {
 
 	static MicroTools plugin = MicroTools.instance;
 	private static Logger logger = new Logger();
+
+	public static final String DEFAULT_TYPE = "LEATHER";
 
 	public enum Armor {
 		LEATHER, CHAINMAIL, IRON, GOLDEN, DIAMOND;
@@ -49,6 +52,19 @@ public enum ArmorType implements MicroType {
 
 		logger.console("&cDefaulting to Color&8: &7" + Color.fromRGB(3).toString());
 		return Color.fromRGB(3);
+	}
+
+	public static List<Material> defaultArmor() {
+		String type = DEFAULT_TYPE + "_";
+		List<Material> list = new ArrayList<>();
+
+		for (Material m : materials()) {
+			if (m.toString().startsWith(type)) {
+				list.add(m);
+			}
+		}
+
+		return list;
 	}
 
 	public static List<Material> materials() {
