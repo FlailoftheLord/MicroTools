@@ -54,7 +54,7 @@ public class Enchants extends Logger {
 		}
 
 		public static Enum<?>[] all() {
-			List<Enum> list = new LinkedList<>();
+			List<Enum<?>> list = new LinkedList<>();
 			list.addAll(EnchantType.list());
 			list.addAll(mctEnchantments.list());
 

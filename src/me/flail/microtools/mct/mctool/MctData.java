@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import me.flail.microtools.armor.ArmorType;
+import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
+import me.flail.microtools.tool.ToolType;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 
@@ -62,6 +66,21 @@ public class MctData extends Logger {
 
 	public String getTag(String key) {
 		return getTag(toolItem, key);
+	}
+
+	public Material getMaterial() {
+		return toolItem.getType();
+	}
+
+	public Class<? extends MicroType> getType() {
+		List<Material> armor = ArmorType.materials();
+
+		Material material = getMaterial();
+		if (armor.contains(material)) {
+			return ArmorType.class;
+		}
+
+		return ToolType.class;
 	}
 
 	public boolean hasTag(String key) {

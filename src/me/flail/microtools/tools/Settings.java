@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import me.flail.microtools.mct.Enchants.EnchantType;
-import me.flail.microtools.tool.IToolType;
 import me.flail.microtools.user.User;
 
 public class Settings extends Logger {
@@ -109,7 +108,6 @@ public class Settings extends Logger {
 		}
 
 		values.put("Enchantments", enchNames);
-		values.put("Attributes", IToolType.toolAttributes());
 
 		setValues(file, values);
 	}

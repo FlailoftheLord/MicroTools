@@ -9,9 +9,10 @@ import org.bukkit.Material;
 import me.flail.microtools.MicroTools;
 import me.flail.microtools.armor.ArmorType.Armor.ColorType;
 import me.flail.microtools.armor.ArmorType.Armor.Type;
+import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
 import me.flail.microtools.tools.Logger;
 
-public enum ArmorType {
+public enum ArmorType implements MicroType {
 	SHIELD, TURTLE_HELMET;
 
 	static MicroTools plugin = MicroTools.instance;

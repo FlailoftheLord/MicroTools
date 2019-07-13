@@ -9,8 +9,9 @@ import java.util.Map;
 import org.bukkit.Material;
 
 import me.flail.microtools.MicroTools;
+import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
 
-public enum ToolType {
+public enum ToolType implements MicroType {
 	FLINT_AND_STEEL, SHIELD, BOW, CROSSBOW, SHEARS, FISHING_ROD;
 
 	static MicroTools plugin = MicroTools.instance;
@@ -79,13 +80,12 @@ public enum ToolType {
 		}
 
 		return list;
-
 	}
 
 
 
 	/**
-	 * @return A complete list of all Tool, Armor & Miscelaneous materials.
+	 * @return A complete list of all Tool & Miscelaneous materials.
 	 */
 	public static List<Material> materials() {
 		List<Material> list = new LinkedList<>();

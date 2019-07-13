@@ -105,6 +105,9 @@ public class MctMaterial {
 	}
 
 
+	public interface MicroType {
+
+	}
 
 
 
