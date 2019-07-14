@@ -299,7 +299,6 @@ public class MicroTool extends MctData {
 	}
 
 
-
 	public Map<String, String> placeholders() {
 		Map<String, String> map = new HashMap<>();
 		map.put("%level%", upgradeLevel() + "");
