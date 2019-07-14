@@ -21,7 +21,7 @@ import me.flail.microtools.user.User;
 
 public class ToolListener extends Logger implements Listener {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void invClick(InventoryClickEvent event) {
 		ItemStack item = event.getCurrentItem();
 		ClickType click = event.getClick();

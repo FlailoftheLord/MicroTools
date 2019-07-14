@@ -178,10 +178,15 @@ public class User extends UserData {
 		if (!msgs.contains(messageKey)) {
 			msgs.add(messageKey);
 
+			plugin.msgCooldowns.put(uuid(), msgs);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				Set<String> newSet = new HashSet<>();
-				newSet.addAll(plugin.msgCooldowns.get(uuid()));
+				if (plugin.msgCooldowns.containsKey(uuid())) {
+					newSet.addAll(plugin.msgCooldowns.get(uuid()));
+
+				}
+				plugin.msgCooldowns.remove(uuid());
 
 				newSet.remove(messageKey);
 				plugin.msgCooldowns.put(uuid(), newSet);

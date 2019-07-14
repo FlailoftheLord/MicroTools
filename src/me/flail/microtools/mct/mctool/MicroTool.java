@@ -107,7 +107,7 @@ public class MicroTool extends MctData {
 	 * Checks if the ItemStack is a valid tool.
 	 */
 	public boolean isValid() {
-		return ToolType.materials().contains(type());
+		return ToolType.materials().contains(material());
 	}
 
 	/**
@@ -191,35 +191,38 @@ public class MicroTool extends MctData {
 	}
 
 	/**
-	 * @return true if this {@link #type()} is a valid ArmorType. false otherwise.
+	 * @return true if this {@link #material()} is a valid ArmorType. false otherwise.
 	 */
 	public boolean isArmor() {
-		return ArmorType.materials().contains(type());
+		return ArmorType.materials().contains(material());
 	}
 
 	/**
-	 * @return true if this {@link #type()} is a valid ToolType. false otherwise.
+	 * @return true if this {@link #material()} is a valid ToolType. false otherwise.
 	 */
 	public boolean isTool() {
-		return ToolType.materials().contains(type());
+		return ToolType.materials().contains(material());
 	}
 
 	/**
 	 * @return true if, somehow, the type is neither Armor nor Tool.
 	 */
 	public boolean isMisc() {
-		return !isTool() && !isArmor() && MicroType.allMaterials().contains(type());
+		return !isTool() && !isArmor() && MicroType.allMaterials().contains(material());
 	}
 
-	public Material type() {
-		return toolItem.getType();
+	/**
+	 * Proxy for {@link #getMaterial()}
+	 */
+	public Material material() {
+		return getMaterial();
 	}
 
 	public String getName() {
 		if (toolItem.hasItemMeta()) {
 			return toolItem.getItemMeta().getDisplayName();
 		}
-		return type().toString().toLowerCase();
+		return material().toString().toLowerCase();
 	}
 
 	public int upgradeLevel() {
@@ -231,11 +234,11 @@ public class MicroTool extends MctData {
 	}
 
 	public void setNextUpgrade() {
-		if (!isMisc() && isValid()) {
+		if (MicroType.isUpgradeable(material())) {
 			Map<Integer, String> upgrades = ToolType.Tool.upgradeOrder();
 
 			if (isArmor()) {
-
+				upgrades = ArmorType.Armor.upgradeOrder();
 			}
 
 			if ((upgradeLevel() + 1) > upgrades.size()) {
@@ -254,8 +257,10 @@ public class MicroTool extends MctData {
 			return this;
 		}
 
-		if (getTag("upgrade").equalsIgnoreCase("max")) {
-			console("Item is at max upgrades, and cannot be upgraded further: " + type().toString());
+		String upgradeType = getTag("upgrade");
+
+		if (upgradeType.equalsIgnoreCase("max")) {
+			console("Item is at max upgrades, and cannot be upgraded further: " + material().toString());
 			return this;
 		}
 
@@ -263,9 +268,10 @@ public class MicroTool extends MctData {
 		removeTag("level");
 		addTag("level", level + 1 + "");
 
-		if (isArmor()) {
-
-			return this;
+		String newItemType = upgradeType.toUpperCase() + "_" + getMaterial().toString().split("_")[1];
+		Material upgradedMaterial = Material.matchMaterial(newItemType);
+		if (upgradedMaterial != null) {
+			toolItem.setType(upgradedMaterial);
 		}
 
 		return this;
@@ -306,7 +312,7 @@ public class MicroTool extends MctData {
 		}
 		map.put("%tool-grade%", gradeLevel() + "");
 		map.put("%tool%", this.getName());
-		map.put("%item%", type().toString());
+		map.put("%item%", material().toString());
 
 		return map;
 	}

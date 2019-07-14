@@ -58,7 +58,10 @@ public class Message extends Logger {
 	 *                      subject. Used for placeholders.
 	 */
 	public void send(User recipient, @Nullable User operator) {
-		if (recipient.isOnline() && !recipient.hasMessageCooldown(key)) {
+		if (recipient.isOnline()) {
+			if (recipient.hasMessageCooldown(key)) {
+				return;
+			}
 
 			if (!message.isEmpty() && (message.get(0) != null)) {
 				for (String msg : message) {

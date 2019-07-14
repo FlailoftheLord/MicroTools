@@ -145,6 +145,17 @@ public class MctMaterial {
 			return list;
 		}
 
+		static boolean isUpgradeable(Material material) {
+			String[] upgradeables = { "axe", "hoe", "pickaxe", "shovel", "sword", "helmet", "chestplate", "leggings", "boots" };
+			for (String s : upgradeables) {
+				if (material.toString().toLowerCase().contains("_" + s)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 	}
 
 

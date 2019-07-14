@@ -69,7 +69,7 @@ public class MctData extends Logger {
 
 		ItemMeta meta = toolItem.getItemMeta();
 
-		meta.setDisplayName(chat(name));
+		meta.setDisplayName(chat("&r" + name));
 		meta.setLore(lore);
 
 		meta.setUnbreakable(true);

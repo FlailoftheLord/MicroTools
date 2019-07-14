@@ -1,5 +1,6 @@
 # Customize all messages here.
 Prefix: "&8(&2&lTools&8)"
-CantCraftMustUpgrade: "%prefix% &cYou can't craft this tool directly! You must upgrade your base tools to get to this level!"
-ToolDoesntHaveOwner: "&7right-click to claim this tool!"
-CannotPickupTool: "%prefix% &cYou can't pickup this tool!"
+CantCraftMustUpgrade: "%prefix% &cYou can't craft this item directly! You must upgrade your base tools/armor to get to this level!"
+CannotPickupTool: "%prefix% &cYou can't pickup this item!"
+CannotUpgradeMax: "%prefix% &cThis item is already at max upgrades!"
+CannotUpgrade: "%prefix% &cThis item doesn't have any avaliable upgrades."

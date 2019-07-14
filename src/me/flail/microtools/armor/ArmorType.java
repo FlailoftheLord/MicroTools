@@ -3,6 +3,8 @@ package me.flail.microtools.armor;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -38,6 +40,18 @@ public enum ArmorType implements MicroType {
 			List<Material> defaults = new LinkedList<>();
 
 			return defaults;
+		}
+
+		public static Map<Integer, String> upgradeOrder() {
+			Map<Integer, String> upgrades = new TreeMap<>();
+
+			upgrades.put(0, "leather");
+			upgrades.put(1, "chainmail");
+			upgrades.put(2, "iron");
+			upgrades.put(3, "golden");
+			upgrades.put(4, "diamond");
+
+			return upgrades;
 		}
 
 
