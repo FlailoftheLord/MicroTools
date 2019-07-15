@@ -1,5 +1,7 @@
 package me.flail.microtools.mct.mctool.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -9,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.mct.mctool.MicroTool;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.user.User;
@@ -16,9 +19,13 @@ import me.flail.microtools.user.User;
 public class ToolEditorGui extends Logger {
 
 	public static final String MAIN_GUI_TITLE = "&2&lEditor&7: &8&l";
+	public static final String DISPLAY_CHANGE_NAME = "&e&lChange Name";
+	public static final String DISPLAY_MODIFY_OWNER = "&c&lModify Owner";
+	public static final String DISPLAY_MANAGE_ENCHANTS = "&d&lMange Enchants";
+
 	public static final Material ITEM_CHANGE_NAME = Material.NAME_TAG;
 	public static final Material ITEM_MODIFY_OWNER = Material.WRITABLE_BOOK;
-	public static final Material ITEM_UPGRADE_ENCHANTS = Material.ENCHANTED_BOOK;
+	public static final Material ITEM_MANAGE_ENCHANTS = Material.ENCHANTED_BOOK;
 	public static final Material FILLER_ITEM = Material.LIME_STAINED_GLASS_PANE;
 
 	public static Material infoItemType;
@@ -33,21 +40,75 @@ public class ToolEditorGui extends Logger {
 		this.tool = tool;
 
 		infoItemType = tool.getMaterial();
-		gui = Bukkit.createInventory(null, 54);
+		gui = Bukkit.createInventory(null, 36);
 
 		generate();
 	}
 
 	public void open(User user) {
 		if (user.isOnline()) {
+			for (Integer i : items.keySet()) {
 
+				gui.setItem(i.intValue(), items.get(i));
+			}
+
+			user.player().openInventory(gui);
 		}
 
 	}
 
+	/**
+	 * Creates all the items to put into the Inventory.
+	 */
 	private void generate() {
-		ItemStack infoItem = new ItemStack(infoItemType);
+		List<String> lore = new ArrayList<>();
 
+		ItemStack infoItem = tool.item().clone();
+
+
+		// Item for modifying the Tool's displayname.
+		ItemStack changeNameItem = new ItemStack(ITEM_CHANGE_NAME);
+		changeNameItem = setDisplayname(DISPLAY_CHANGE_NAME, changeNameItem);
+
+		lore.clear();
+		lore.add(" ");
+		lore.add("&7click to change the");
+		lore.add("&7displayname of this item.");
+		changeNameItem = setLore(lore, changeNameItem);
+
+
+		// Item for modifying the Tool owner.
+		ItemStack modifyOwnerItem = new ItemStack(ITEM_MODIFY_OWNER);
+		modifyOwnerItem = setDisplayname(DISPLAY_MODIFY_OWNER, modifyOwnerItem);
+
+		lore.clear();
+		lore.add(" ");
+		lore.add("&7You can change or remove");
+		lore.add("&7the owner of this item.");
+		lore.add("&7As long as you are the current owner.");
+		modifyOwnerItem = setLore(lore, modifyOwnerItem);
+
+
+		// Item for managing enchantments.
+		ItemStack manageEnchantsItem = new ItemStack(ITEM_MANAGE_ENCHANTS);
+		manageEnchantsItem = setDisplayname(DISPLAY_MANAGE_ENCHANTS, manageEnchantsItem);
+
+		lore.clear();
+		lore.add(" ");
+		lore.add("&7Click to manage the enchantments");
+		lore.add("&7on this item.");
+		lore.add(" ");
+		lore.add(" &aCurrent Enchantments&8:");
+		for (EnchantType e : tool.enchants().keySet()) {
+			String level = romanNumeral(tool.enchants().get(e).intValue());
+
+			lore.add("  &7- " + enumName(e) + " " + level);
+		}
+
+
+		items.put(4, infoItem);
+		items.put(19, changeNameItem);
+		items.put(21, modifyOwnerItem);
 
 		fillEmptySpace();
 	}
@@ -65,6 +126,26 @@ public class ToolEditorGui extends Logger {
 			}
 		}
 
+	}
+
+	private ItemStack setDisplayname(String name, ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(chat(name));
+		item.setItemMeta(meta);
+
+		return item;
+	}
+
+	private ItemStack setLore(List<String> lore, ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		for (String line : lore.toArray(new String[] {})) {
+			lore.set(lore.indexOf(line), chat(line));
+		}
+
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+
+		return item;
 	}
 
 }

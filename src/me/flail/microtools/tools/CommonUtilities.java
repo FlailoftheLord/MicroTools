@@ -124,4 +124,16 @@ public class CommonUtilities extends BaseUtilities {
 		return builder.toString();
 	}
 
+	public static String enumName(Enum<?> e) {
+		String name = "";
+
+		for (String s : e.toString().toLowerCase().split("_")) {
+
+			s = s.replace(s.charAt(0) + "", (s.charAt(0) + "").toUpperCase());
+			name = name.concat(s + " ");
+		}
+
+		return name;
+	}
+
 }

@@ -8,8 +8,9 @@ import org.bukkit.Material;
 import me.flail.microtools.armor.ArmorType;
 import me.flail.microtools.armor.ArmorType.Armor.ColorType;
 import me.flail.microtools.tool.ToolType;
+import me.flail.microtools.tools.Logger;
 
-public class MctMaterial {
+public class MctMaterial extends Logger {
 
 	public static final String FLINT_AND_STEEL = "FLINT_AND_STEEL";
 	public static final String BOW = "BOW";
@@ -120,15 +121,7 @@ public class MctMaterial {
 	}
 
 	public static String friendlyName(Material material) {
-		String name = "";
-
-		for (String s : material.toString().toLowerCase().split("_")) {
-
-			s = s.replace(s.charAt(0) + "", (s.charAt(0) + "").toUpperCase());
-			name = name.concat(s + " ");
-		}
-
-		return name;
+		return enumName(material);
 	}
 
 	public interface MicroType {
