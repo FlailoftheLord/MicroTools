@@ -26,7 +26,7 @@ public class ToolEditorGui extends Logger {
 	public static final Material ITEM_CHANGE_NAME = Material.NAME_TAG;
 	public static final Material ITEM_MODIFY_OWNER = Material.WRITABLE_BOOK;
 	public static final Material ITEM_MANAGE_ENCHANTS = Material.ENCHANTED_BOOK;
-	public static final Material FILLER_ITEM = Material.LIME_STAINED_GLASS_PANE;
+	public static final Material FILLER_ITEM = Material.GREEN_STAINED_GLASS_PANE;
 
 	public static Material infoItemType;
 
@@ -40,7 +40,7 @@ public class ToolEditorGui extends Logger {
 		this.tool = tool;
 
 		infoItemType = tool.getMaterial();
-		gui = Bukkit.createInventory(null, 36);
+		gui = Bukkit.createInventory(null, 45, chat(MAIN_GUI_TITLE + tool.getName()));
 
 		generate();
 	}
@@ -48,8 +48,10 @@ public class ToolEditorGui extends Logger {
 	public void open(User user) {
 		if (user.isOnline()) {
 			for (Integer i : items.keySet()) {
+				ItemStack item = items.get(i);
+				item = addTag(item, "gui-item", "true");
 
-				gui.setItem(i.intValue(), items.get(i));
+				gui.setItem(i.intValue(), item);
 			}
 
 			user.player().openInventory(gui);
@@ -64,6 +66,7 @@ public class ToolEditorGui extends Logger {
 		List<String> lore = new ArrayList<>();
 
 		ItemStack infoItem = tool.item().clone();
+		infoItem = addTag(infoItem, "tool-editor-info", " ");
 
 
 		// Item for modifying the Tool's displayname.
@@ -96,19 +99,36 @@ public class ToolEditorGui extends Logger {
 		lore.clear();
 		lore.add(" ");
 		lore.add("&7Click to manage the enchantments");
+
 		lore.add("&7on this item.");
-		lore.add(" ");
-		lore.add(" &aCurrent Enchantments&8:");
-		for (EnchantType e : tool.enchants().keySet()) {
-			String level = romanNumeral(tool.enchants().get(e).intValue());
+		if (tool.hasEnchants()) {
+			lore.add(" ");
+			lore.add(" &aCurrent Enchantments&8:");
 
-			lore.add("  &7- " + enumName(e) + " " + level);
+			for (EnchantType e : tool.enchants().keySet()) {
+				String level = romanNumeral(tool.enchants().get(e).intValue());
+
+				lore.add("  &7- " + enumName(e) + " " + level);
+			}
+
 		}
+		manageEnchantsItem = setLore(lore, manageEnchantsItem);
 
+
+		// Close button item.
+		ItemStack closeButton = new ItemStack(Material.BARRIER);
+		closeButton = setDisplayname("&c&l&nClose", closeButton);
+		closeButton = addTag(closeButton, "close-tool-editor", "true");
+
+		changeNameItem = addTag(changeNameItem, "change-tool-name", " ");
+		modifyOwnerItem = addTag(modifyOwnerItem, "change-tool-owner", " ");
+		manageEnchantsItem = addTag(manageEnchantsItem, "change-tool-enchants", " ");
 
 		items.put(4, infoItem);
 		items.put(19, changeNameItem);
 		items.put(21, modifyOwnerItem);
+		items.put(23, manageEnchantsItem);
+		items.put(36, closeButton);
 
 		fillEmptySpace();
 	}

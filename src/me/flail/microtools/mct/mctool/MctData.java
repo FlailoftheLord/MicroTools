@@ -46,6 +46,7 @@ public class MctData extends Logger {
 		lore.add(chat(LEVEL_DISPLAY + "0"));
 		lore.add(chat(GRADE_DISPLAY + "BASIC"));
 		lore.add(" ");
+		lore.add(chat("&8right-click to manage item."));
 
 
 		if (!hasTag("tool")) {

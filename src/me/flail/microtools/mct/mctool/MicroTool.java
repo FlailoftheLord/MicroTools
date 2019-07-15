@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -39,12 +40,16 @@ public class MicroTool extends MctData {
 	private MctData itemData;
 
 	/**
-	 * Use {@link #fromItem(ItemStack)} to generate a new MicroTool from an existing ItemStack.
+	 * Use {@link MicroTool#fromItem(ItemStack)} to generate a new MicroTool from an existing ItemStack.
 	 * Always be sure to set the Owner of this tool by calling {@link #setOwner(User owner)}
 	 */
 	protected MicroTool(ItemStack item) {
 		super(item);
 		toolItem = item;
+
+		if (hasTag("owner")) {
+			owner = new User(UUID.fromString(getTag("owner")));
+		}
 
 		itemData = new MctData(toolItem);
 
@@ -212,7 +217,7 @@ public class MicroTool extends MctData {
 	}
 
 	/**
-	 * Proxy for {@link #getMaterial()}
+	 * Proxy method for {@link #getMaterial()}
 	 */
 	public Material material() {
 		return getMaterial();
@@ -285,10 +290,14 @@ public class MicroTool extends MctData {
 		return this;
 	}
 
+	public boolean hasEnchants() {
+		return toolItem.hasItemMeta() ? toolItem.getItemMeta().hasEnchants() : false;
+	}
+
 	public Map<EnchantType, Integer> enchants() {
 		Map<EnchantType, Integer> map = new TreeMap<>();
 
-		if (toolItem.hasItemMeta() && toolItem.getItemMeta().hasEnchants()) {
+		if (hasEnchants()) {
 			for (Enchantment e : toolItem.getEnchantments().keySet()) {
 				map.put(EnchantType.fromString(e.getKey().getKey()), Integer.valueOf(toolItem.getItemMeta().getEnchantLevel(e)));
 			}

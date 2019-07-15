@@ -4,3 +4,4 @@ CantCraftMustUpgrade: "%prefix% &cYou can't craft this item directly! You must u
 CannotPickupTool: "%prefix% &cYou can't pickup this item!"
 CannotUpgradeMax: "%prefix% &cThis item is already at max upgrades!"
 CannotUpgrade: "%prefix% &cThis item doesn't have any avaliable upgrades."
+StolenItemReturned: "%prefix% &3Another player was caught using your item! It has been returned to your inventory."
