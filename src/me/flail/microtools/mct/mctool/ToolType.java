@@ -1,4 +1,4 @@
-package me.flail.microtools.tool;
+package me.flail.microtools.mct.mctool;
 
 import java.util.ArrayList;
 import java.util.HashMap;

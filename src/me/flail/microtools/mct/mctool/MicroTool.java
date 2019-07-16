@@ -13,12 +13,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import me.flail.microtools.armor.ArmorType;
-import me.flail.microtools.armor.ArmorType.Armor;
-import me.flail.microtools.armor.ArmorType.Armor.ColorType;
 import me.flail.microtools.mct.Enchants.EnchantType;
+import me.flail.microtools.mct.mctool.ArmorType.Armor;
+import me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
-import me.flail.microtools.tool.ToolType;
 import me.flail.microtools.tools.Message;
 import me.flail.microtools.tools.NotNull;
 import me.flail.microtools.user.User;

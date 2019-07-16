@@ -12,7 +12,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.mct.mctool.MicroTool;
-import me.flail.microtools.tool.ToolType;
+import me.flail.microtools.mct.mctool.ToolType;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
 import me.flail.microtools.user.User;

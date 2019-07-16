@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.ClickType;
@@ -14,7 +14,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.mct.mctool.MicroTool;
-import me.flail.microtools.mct.mctool.gui.ToolEditorGui;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
 import me.flail.microtools.user.User;
@@ -35,34 +34,7 @@ public class ToolListener extends Logger implements Listener {
 				User user = new User(event.getWhoClicked().getUniqueId());
 				MicroTool tool = MicroTool.fromItem(item);
 
-				if (!tool.hasOwner()) {
-					tool = tool.setOwner(user);
-				} else {
-					User owner = tool.owner();
-
-					if ((owner != null) && owner.uuid().equals(user.uuid())) {
-
-						new ToolEditorGui(tool).open(owner);
-
-					} else {
-						if (owner.isOnline()) {
-							user.player().getInventory().remove(item);
-
-							if (owner.player().getInventory().firstEmpty() != -1) {
-
-								owner.player().getInventory().addItem(tool.item());
-							} else {
-
-								owner.player().getWorld().dropItem(owner.player().getLocation(), tool.item());
-							}
-
-							new Message("StolenItemReturned").send(owner, null);
-
-						}
-
-					}
-
-				}
+				new ToolEditorGuiListener(user, tool).check(click);
 
 				tool.updatePlaceholders(tool.placeholders());
 				return;
@@ -101,10 +73,9 @@ public class ToolListener extends Logger implements Listener {
 				return;
 			}
 			if (tool.hasOwner() && !tool.getTag("owner").equalsIgnoreCase(user.id())) {
-				event.setCancelled(true);
+				event.getItem().setPickupDelay(1);
 
 				new Message("CannotPickupTool").send(user, null);
-
 				user.setMessageCooldown("CannotPickupTool", 16);
 
 			}
@@ -120,9 +91,20 @@ public class ToolListener extends Logger implements Listener {
 
 	}
 
-	@EventHandler
-	public void interact(BlockIgniteEvent event) {
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void interact(BlockBreakEvent event) {
 		if (!event.isCancelled()) {
+			User user = new User(event.getPlayer().getUniqueId());
+			ItemStack item = user.player().getInventory().getItemInMainHand();
+
+			if (hasTag(item, "tool")) {
+				MicroTool tool = MicroTool.fromItem(item);
+
+				if (tool.isTool()) {
+
+				}
+
+			}
 
 		}
 

@@ -10,9 +10,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.flail.microtools.armor.ArmorType;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
-import me.flail.microtools.tool.ToolType;
 import me.flail.microtools.tools.Logger;
 
 /**

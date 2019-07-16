@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 
-import me.flail.microtools.armor.ArmorType;
-import me.flail.microtools.armor.ArmorType.Armor.ColorType;
-import me.flail.microtools.tool.ToolType;
+import me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType;
 import me.flail.microtools.tools.Logger;
 
 public class MctMaterial extends Logger {
@@ -80,7 +78,7 @@ public class MctMaterial extends Logger {
 	 * Get a colored Helmet.
 	 * <br>
 	 * <br>
-	 * Valid colors are: {@link me.flail.microtools.armor.ArmorType.Armor.ColorType#values}<br>
+	 * Valid colors are: {@link me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType#values}<br>
 	 * <code> WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE</code>
 	 */
 	public static final String HELMET(ColorType color) {
@@ -91,7 +89,7 @@ public class MctMaterial extends Logger {
 	 * Get a colored Chestplate.
 	 * <br>
 	 * <br>
-	 * Valid colors are: {@link me.flail.microtools.armor.ArmorType.Armor.ColorType#values}<br>
+	 * Valid colors are: {@link me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType#values}<br>
 	 * <code> WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE</code>
 	 */
 	public static final String CHESTPLATE(ColorType color) {
@@ -102,7 +100,7 @@ public class MctMaterial extends Logger {
 	 * Get colored leggings.
 	 * <br>
 	 * <br>
-	 * Valid colors are: {@link me.flail.microtools.armor.ArmorType.Armor.ColorType#values}<br>
+	 * Valid colors are: {@link me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType#values}<br>
 	 * <code> WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE</code>
 	 */
 	public static final String LEGGINGS(ColorType color) {
@@ -113,7 +111,7 @@ public class MctMaterial extends Logger {
 	 * Get colored boots.
 	 * <br>
 	 * <br>
-	 * Valid colors are: {@link me.flail.microtools.armor.ArmorType.Armor.ColorType#values}<br>
+	 * Valid colors are: {@link me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType#values}<br>
 	 * <code> WHITE, SILVER, GRAY, BLACK, RED, MAROON, YELLOW, OLIVE, LIME, GREEN, AQUA, TEAL, BLUE, NAVY, FUCHSIA, PURPLE, ORANGE</code>
 	 */
 	public static final String BOOTS(ColorType color) {

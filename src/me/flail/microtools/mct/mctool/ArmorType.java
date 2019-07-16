@@ -1,4 +1,4 @@
-package me.flail.microtools.armor;
+package me.flail.microtools.mct.mctool;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -10,8 +10,8 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 
 import me.flail.microtools.MicroTools;
-import me.flail.microtools.armor.ArmorType.Armor.ColorType;
-import me.flail.microtools.armor.ArmorType.Armor.Type;
+import me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType;
+import me.flail.microtools.mct.mctool.ArmorType.Armor.Type;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
 import me.flail.microtools.tools.Logger;
 
