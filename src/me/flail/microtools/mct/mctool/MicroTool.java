@@ -17,6 +17,7 @@ import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.mct.mctool.ArmorType.Armor;
 import me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
+import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Message;
 import me.flail.microtools.tools.NotNull;
 import me.flail.microtools.user.User;
@@ -52,6 +53,10 @@ public class MicroTool extends MctData {
 		itemData = new MctData(toolItem);
 
 		createItem();
+	}
+
+	public static DataFile configuration() {
+		return new DataFile("Configuration.yml");
 	}
 
 	/**
@@ -280,6 +285,30 @@ public class MicroTool extends MctData {
 		return this;
 	}
 
+	public void addBlocksBroken(int amount) {
+		if (!hasTag("blocks")) {
+			addTag("blocks", amount + "");
+			return;
+		}
+		int blocksBroken = Integer.parseInt(getTag("blocks"));
+
+		blocksBroken += amount;
+
+		removeTag("blocks");
+		addTag("blocks", blocksBroken + "");
+	}
+
+	public int getBlocksBroken() {
+		return hasTag("blocks") ? Integer.parseInt(getTag("blocks").replaceAll("[^0-9]", "")) : 0;
+	}
+
+	public void updateBlocksBrokenDisplay() {
+		this.removeLoreLine(3);
+		this.setLoreLine(BLOCKS_DISPLAY + "%blocks%", 3);
+
+		updatePlaceholders(this.placeholders());
+	}
+
 	public MicroTool upgradeEnchants(int increment) {
 		if (increment < 0) {
 			increment = 1;
@@ -319,6 +348,7 @@ public class MicroTool extends MctData {
 		map.put("%tool-grade%", gradeLevel() + "");
 		map.put("%tool%", this.getName());
 		map.put("%item%", material().toString());
+		map.put("%blocks%", getBlocksBroken() + "");
 
 		return map;
 	}

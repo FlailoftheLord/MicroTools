@@ -24,6 +24,7 @@ public class MctData extends Logger {
 	public static final String UNCLAIMED_TOOL_TEXT = "&7This tool is unclaimed, right-click to claim.";
 	public static final String LEVEL_DISPLAY = "&aLevel&8: &7";
 	public static final String GRADE_DISPLAY = "&aGrade&8: &7";
+	public static final String BLOCKS_DISPLAY = "&aBlocks Broken&8: &7";
 
 	protected MctData(ItemStack item) {
 		toolItem = item;
@@ -41,8 +42,9 @@ public class MctData extends Logger {
 		String name = MctMaterial.friendlyName(toolItem.getType());
 
 		lore.add(" ");
-		lore.add(chat(LEVEL_DISPLAY + "0"));
-		lore.add(chat(GRADE_DISPLAY + "BASIC"));
+		lore.add(chat(LEVEL_DISPLAY + "%level%"));
+		lore.add(chat(GRADE_DISPLAY + "%tool-grade%"));
+		lore.add(chat(BLOCKS_DISPLAY + "%blocks%"));
 		lore.add(" ");
 		lore.add(chat("&8right-click to manage item."));
 
@@ -98,6 +100,20 @@ public class MctData extends Logger {
 		return getItemMeta().hasLore() ? getItemMeta().getLore() : new ArrayList<>();
 	}
 
+	protected void removeLoreLine(int index) {
+		List<String> lore = getLore();
+		lore.remove(index);
+
+		setLore(lore);
+	}
+
+	protected boolean setLoreLine(String value, int line) {
+		List<String> lore = getLore();
+
+		lore.add(line, value);
+		return setLore(lore);
+	}
+
 	public boolean setLore(List<String> lore) {
 		ItemMeta meta = getItemMeta();
 		meta.setLore(lore);
@@ -129,7 +145,7 @@ public class MctData extends Logger {
 	}
 
 	/**
-	 * Update any placeholders in this Item's String name or Lore.
+	 * Update any placeholders in this Items' String name or Lore.
 	 * 
 	 * @param pl
 	 *               the Map of {@literal <Placeholder, Value>}'s

@@ -35,6 +35,7 @@ public class ToolListener extends Logger implements Listener {
 				MicroTool tool = MicroTool.fromItem(item);
 
 				new ToolEditorGuiListener(user, tool).check(click);
+				event.setCancelled(true);
 
 				tool.updatePlaceholders(tool.placeholders());
 				return;
@@ -101,7 +102,9 @@ public class ToolListener extends Logger implements Listener {
 				MicroTool tool = MicroTool.fromItem(item);
 
 				if (tool.isTool()) {
+					tool.addBlocksBroken(1);
 
+					tool.updateBlocksBrokenDisplay();
 				}
 
 			}

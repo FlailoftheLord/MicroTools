@@ -1,4 +1,9 @@
 # Stuff
+Display:
+  PointDisplay:
+    Icon: '•'
+    FullColor: '&9'
+    EmptyColor: '&7'
     
 Stats:
   Item:
