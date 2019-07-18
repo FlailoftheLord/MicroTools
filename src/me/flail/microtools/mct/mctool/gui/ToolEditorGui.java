@@ -31,8 +31,8 @@ public class ToolEditorGui extends Logger {
 	public static Material infoItemType;
 
 
-	private Inventory gui;
-	private Map<Integer, ItemStack> items = new TreeMap<>();
+	protected Inventory gui;
+	protected Map<Integer, ItemStack> items = new TreeMap<>();
 
 	private MicroTool tool;
 
@@ -56,6 +56,10 @@ public class ToolEditorGui extends Logger {
 
 			user.player().openInventory(gui);
 		}
+
+	}
+
+	public void openNameChanger(User user) {
 
 	}
 

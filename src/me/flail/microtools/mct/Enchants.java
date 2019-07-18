@@ -41,8 +41,8 @@ public class Enchants extends Logger {
 			}
 		}
 
-		public static Enchantment fromEnch(EnchantType e) {
-			return Enchantment.getByKey(NamespacedKey.minecraft(e.toString().toLowerCase()));
+		public static EnchantType fromEnchantment(Enchantment e) {
+			return EnchantType.fromString(e.getKey().getKey().toUpperCase());
 		}
 
 		public static EnchantType fromString(String value) {
@@ -50,7 +50,7 @@ public class Enchants extends Logger {
 		}
 
 		public static Enchantment toEnchantment(EnchantType e) {
-			return fromEnch(e);
+			return Enchantment.getByKey(NamespacedKey.minecraft(e.toString().toLowerCase()));
 		}
 
 		public static Enum<?>[] all() {

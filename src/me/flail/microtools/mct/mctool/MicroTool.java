@@ -3,17 +3,14 @@ package me.flail.microtools.mct.mctool;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.mct.mctool.ArmorType.Armor;
 import me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
@@ -166,17 +163,18 @@ public class MicroTool extends MctData {
 		String claimed = lore.get(lore.size() - 1);
 		if (claimed.equalsIgnoreCase(chat(MctData.UNCLAIMED_TOOL_TEXT))) {
 			if (claimStatus) {
-				lore.remove(lore.get(lore.size() - 1));
-
+				removeLoreLine(lore.size() - 1);
 				removeTag("unclaimed");
-				itemData.setLore(lore);
+
+				setLoreLine(chat(MctData.MANAGE_TOOL_TEXT), lore.size() - 1);
 			}
 
 			return;
 		}
 
 		if (!claimStatus) {
-			lore.add(chat(MctData.UNCLAIMED_TOOL_TEXT));
+			removeLoreLine(lore.size() - 1);
+			setLoreLine(chat(MctData.UNCLAIMED_TOOL_TEXT), lore.size() - 1);
 
 			addTag("unclaimed", "true");
 			itemData.setLore(lore);
@@ -226,12 +224,7 @@ public class MicroTool extends MctData {
 		return getMaterial();
 	}
 
-	public String getName() {
-		if (toolItem.hasItemMeta()) {
-			return toolItem.getItemMeta().getDisplayName();
-		}
-		return material().toString().toLowerCase();
-	}
+
 
 	public int upgradeLevel() {
 		return hasTag("level") ? Integer.parseInt(getTag("level").replaceAll("[^0-9]", "")) : 0;
@@ -309,30 +302,7 @@ public class MicroTool extends MctData {
 		updatePlaceholders(this.placeholders());
 	}
 
-	public MicroTool upgradeEnchants(int increment) {
-		if (increment < 0) {
-			increment = 1;
-		}
 
-		return this;
-	}
-
-	public boolean hasEnchants() {
-		return toolItem.hasItemMeta() ? toolItem.getItemMeta().hasEnchants() : false;
-	}
-
-	public Map<EnchantType, Integer> enchants() {
-		Map<EnchantType, Integer> map = new TreeMap<>();
-
-		if (hasEnchants()) {
-			for (Enchantment e : toolItem.getEnchantments().keySet()) {
-				map.put(EnchantType.fromString(e.getKey().getKey()), Integer.valueOf(toolItem.getItemMeta().getEnchantLevel(e)));
-			}
-
-		}
-
-		return map;
-	}
 
 
 	public Map<String, String> placeholders() {

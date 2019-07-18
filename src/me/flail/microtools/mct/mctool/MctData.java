@@ -3,13 +3,16 @@ package me.flail.microtools.mct.mctool;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
 import me.flail.microtools.tools.Logger;
 
@@ -22,6 +25,7 @@ public class MctData extends Logger {
 	private ItemStack toolItem;
 
 	public static final String UNCLAIMED_TOOL_TEXT = "&7This tool is unclaimed, right-click to claim.";
+	public static final String MANAGE_TOOL_TEXT = "&8right-click to manage item.";
 	public static final String LEVEL_DISPLAY = "&aLevel&8: &7";
 	public static final String GRADE_DISPLAY = "&aGrade&8: &7";
 	public static final String BLOCKS_DISPLAY = "&aBlocks Broken&8: &7";
@@ -46,7 +50,7 @@ public class MctData extends Logger {
 		lore.add(chat(GRADE_DISPLAY + "%tool-grade%"));
 		lore.add(chat(BLOCKS_DISPLAY + "%blocks%"));
 		lore.add(" ");
-		lore.add(chat("&8right-click to manage item."));
+
 
 
 		if (!hasTag("tool")) {
@@ -66,6 +70,8 @@ public class MctData extends Logger {
 			addTag("unclaiemd", "true");
 
 			lore.add(chat(UNCLAIMED_TOOL_TEXT));
+		} else {
+			lore.add(chat(MANAGE_TOOL_TEXT));
 		}
 
 		ItemMeta meta = toolItem.getItemMeta();
@@ -94,6 +100,32 @@ public class MctData extends Logger {
 
 	public Material getMaterial() {
 		return toolItem.getType();
+	}
+
+	/**
+	 * Gets the displayname of this tool item.
+	 */
+	public String getName() {
+		if (toolItem.hasItemMeta()) {
+			return toolItem.getItemMeta().getDisplayName();
+		}
+
+		return MctMaterial.friendlyName(getMaterial());
+	}
+
+	/**
+	 * Set the displayname of this Tool item.
+	 * 
+	 * @param name
+	 *                 will translate color codes with the '&' character.
+	 */
+	public void setName(String name) {
+		ItemMeta meta = getItemMeta();
+
+		meta.setDisplayName(chat(name));
+		setItemMeta(meta);
+		removeTag("name");
+		addTag("name", chat(name));
 	}
 
 	public List<String> getLore() {
@@ -138,6 +170,38 @@ public class MctData extends Logger {
 		}
 
 		return ToolType.class;
+	}
+
+	public MctData addEnchant(EnchantType type) {
+		if (hasEnchants() && enchants().containsKey(type)) {
+			String errorWhileEnchanting = "%prefix% &cthis tool already has enchantment&8: &7" + type.toString()
+			+ " &cto upgrade it use the upgrade option in the menu &8&o(#upgradeEnchant(type))";
+
+			console(errorWhileEnchanting);
+			return this;
+		}
+
+		ItemMeta meta = getItemMeta();
+		meta.addEnchant(EnchantType.toEnchantment(type), 1, true);
+		setItemMeta(meta);
+		return this;
+	}
+
+	public boolean hasEnchants() {
+		return toolItem.hasItemMeta() ? toolItem.getItemMeta().hasEnchants() : false;
+	}
+
+	public Map<EnchantType, Integer> enchants() {
+		Map<EnchantType, Integer> map = new TreeMap<>();
+
+		if (hasEnchants()) {
+			for (Enchantment e : toolItem.getEnchantments().keySet()) {
+				map.put(EnchantType.fromEnchantment(e), Integer.valueOf(toolItem.getItemMeta().getEnchantLevel(e)));
+			}
+
+		}
+
+		return map;
 	}
 
 	public boolean hasTag(String key) {

@@ -29,6 +29,10 @@ public class ToolListener extends Logger implements Listener {
 			event.setCancelled(true);
 		}
 
+		if (hasTag(item, "change-tool-name")) {
+
+		}
+
 		if (click.equals(ClickType.RIGHT) || click.equals(ClickType.SHIFT_RIGHT)) {
 			if (hasTag(item, "tool") && !hasTag(item, "tool-editor-info")) {
 				User user = new User(event.getWhoClicked().getUniqueId());
