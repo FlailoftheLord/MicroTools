@@ -2,6 +2,7 @@ package me.flail.microtools.listeners;
 
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.mct.mctool.MicroTool;
 import me.flail.microtools.mct.mctool.gui.ToolEditorGui;
@@ -20,8 +21,8 @@ public class ToolEditorGuiListener extends Logger implements Listener {
 		this.tool = tool;
 	}
 
-	public void check(ClickType clickType) {
-		if (!tool.hasOwner()) {
+	public void onClick(ItemStack item, ClickType clickType) {
+		if ((tool != null) && !tool.hasOwner()) {
 			tool = tool.setOwner(operator);
 			return;
 		}

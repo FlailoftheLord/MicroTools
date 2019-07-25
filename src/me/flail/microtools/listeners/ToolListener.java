@@ -33,19 +33,14 @@ public class ToolListener extends Logger implements Listener {
 
 		}
 
-		if (click.equals(ClickType.RIGHT) || click.equals(ClickType.SHIFT_RIGHT)) {
-			if (hasTag(item, "tool") && !hasTag(item, "tool-editor-info")) {
-				User user = new User(event.getWhoClicked().getUniqueId());
-				MicroTool tool = MicroTool.fromItem(item);
+		if (hasTag(item, "tool") && !hasTag(item, "tool-editor-info")) {
+			User user = new User(event.getWhoClicked().getUniqueId());
+			MicroTool tool = MicroTool.fromItem(item);
 
-				new ToolEditorGuiListener(user, tool).check(click);
-				event.setCancelled(true);
-
-				tool.updatePlaceholders(tool.placeholders());
-				return;
-			}
-
+			new ToolEditorGuiListener(user, tool).onClick(item, click);
 		}
+
+
 
 		if (hasTag(item, "close-tool-editor")) {
 			Player player = (Player) event.getWhoClicked();
