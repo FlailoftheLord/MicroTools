@@ -1,5 +1,6 @@
 package me.flail.microtools.user;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,9 +13,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 
 import me.flail.microtools.tools.DataFile;
@@ -332,6 +336,66 @@ public class User extends UserData {
 		}
 
 		console("doesn't have value");
+	}
+
+	public boolean openSign(Object extraData) {
+
+		if (isOnline()) {
+			player().closeInventory();
+
+			Block block = player().getLocation().getBlock();
+			block.setType(Material.OAK_SIGN);
+			block.getState().update();
+
+			Sign sign = (Sign) block.getState();
+
+			sign.setLine(1, "   ^ ^ ^   ");
+			sign.setLine(2, "Enter value above.");
+			sign.setLine(3, " - - - - - ");
+
+			sign.setEditable(true);
+			sign.update();
+
+			sign.setMetadata("edit-subject-data", new FixedMetadataValue(plugin, extraData));
+
+			try {
+
+				Object handle = player().getClass().getMethod("getHandle").invoke(player());
+				Object connection = handle.getClass().getField("playerConnection").get(handle);
+
+				Field tileField = sign.getClass().getDeclaredField("sign");
+				tileField.setAccessible(true);
+
+				Object tileSign = tileField.get(sign);
+				Field editable = tileSign.getClass().getDeclaredField("isEditable");
+
+				editable.setAccessible(true);
+				editable.set(tileSign, true);
+
+				Field handler = tileSign.getClass().getDeclaredField("h");
+				handler.setAccessible(true);
+				handler.set(tileSign, handle);
+
+				Object position = Reflection.getClass("BlockPosition$PooledBlockPosition")
+						.getMethod("d", double.class, double.class, double.class)
+						.invoke(null, sign.getX(), sign.getY(), sign.getZ());
+
+				Object packet = Reflection.getClass("PacketPlayOutOpenSignEditor").getConstructor(Reflection.getClass("BlockPosition"))
+						.newInstance(position);
+
+				connection.getClass().getDeclaredMethod("sendPacket", Reflection.getClass("Packet")).invoke(connection, packet);
+
+				plugin.signInputs.put(uuid(), sign.getLocation());
+
+			} catch (Throwable t) {
+				t.printStackTrace();
+
+				console("&cERROR while sending sign editor packets to user: " + name());
+			}
+
+		}
+
+		return false;
 	}
 
 	public ItemStack getSkull() {

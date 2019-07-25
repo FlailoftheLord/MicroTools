@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -44,6 +45,7 @@ public class MicroTools extends JavaPlugin {
 	public Map<UUID, User> userMap = new HashMap<>();
 
 	public Map<UUID, Set<String>> msgCooldowns = new TreeMap<>();
+	public Map<UUID, Location> signInputs = new HashMap<>();
 
 	public DataFile settings;
 

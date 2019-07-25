@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -208,6 +209,33 @@ public class BaseUtilities extends LegacyUtils {
 
 	private Integer i(int n) {
 		return Integer.valueOf(n);
+	}
+
+	/**
+	 * Methods for retrieving base NMS classes.
+	 * 
+	 * @author FlailoftheLord
+	 */
+	public static class Reflection {
+
+		public static Class<?> getClass(String className) {
+			return getNMSClass(className);
+		}
+
+		protected static Class<?> getNMSClass(String classDef) {
+			try {
+
+				return Class.forName(
+						"net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3] + "."
+								+ classDef);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+
 	}
 
 }

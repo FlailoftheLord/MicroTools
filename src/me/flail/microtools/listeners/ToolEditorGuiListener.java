@@ -5,9 +5,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.mct.mctool.MicroTool;
-import me.flail.microtools.mct.mctool.gui.ToolEditorGui;
 import me.flail.microtools.tools.Logger;
-import me.flail.microtools.tools.Message;
 import me.flail.microtools.user.User;
 
 public class ToolEditorGuiListener extends Logger implements Listener {
@@ -27,26 +25,17 @@ public class ToolEditorGuiListener extends Logger implements Listener {
 			return;
 		}
 
-		User owner = tool.owner();
-		if ((owner != null) && owner.uuid().equals(operator.uuid())) {
+		if (hasTag(item, "change-tool-name")) {
+			if (tool != null) {
 
-			new ToolEditorGui(tool).open(owner);
-
-		} else {
-			if (owner.isOnline()) {
-				operator.player().getInventory().remove(tool.item());
-
-				if (owner.player().getInventory().firstEmpty() != -1) {
-
-					owner.player().getInventory().addItem(tool.item());
-				} else {
-
-					owner.player().getWorld().dropItem(owner.player().getLocation(), tool.item());
-				}
-
-				new Message("StolenItemReturned").send(owner, null);
+				operator.openSign(tool);
 			}
 
+		}
+
+		if (hasTag(item, "close-tool-editor")) {
+
+			operator.player().closeInventory();
 		}
 
 

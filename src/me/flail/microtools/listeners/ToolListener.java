@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.mct.mctool.MicroTool;
+import me.flail.microtools.mct.mctool.gui.ToolEditorGui;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
 import me.flail.microtools.user.User;
@@ -25,27 +26,49 @@ public class ToolListener extends Logger implements Listener {
 		ItemStack item = event.getCurrentItem();
 		ClickType click = event.getClick();
 
+		User user = new User(event.getWhoClicked().getUniqueId());
+		MicroTool tool = null;
+
 		if (hasTag(item, "gui-item")) {
 			event.setCancelled(true);
-		}
 
-		if (hasTag(item, "change-tool-name")) {
-
-		}
-
-		if (hasTag(item, "tool") && !hasTag(item, "tool-editor-info")) {
-			User user = new User(event.getWhoClicked().getUniqueId());
-			MicroTool tool = MicroTool.fromItem(item);
+			tool = MicroTool.fromItem(event.getInventory().getItem(4));
 
 			new ToolEditorGuiListener(user, tool).onClick(item, click);
 		}
 
+		if (hasTag(item, "tool") && !hasTag(item, "tool-editor-info")) {
+			if ((click == ClickType.SHIFT_RIGHT) || (click == ClickType.RIGHT)) {
+				event.setCancelled(true);
 
+				tool = MicroTool.fromItem(item);
 
-		if (hasTag(item, "close-tool-editor")) {
-			Player player = (Player) event.getWhoClicked();
+				User owner = tool.owner();
+				if (owner == null) {
+					tool.setOwner(user);
+				}
 
-			player.closeInventory();
+				if (owner.uuid().equals(user.uuid())) {
+
+					new ToolEditorGui(tool).open(owner);
+				} else {
+					if (owner.isOnline()) {
+						user.player().getInventory().remove(tool.item());
+
+						if (owner.player().getInventory().firstEmpty() != -1) {
+
+							owner.player().getInventory().addItem(tool.item());
+						} else {
+
+							owner.player().getWorld().dropItem(owner.player().getLocation(), tool.item());
+						}
+
+						new Message("StolenItemReturned").send(owner, null);
+					}
+
+				}
+
+			}
 
 		}
 
