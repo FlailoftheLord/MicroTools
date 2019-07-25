@@ -365,12 +365,14 @@ public class User extends UserData {
 
 				Field tileField = sign.getClass().getDeclaredField("sign");
 				tileField.setAccessible(true);
+				tileField.setBoolean(sign, true);
 
 				Object tileSign = tileField.get(sign);
 				Field editable = tileSign.getClass().getDeclaredField("isEditable");
 
 				editable.setAccessible(true);
 				editable.set(tileSign, true);
+
 
 				Field handler = tileSign.getClass().getDeclaredField("h");
 				handler.setAccessible(true);
