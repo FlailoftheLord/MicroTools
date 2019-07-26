@@ -1,6 +1,5 @@
 package me.flail.microtools.user;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,20 +10,22 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 
+import me.flail.microtools.mct.mctool.MicroTool;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Message;
+import me.flail.microtools.tools.SignInput;
 import me.flail.microtools.tools.Time;
-import net.minecraft.server.v1_14_R1.TileEntitySign;
 
 /**
  * Definitely <b>NOT</b> a user Object.
@@ -339,65 +340,36 @@ public class User extends UserData {
 		console("doesn't have value");
 	}
 
-	public boolean openSign(Object extraData) {
+	public boolean openToolNameEditor(MicroTool tool) {
+		Block block = player().getLocation().getBlock();
+		BlockState signState = block.getState();
+		signState.setType(Material.OAK_SIGN);
+		signState.update();
+
+		block.setBlockData(signState.getBlockData());
+
+		Sign sign = (Sign) block.getState();
+
+		sign.setLine(0, tool.getName());
+		sign.setLine(1, " ^ ^ ^ ^ ^ ^ ");
+		sign.setLine(2, "Enter new Tool Name");
+		sign.setLine(3, " - - - - - - ");
+		sign.update(true);
+
+		Map<Location, MicroTool> map = new HashMap<>();
+		map.put(sign.getLocation(), tool);
+
+		plugin.signInputs.put(uuid(), map);
+
+		return openSign(sign.getLocation());
+	}
+
+	public boolean openSign(Location location) {
 
 		if (isOnline()) {
 			player().closeInventory();
 
-			Block block = player().getLocation().getBlock();
-			block.setType(Material.OAK_SIGN);
-			block.getState().update();
-
-			Sign sign = (Sign) block.getState();
-
-			sign.setLine(1, "   ^ ^ ^   ");
-			sign.setLine(2, "Enter value above.");
-			sign.setLine(3, " - - - - - ");
-
-			sign.setEditable(true);
-			sign.update();
-
-			sign.setMetadata("edit-subject-data", new FixedMetadataValue(plugin, extraData));
-
-			try {
-
-				Object handle = player().getClass().getMethod("getHandle").invoke(player());
-				Object connection = handle.getClass().getField("playerConnection").get(handle);
-
-				TileEntitySign signEntity = sign.getClass().getMethod("getTileEntity").invoke(TileEntitySign.class);
-
-				Field tileField = sign.getClass().getDeclaredField("sign");
-				tileField.setAccessible(true);
-				tileField.setBoolean(sign, true);
-
-				Object tileSign = tileField.get(sign);
-				Field editable = tileSign.getClass().getDeclaredField("isEditable");
-
-				editable.setAccessible(true);
-				editable.set(tileSign, true);
-
-
-				Field handler = tileSign.getClass().getDeclaredField("h");
-				handler.setAccessible(true);
-				handler.set(tileSign, handle);
-
-				Object position = Reflection.getClass("BlockPosition$PooledBlockPosition")
-						.getMethod("d", double.class, double.class, double.class)
-						.invoke(null, sign.getX(), sign.getY(), sign.getZ());
-
-				Object packet = Reflection.getClass("PacketPlayOutOpenSignEditor").getConstructor(Reflection.getClass("BlockPosition"))
-						.newInstance(position);
-
-				connection.getClass().getDeclaredMethod("sendPacket", Reflection.getClass("Packet")).invoke(connection, packet);
-
-				plugin.signInputs.put(uuid(), sign.getLocation());
-
-			} catch (Throwable t) {
-				t.printStackTrace();
-
-				console("&cERROR while sending sign editor packets to user: " + name());
-			}
-
+			return new SignInput(location.getBlock()).open(this);
 		}
 
 		return false;

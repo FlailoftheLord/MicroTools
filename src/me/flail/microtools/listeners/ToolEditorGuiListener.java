@@ -28,7 +28,7 @@ public class ToolEditorGuiListener extends Logger implements Listener {
 		if (hasTag(item, "change-tool-name")) {
 			if (tool != null) {
 
-				operator.openSign(tool);
+				operator.openToolNameEditor(tool);
 			}
 
 		}

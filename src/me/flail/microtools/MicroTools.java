@@ -23,6 +23,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import me.flail.microtools.listeners.PlayerListener;
 import me.flail.microtools.listeners.ToolListener;
 import me.flail.microtools.mct.MctHandler;
+import me.flail.microtools.mct.mctool.MicroTool;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Settings;
@@ -45,7 +46,7 @@ public class MicroTools extends JavaPlugin {
 	public Map<UUID, User> userMap = new HashMap<>();
 
 	public Map<UUID, Set<String>> msgCooldowns = new TreeMap<>();
-	public Map<UUID, Location> signInputs = new HashMap<>();
+	public Map<UUID, Map<Location, MicroTool>> signInputs = new HashMap<>();
 
 	public DataFile settings;
 

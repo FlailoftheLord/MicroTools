@@ -52,17 +52,18 @@ public class PlayerListener extends Logger implements Listener {
 			User user = new User(event.getEntity().getUniqueId());
 
 			List<ItemStack> keptItems = new ArrayList<>();
-			List<ItemStack> items = event.getDrops();
+			ItemStack[] items = event.getDrops().toArray(new ItemStack[] {});
 			for (ItemStack item : items) {
 				if (ToolType.isValid(item.getType())) {
 					keptItems.add(item);
+					event.getDrops().remove(item);
 				}
 			}
 
 			plugin.server.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				user.player().spigot().respawn();
 
-				user.player().getInventory().addItem(items.toArray(new ItemStack[] {}));
+				user.player().getInventory().addItem(keptItems.toArray(new ItemStack[] {}));
 			}, 64L);
 
 		}
@@ -73,11 +74,11 @@ public class PlayerListener extends Logger implements Listener {
 	public void onSignChange(SignChangeEvent event) {
 		if (!event.isCancelled()) {
 			User user = new User(event.getPlayer().getUniqueId());
-			Sign sign = (Sign) event.getBlock();
+			Sign sign = (Sign) event.getBlock().getState();
 
 			if (plugin.signInputs.containsKey(user.uuid())
-					&& plugin.signInputs.get(user.uuid()).equals(sign.getLocation())
-					&& sign.hasMetadata("edit-subject-data")) {
+					&& plugin.signInputs.get(user.uuid()).containsKey(sign.getLocation())
+					&& sign.getBlock().hasMetadata("edit-subject-data")) {
 
 				String inputValue = event.getLine(0);
 				Object data = sign.getMetadata("edit-subject-data").get(0);
@@ -86,8 +87,6 @@ public class PlayerListener extends Logger implements Listener {
 					MicroTool tool = (MicroTool) data;
 					tool.setName(chat(inputValue));
 
-					plugin.signInputs.get(user.uuid()).getBlock().setType(Material.AIR);
-
 					plugin.signInputs.remove(user.uuid());
 					new Message("ToolNameChanged").replace("%tool%", tool.getName()).send(user, null);
 
@@ -95,6 +94,8 @@ public class PlayerListener extends Logger implements Listener {
 
 				}
 
+				sign.setType(Material.AIR);
+				sign.update();
 			}
 
 		}
