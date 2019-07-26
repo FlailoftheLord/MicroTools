@@ -24,6 +24,7 @@ import org.bukkit.potion.PotionEffect;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Message;
 import me.flail.microtools.tools.Time;
+import net.minecraft.server.v1_14_R1.TileEntitySign;
 
 /**
  * Definitely <b>NOT</b> a user Object.
@@ -362,6 +363,8 @@ public class User extends UserData {
 
 				Object handle = player().getClass().getMethod("getHandle").invoke(player());
 				Object connection = handle.getClass().getField("playerConnection").get(handle);
+
+				TileEntitySign signEntity = sign.getClass().getMethod("getTileEntity").invoke(TileEntitySign.class);
 
 				Field tileField = sign.getClass().getDeclaredField("sign");
 				tileField.setAccessible(true);
