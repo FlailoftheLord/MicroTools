@@ -59,9 +59,6 @@ public class ToolEditorGui extends Logger {
 
 	}
 
-	public void openNameChanger(User user) {
-
-	}
 
 	/**
 	 * Creates all the items to put into the Inventory.
@@ -118,6 +115,9 @@ public class ToolEditorGui extends Logger {
 		}
 		manageEnchantsItem = setLore(lore, manageEnchantsItem);
 
+		// Temporary item for upgrade testing.
+		ItemStack upgradeItem = new ItemStack(Material.ANVIL);
+		upgradeItem = addTag(upgradeItem, "upgrade-trigger", "true");
 
 		// Close button item.
 		ItemStack closeButton = new ItemStack(Material.BARRIER);
@@ -133,6 +133,7 @@ public class ToolEditorGui extends Logger {
 		items.put(21, modifyOwnerItem);
 		items.put(23, manageEnchantsItem);
 		items.put(36, closeButton);
+		items.put(8, upgradeItem);
 
 		fillEmptySpace();
 	}

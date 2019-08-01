@@ -15,7 +15,6 @@ import me.flail.microtools.mct.mctool.ArmorType.Armor;
 import me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
 import me.flail.microtools.tools.DataFile;
-import me.flail.microtools.tools.Message;
 import me.flail.microtools.tools.NotNull;
 import me.flail.microtools.user.User;
 
@@ -112,7 +111,7 @@ public class MicroTool extends MctData {
 	 * Checks if the ItemStack is a valid tool.
 	 */
 	public boolean isValid() {
-		return ToolType.materials().contains(material());
+		return ToolType.materials().contains(material()) || ArmorType.materials().contains(material());
 	}
 
 	/**
@@ -224,8 +223,6 @@ public class MicroTool extends MctData {
 		return getMaterial();
 	}
 
-
-
 	public int upgradeLevel() {
 		return hasTag("level") ? Integer.parseInt(getTag("level").replaceAll("[^0-9]", "")) : 0;
 	}
@@ -242,7 +239,7 @@ public class MicroTool extends MctData {
 				upgrades = ArmorType.Armor.upgradeOrder();
 			}
 
-			if ((upgradeLevel() + 1) > upgrades.size()) {
+			if ((upgradeLevel() + 1) >= upgrades.size()) {
 				addTag("upgrade", "max");
 				return;
 			}
@@ -252,7 +249,10 @@ public class MicroTool extends MctData {
 		}
 	}
 
-	public MicroTool upgrade(String upgrade) {
+	/**
+	 * Upgrades this tool to the next Material type level.
+	 */
+	public MicroTool upgrade() {
 		if (!hasTag("upgrade") && hasOwner()) {
 			owner.sendMessage("&cThis tool has no available upgrades!");
 			return this;
@@ -278,6 +278,10 @@ public class MicroTool extends MctData {
 		return this;
 	}
 
+	/**
+	 * Adds the new amount to the current amount of blocks broken.
+	 * Enter a negative number to subtract blocks.
+	 */
 	public void addBlocksBroken(int amount) {
 		if (!hasTag("blocks")) {
 			addTag("blocks", amount + "");
@@ -295,9 +299,40 @@ public class MicroTool extends MctData {
 		return hasTag("blocks") ? Integer.parseInt(getTag("blocks").replaceAll("[^0-9]", "")) : 0;
 	}
 
+	/**
+	 * Update the display lore on the Tool item.
+	 */
 	public void updateBlocksBrokenDisplay() {
-		this.removeLoreLine(3);
+		if (!getLore().get(3).isEmpty()) {
+			removeLoreLine(3);
+		}
 		this.setLoreLine(BLOCKS_DISPLAY + "%blocks%", 3);
+
+		updatePlaceholders(this.placeholders());
+	}
+
+	public void addEntityKill(int amount) {
+		if (!hasTag("kills")) {
+			addTag("kills", amount + "");
+			return;
+		}
+		int killCount = Integer.parseInt(getTag("kills"));
+
+		killCount += amount;
+
+		removeTag("kills");
+		addTag("kills", killCount + "");
+	}
+
+	public int getEntitiesKilled() {
+		return hasTag("kills") ? Integer.parseInt(getTag("kills").replaceAll("[^0-9]", "")) : 0;
+	}
+
+	public void updateEntityKillDisplay() {
+		if (!getLore().get(4).isEmpty()) {
+			removeLoreLine(4);
+		}
+		this.setLoreLine(KILLS_DISPLAY + "%kills%", 4);
 
 		updatePlaceholders(this.placeholders());
 	}
@@ -309,7 +344,7 @@ public class MicroTool extends MctData {
 		Map<String, String> map = new HashMap<>();
 		map.put("%level%", upgradeLevel() + "");
 		if (owner == null) {
-			map.put("%owner%", new Message("ToolDoesntHaveOwner").stringValue());
+			map.put("%owner%", UNCLAIMED_TOOL_TEXT);
 			map.put("%owner-uuid%", "");
 		} else {
 			map.put("%owner%", owner.name());
@@ -319,6 +354,7 @@ public class MicroTool extends MctData {
 		map.put("%tool%", this.getName());
 		map.put("%item%", material().toString());
 		map.put("%blocks%", getBlocksBroken() + "");
+		map.put("%kills%", getEntitiesKilled() + "");
 
 		return map;
 	}

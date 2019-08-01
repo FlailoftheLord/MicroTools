@@ -70,32 +70,26 @@ public class PlayerListener extends Logger implements Listener {
 
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onSignChange(SignChangeEvent event) {
 		if (!event.isCancelled()) {
 			User user = new User(event.getPlayer().getUniqueId());
 			Sign sign = (Sign) event.getBlock().getState();
 
 			if (plugin.signInputs.containsKey(user.uuid())
-					&& plugin.signInputs.get(user.uuid()).containsKey(sign.getLocation())
-					&& sign.getBlock().hasMetadata("edit-subject-data")) {
+					&& plugin.signInputs.get(user.uuid()).containsKey(sign.getLocation())) {
 
 				String inputValue = event.getLine(0);
-				Object data = sign.getMetadata("edit-subject-data").get(0);
+				MicroTool tool = plugin.signInputs.get(user.uuid()).get(sign.getLocation());
 
-				if (data instanceof MicroTool) {
-					MicroTool tool = (MicroTool) data;
-					tool.setName(chat(inputValue));
+				tool.setName(chat(inputValue));
 
-					plugin.signInputs.remove(user.uuid());
-					new Message("ToolNameChanged").replace("%tool%", tool.getName()).send(user, null);
+				plugin.signInputs.remove(user.uuid());
+				new Message("ToolNameChanged").replace("%tool%", tool.getName()).send(user, null);
 
-					new ToolEditorGui(tool).open(user);
+				new ToolEditorGui(tool).open(user);
 
-				}
-
-				sign.setType(Material.AIR);
-				sign.update();
+				event.getBlock().setType(Material.AIR);
 			}
 
 		}

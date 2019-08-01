@@ -29,6 +29,7 @@ public class MctData extends Logger {
 	public static final String LEVEL_DISPLAY = "&aLevel&8: &7";
 	public static final String GRADE_DISPLAY = "&aGrade&8: &7";
 	public static final String BLOCKS_DISPLAY = "&aBlocks Broken&8: &7";
+	public static final String KILLS_DISPLAY = "&aKills&8: &7";
 
 	protected MctData(ItemStack item) {
 		toolItem = item;
@@ -45,11 +46,12 @@ public class MctData extends Logger {
 		List<String> lore = new ArrayList<>();
 		String name = MctMaterial.friendlyName(toolItem.getType());
 
-		lore.add(" ");
+		lore.add("");
 		lore.add(chat(LEVEL_DISPLAY + "%level%"));
 		lore.add(chat(GRADE_DISPLAY + "%tool-grade%"));
 		lore.add(chat(BLOCKS_DISPLAY + "%blocks%"));
-		lore.add(" ");
+		lore.add(chat(KILLS_DISPLAY + "%kills%"));
+		lore.add("");
 
 
 

@@ -14,7 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -342,11 +341,7 @@ public class User extends UserData {
 
 	public boolean openToolNameEditor(MicroTool tool) {
 		Block block = player().getLocation().getBlock();
-		BlockState signState = block.getState();
-		signState.setType(Material.OAK_SIGN);
-		signState.update();
-
-		block.setBlockData(signState.getBlockData());
+		block.setType(Material.OAK_SIGN);
 
 		Sign sign = (Sign) block.getState();
 
@@ -354,7 +349,9 @@ public class User extends UserData {
 		sign.setLine(1, " ^ ^ ^ ^ ^ ^ ");
 		sign.setLine(2, "Enter new Tool Name");
 		sign.setLine(3, " - - - - - - ");
-		sign.update(true);
+		sign.update(true, false);
+
+		block.setBlockData(sign.getBlockData());
 
 		Map<Location, MicroTool> map = new HashMap<>();
 		map.put(sign.getLocation(), tool);

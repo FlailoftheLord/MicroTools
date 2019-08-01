@@ -1,5 +1,6 @@
 package me.flail.microtools.listeners;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -7,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.ClickType;
@@ -42,10 +44,12 @@ public class ToolListener extends Logger implements Listener {
 				event.setCancelled(true);
 
 				tool = MicroTool.fromItem(item);
+				tool.addTag("editing", "true");
 
 				User owner = tool.owner();
 				if (owner == null) {
-					tool.setOwner(user);
+					tool = tool.setOwner(user);
+					return;
 				}
 
 				if (owner.uuid().equals(user.uuid())) {
@@ -115,7 +119,7 @@ public class ToolListener extends Logger implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void interact(BlockBreakEvent event) {
+	public void blockBreak(BlockBreakEvent event) {
 		if (!event.isCancelled()) {
 			User user = new User(event.getPlayer().getUniqueId());
 			ItemStack item = user.player().getInventory().getItemInMainHand();
@@ -127,6 +131,38 @@ public class ToolListener extends Logger implements Listener {
 					tool.addBlocksBroken(1);
 
 					tool.updateBlocksBrokenDisplay();
+				}
+
+			}
+
+		}
+
+	}
+
+	@EventHandler(priority=EventPriority.MONITOR)
+	public void entityKill(EntityDamageByEntityEvent event) {
+		LivingEntity entity =(LivingEntity) event.getEntity();
+		double damage = event.getFinalDamage();
+
+
+		if (!event.isCancelled()) {
+			Entity damager = event.getDamager();
+			if (damager instanceof Player) {
+				User user = new User(((Player) damager).getUniqueId());
+				ItemStack item = user.player().getInventory().getItemInMainHand();
+
+				if (hasTag(item, "tool")) {
+					MicroTool tool = MicroTool.fromItem(item);
+
+					if (tool.isTool()) {
+						if (damage >= entity.getHealth()) {
+							tool.addEntityKill(1);
+
+							tool.updateEntityKillDisplay();
+						}
+
+					}
+
 				}
 
 			}
