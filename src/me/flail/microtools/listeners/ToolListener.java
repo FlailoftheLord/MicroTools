@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.mct.mctool.MicroTool;
@@ -28,6 +29,11 @@ public class ToolListener extends Logger implements Listener {
 		ItemStack item = event.getCurrentItem();
 		ClickType click = event.getClick();
 
+		if (hasTag(item, "tool-editor-info")) {
+			event.setCancelled(true);
+			return;
+		}
+
 		User user = new User(event.getWhoClicked().getUniqueId());
 		MicroTool tool = null;
 
@@ -37,9 +43,10 @@ public class ToolListener extends Logger implements Listener {
 			tool = MicroTool.fromItem(event.getInventory().getItem(4));
 
 			new ToolEditorGuiListener(user, tool).onClick(item, click);
+			return;
 		}
 
-		if (hasTag(item, "tool") && !hasTag(item, "tool-editor-info")) {
+		if (hasTag(item, "tool")) {
 			if ((click == ClickType.SHIFT_RIGHT) || (click == ClickType.RIGHT)) {
 				event.setCancelled(true);
 
@@ -76,6 +83,21 @@ public class ToolListener extends Logger implements Listener {
 
 		}
 
+	}
+
+	@EventHandler
+	public void invClose(InventoryCloseEvent event) {
+		Player player = (Player) event.getPlayer();
+
+		for (ItemStack item : event.getInventory().getContents()) {
+			if (!hasTag(item, "gui-item")) {
+				for (ItemStack extraItem : player.getInventory().addItem(item).values()) {
+					if (extraItem != null) {
+						player.getWorld().dropItem(player.getLocation(), extraItem);
+					}
+				}
+			}
+		}
 	}
 
 	@EventHandler
@@ -116,6 +138,9 @@ public class ToolListener extends Logger implements Listener {
 		Item itemEntity = event.getItemDrop();
 		ItemStack item = itemEntity.getItemStack();
 
+		item = removeTag(item, "gui-item");
+		item = removeTag(item, "tool-editor-info");
+		itemEntity.setItemStack(item);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

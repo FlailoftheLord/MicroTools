@@ -25,6 +25,15 @@ public class ToolEditorGuiListener extends Logger implements Listener {
 			return;
 		}
 
+		for (ItemStack invItem : operator.player().getInventory().getContents()) {
+			if ((invItem != null) && hasTag(item, "editing")) {
+				invItem = tool.item();
+
+				invItem = removeTag(invItem, "tool-editor-info");
+				break;
+			}
+		}
+
 		if (hasTag(item, "change-tool-name")) {
 			if (tool != null) {
 				operator.player().closeInventory();
@@ -36,24 +45,21 @@ public class ToolEditorGuiListener extends Logger implements Listener {
 
 		if (hasTag(item, "close-tool-editor")) {
 
-			operator.player().closeInventory();
 			for (ItemStack invItem : operator.player().getInventory().getContents()) {
 				if (invItem != null) {
 					invItem = removeTag(invItem, "editing");
+					invItem = removeTag(invItem, "tool-editor-info");
 				}
 			}
+
+			operator.player().closeInventory();
 		}
 
 		if (hasTag(item, "upgrade-trigger")) {
 			tool.upgrade();
 		}
 
-		for (ItemStack invItem : operator.player().getInventory().getContents()) {
-			if ((invItem != null) && hasTag(item, "editing")) {
-				invItem = tool.item();
-				return;
-			}
-		}
+
 
 
 	}
