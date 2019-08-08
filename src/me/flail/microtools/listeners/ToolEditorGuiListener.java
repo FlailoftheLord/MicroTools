@@ -12,11 +12,13 @@ public class ToolEditorGuiListener extends Logger implements Listener {
 
 	private User operator;
 	private MicroTool tool;
+	private MicroTool preview;
 
-	public ToolEditorGuiListener(User operator, MicroTool tool) {
+	public ToolEditorGuiListener(User operator, MicroTool tool, MicroTool preview) {
 
 		this.operator = operator;
 		this.tool = tool;
+		this.preview = preview;
 	}
 
 	public void onClick(ItemStack item, ClickType clickType) {
@@ -25,13 +27,14 @@ public class ToolEditorGuiListener extends Logger implements Listener {
 			return;
 		}
 
-		for (ItemStack invItem : operator.player().getInventory().getContents()) {
-			if ((invItem != null) && hasTag(item, "editing")) {
-				invItem = tool.item();
+		if (hasTag(item, "preview")) {
+			ItemStack newTool = preview.item().clone();
+			newTool = removeTag(newTool, "preview");
+			newTool = removeTag(newTool, "gui-item");
 
-				invItem = removeTag(invItem, "tool-editor-info");
-				break;
-			}
+			tool = MicroTool.fromItem(newTool);
+
+			return;
 		}
 
 		if (hasTag(item, "change-tool-name")) {

@@ -46,15 +46,6 @@ public class MctData extends Logger {
 		List<String> lore = new ArrayList<>();
 		String name = MctMaterial.friendlyName(toolItem.getType());
 
-		lore.add("");
-		lore.add(chat(LEVEL_DISPLAY + "%level%"));
-		lore.add(chat(GRADE_DISPLAY + "%tool-grade%"));
-		lore.add(chat(BLOCKS_DISPLAY + "%blocks%"));
-		lore.add(chat(KILLS_DISPLAY + "%kills%"));
-		lore.add("");
-
-
-
 		if (!hasTag("tool")) {
 			addTag("tool", ChatColor.stripColor(chat(name)));
 		}
@@ -68,23 +59,29 @@ public class MctData extends Logger {
 			addTag("tool-grade", "BASIC");
 		}
 
-		if (!hasTag("owner")) {
-			addTag("unclaiemd", "true");
-
-			lore.add(chat(UNCLAIMED_TOOL_TEXT));
-		} else {
-			lore.add(chat(MANAGE_TOOL_TEXT));
-		}
-
-		ItemMeta meta = toolItem.getItemMeta();
+		ItemMeta meta = getItemMeta();
 
 		meta.setDisplayName(chat("&r" + name));
-		meta.setLore(lore);
-
 		meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
-		toolItem.setItemMeta(meta);
+		setItemMeta(meta);
+
+		if (!hasTag("owner")) {
+			addTag("unclaiemd", "true");
+
+			setLoreLine(chat(UNCLAIMED_TOOL_TEXT), -1);
+		} else {
+			setLoreLine(chat(MANAGE_TOOL_TEXT), -1);
+		}
+
+
+		lore.add("");
+		lore.add(chat(LEVEL_DISPLAY + "%level%"));
+		lore.add(chat(GRADE_DISPLAY + "%tool-grade%"));
+		lore.add(chat(BLOCKS_DISPLAY + "%blocks%"));
+		lore.add(chat(KILLS_DISPLAY + "%kills%"));
+		lore.add("");
 
 	}
 
@@ -134,6 +131,20 @@ public class MctData extends Logger {
 		return getItemMeta().hasLore() ? getItemMeta().getLore() : new ArrayList<>();
 	}
 
+	public boolean setLore(List<String> lore) {
+		ItemMeta meta = getItemMeta();
+		meta.setLore(lore);
+
+		return setItemMeta(meta);
+	}
+
+	protected void addLoreLine(String value) {
+		List<String> lore = getLore();
+		lore.add(value);
+
+		setLore(lore);
+	}
+
 	protected void removeLoreLine(int index) {
 		List<String> lore = getLore();
 		lore.remove(index);
@@ -144,16 +155,13 @@ public class MctData extends Logger {
 	protected boolean setLoreLine(String value, int line) {
 		List<String> lore = getLore();
 
+		if (line < 0) {
+			line = lore.size() - 1;
+		}
 		lore.add(line, value);
 		return setLore(lore);
 	}
 
-	public boolean setLore(List<String> lore) {
-		ItemMeta meta = getItemMeta();
-		meta.setLore(lore);
-
-		return setItemMeta(meta);
-	}
 
 	public ItemMeta getItemMeta() {
 		return toolItem.getItemMeta();

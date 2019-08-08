@@ -54,6 +54,7 @@ public class ToolEditorGui extends Logger {
 				gui.setItem(i.intValue(), item);
 			}
 
+			tool.addTag("editing", "true");
 			user.player().openInventory(gui);
 		}
 
@@ -67,7 +68,7 @@ public class ToolEditorGui extends Logger {
 		List<String> lore = new ArrayList<>();
 
 		ItemStack infoItem = tool.item().clone();
-		infoItem = addTag(infoItem, "tool-editor-info", " ");
+		infoItem = addTag(infoItem, "preview", " ");
 
 
 		// Item for modifying the Tool's displayname.

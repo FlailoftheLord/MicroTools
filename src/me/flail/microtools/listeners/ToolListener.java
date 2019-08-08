@@ -29,29 +29,32 @@ public class ToolListener extends Logger implements Listener {
 		ItemStack item = event.getCurrentItem();
 		ClickType click = event.getClick();
 
-		if (hasTag(item, "tool-editor-info")) {
-			event.setCancelled(true);
-			return;
-		}
-
 		User user = new User(event.getWhoClicked().getUniqueId());
 		MicroTool tool = null;
 
 		if (hasTag(item, "gui-item")) {
 			event.setCancelled(true);
 
-			tool = MicroTool.fromItem(event.getInventory().getItem(4));
+			for (ItemStack invItem : user.player().getInventory().getContents()) {
+				if ((invItem != null) && hasTag(invItem, "editing")) {
+					tool = MicroTool.fromItem(invItem);
+				}
+			}
 
-			new ToolEditorGuiListener(user, tool).onClick(item, click);
+			MicroTool preview = MicroTool.fromItem(event.getInventory().getItem(4));
+
+			new ToolEditorGuiListener(user, tool, preview).onClick(item, click);
 			return;
 		}
 
-		if (hasTag(item, "tool")) {
-			if ((click == ClickType.SHIFT_RIGHT) || (click == ClickType.RIGHT)) {
+
+		if ((click == ClickType.SHIFT_RIGHT) || (click == ClickType.RIGHT)) {
+
+			if (hasTag(item, "tool")) {
+
 				event.setCancelled(true);
 
 				tool = MicroTool.fromItem(item);
-				tool.addTag("editing", "true");
 
 				User owner = tool.owner();
 				if (owner == null) {

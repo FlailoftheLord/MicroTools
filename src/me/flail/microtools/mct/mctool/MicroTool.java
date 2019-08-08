@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import me.flail.microtools.mct.mctool.ArmorType.Armor;
 import me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
+import me.flail.microtools.mct.mctool.gui.ToolEditorGui;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.NotNull;
 import me.flail.microtools.user.User;
@@ -338,6 +339,10 @@ public class MicroTool extends MctData {
 	}
 
 
+	public void openEditor(User user) {
+
+		new ToolEditorGui(this).open(user);
+	}
 
 
 	public Map<String, String> placeholders() {
