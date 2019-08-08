@@ -48,6 +48,7 @@ public class MctData extends Logger {
 		setLoreLine(chat(BLOCKS_DISPLAY + "%blocks%"), 3);
 		setLoreLine(chat(KILLS_DISPLAY + "%kills%"), 4);
 		setLoreLine("", 5);
+		setLoreLine("", 6);
 
 		if (hasTag("editing")) {
 
