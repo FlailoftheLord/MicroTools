@@ -69,6 +69,7 @@ public class ToolEditorGui extends Logger {
 
 		ItemStack infoItem = tool.item().clone();
 		infoItem = addTag(infoItem, "preview", " ");
+		infoItem = removeTag(infoItem, "editing");
 
 
 		// Item for modifying the Tool's displayname.

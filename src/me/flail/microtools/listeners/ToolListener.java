@@ -35,7 +35,7 @@ public class ToolListener extends Logger implements Listener {
 		if (hasTag(item, "gui-item")) {
 			event.setCancelled(true);
 
-			for (ItemStack invItem : user.player().getInventory().getContents()) {
+			for (ItemStack invItem : user.player().getInventory().getStorageContents()) {
 				if ((invItem != null) && hasTag(invItem, "editing")) {
 					tool = MicroTool.fromItem(invItem);
 				}
@@ -88,19 +88,20 @@ public class ToolListener extends Logger implements Listener {
 
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void invClose(InventoryCloseEvent event) {
-		Player player = (Player) event.getPlayer();
+		for (ItemStack item : event.getPlayer().getInventory().getStorageContents()) {
+			if (hasTag(item, "tool")) {
+				MicroTool tool = MicroTool.fromItem(item);
 
-		for (ItemStack item : event.getInventory().getContents()) {
-			if (!hasTag(item, "gui-item")) {
-				for (ItemStack extraItem : player.getInventory().addItem(item).values()) {
-					if (extraItem != null) {
-						player.getWorld().dropItem(player.getLocation(), extraItem);
-					}
-				}
+				tool.removeTag("editing");
+				tool.removeTag("preview");
+				tool.updateItem();
 			}
+
 		}
+
+		((Player) event.getPlayer()).updateInventory();
 	}
 
 	@EventHandler

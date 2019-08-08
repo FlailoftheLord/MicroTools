@@ -26,6 +26,8 @@ public class MctData extends Logger {
 
 	public static final String UNCLAIMED_TOOL_TEXT = "&7This tool is unclaimed, right-click to claim.";
 	public static final String MANAGE_TOOL_TEXT = "&8right-click to manage item.";
+	public static final String PREVIEW_TOOL_TEXT = "&eclick to apply upgrades";
+	public static final String EDITING_TOOL_TEXT = "&eyou are currently editing this tool!";
 	public static final String LEVEL_DISPLAY = "&aLevel&8: &7";
 	public static final String GRADE_DISPLAY = "&aGrade&8: &7";
 	public static final String BLOCKS_DISPLAY = "&aBlocks Broken&8: &7";
@@ -39,16 +41,37 @@ public class MctData extends Logger {
 	 * Generates the new Tool from the provided ItemStack.
 	 */
 	protected void create() {
+
+		setLoreLine("", 0);
+		setLoreLine(chat(LEVEL_DISPLAY + "%level%"), 1);
+		setLoreLine(chat(GRADE_DISPLAY + "%tool-grade%"), 2);
+		setLoreLine(chat(BLOCKS_DISPLAY + "%blocks%"), 3);
+		setLoreLine(chat(KILLS_DISPLAY + "%kills%"), 4);
+		setLoreLine("", 5);
+
+		if (hasTag("editing")) {
+
+			setLoreLine(chat(EDITING_TOOL_TEXT), -1);
+		} else if (hasTag("preview")) {
+
+			setLoreLine(chat(PREVIEW_TOOL_TEXT), -1);
+		} else if (!hasTag("owner")) {
+			addTag("unclaiemd", "true");
+
+			setLoreLine(chat(UNCLAIMED_TOOL_TEXT), -1);
+		} else {
+
+			setLoreLine(chat(MANAGE_TOOL_TEXT), -1);
+		}
+
+
 		if (hasTag("tool")) {
 			return;
 		}
 
-		List<String> lore = new ArrayList<>();
 		String name = MctMaterial.friendlyName(toolItem.getType());
+		addTag("tool", ChatColor.stripColor(chat(name)));
 
-		if (!hasTag("tool")) {
-			addTag("tool", ChatColor.stripColor(chat(name)));
-		}
 		if (!hasTag("tool-type")) {
 			addTag("tool-type", toolItem.getType().toString());
 		}
@@ -61,27 +84,11 @@ public class MctData extends Logger {
 
 		ItemMeta meta = getItemMeta();
 
-		meta.setDisplayName(chat("&r" + name));
+
 		meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
 		setItemMeta(meta);
-
-		if (!hasTag("owner")) {
-			addTag("unclaiemd", "true");
-
-			setLoreLine(chat(UNCLAIMED_TOOL_TEXT), -1);
-		} else {
-			setLoreLine(chat(MANAGE_TOOL_TEXT), -1);
-		}
-
-
-		lore.add("");
-		lore.add(chat(LEVEL_DISPLAY + "%level%"));
-		lore.add(chat(GRADE_DISPLAY + "%tool-grade%"));
-		lore.add(chat(BLOCKS_DISPLAY + "%blocks%"));
-		lore.add(chat(KILLS_DISPLAY + "%kills%"));
-		lore.add("");
 
 	}
 
@@ -128,7 +135,7 @@ public class MctData extends Logger {
 	}
 
 	public List<String> getLore() {
-		return getItemMeta().hasLore() ? getItemMeta().getLore() : new ArrayList<>();
+		return getItemMeta().hasLore() ? getItemMeta().getLore() : new ArrayList<>(16);
 	}
 
 	public boolean setLore(List<String> lore) {
@@ -145,14 +152,30 @@ public class MctData extends Logger {
 		setLore(lore);
 	}
 
-	protected void removeLoreLine(int index) {
+	public void removeLoreLine(int index) {
 		List<String> lore = getLore();
 		lore.remove(index);
 
 		setLore(lore);
 	}
 
-	protected boolean setLoreLine(String value, int line) {
+	public boolean setLoreLine(String value, int line) {
+		List<String> lore = getLore();
+
+		if (line < 0) {
+			line = lore.size() - 1;
+		}
+
+		if (line >= lore.size()) {
+
+			lore.add("");
+		}
+
+		lore.set(line, value);
+		return setLore(lore);
+	}
+
+	public boolean insertLoreLine(String value, int line) {
 		List<String> lore = getLore();
 
 		if (line < 0) {

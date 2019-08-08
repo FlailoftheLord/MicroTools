@@ -91,11 +91,15 @@ public class MicroTool extends MctData {
 	}
 
 	protected void createItem() {
-		updatePlaceholders(this.placeholders());
-
 		setNextUpgrade();
 
+		updateItem();
+	}
+
+	public void updateItem() {
 		create();
+
+		updatePlaceholders(this.placeholders());
 	}
 
 	public void setColor(ColorType color) {

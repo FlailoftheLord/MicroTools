@@ -22,8 +22,8 @@ public class ToolEditorGuiListener extends Logger implements Listener {
 	}
 
 	public void onClick(ItemStack item, ClickType clickType) {
-		if ((tool != null) && !tool.hasOwner()) {
-			tool = tool.setOwner(operator);
+		if ((preview != null) && !preview.hasOwner()) {
+			preview = preview.setOwner(operator);
 			return;
 		}
 
@@ -32,38 +32,29 @@ public class ToolEditorGuiListener extends Logger implements Listener {
 			newTool = removeTag(newTool, "preview");
 			newTool = removeTag(newTool, "gui-item");
 
+			newTool = addTag(newTool, "editing", "true");
 			tool = MicroTool.fromItem(newTool);
 
 			return;
 		}
 
 		if (hasTag(item, "change-tool-name")) {
-			if (tool != null) {
+			if (preview != null) {
 				operator.player().closeInventory();
 
-				operator.openToolNameEditor(tool);
+				operator.openToolNameEditor(preview);
 			}
 
 		}
 
 		if (hasTag(item, "close-tool-editor")) {
 
-			for (ItemStack invItem : operator.player().getInventory().getContents()) {
-				if (invItem != null) {
-					invItem = removeTag(invItem, "editing");
-					invItem = removeTag(invItem, "tool-editor-info");
-				}
-			}
-
 			operator.player().closeInventory();
 		}
 
 		if (hasTag(item, "upgrade-trigger")) {
-			tool.upgrade();
+			preview.upgrade();
 		}
-
-
-
 
 	}
 
