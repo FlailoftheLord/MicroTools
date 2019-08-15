@@ -38,19 +38,18 @@ public class ToolListener extends Logger implements Listener {
 			for (ItemStack invItem : user.player().getInventory().getStorageContents()) {
 				if ((invItem != null) && hasTag(invItem, "editing")) {
 					tool = MicroTool.fromItem(invItem);
+					tool.updateItem();
 				}
 			}
 
-			MicroTool preview = MicroTool.fromItem(event.getInventory().getItem(4));
-
-			new ToolEditorGuiListener(user, tool, preview).onClick(item, click);
+			new ToolEditorGuiListener(user, tool, event.getInventory()).onClick(item, click);
 			return;
 		}
 
 
 		if ((click == ClickType.SHIFT_RIGHT) || (click == ClickType.RIGHT)) {
 
-			if (hasTag(item, "tool")) {
+			if (hasTag(item, "tool") && !hasTag(item, "preview")) {
 
 				event.setCancelled(true);
 

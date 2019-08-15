@@ -93,6 +93,10 @@ public class MctData extends Logger {
 
 	}
 
+	public void setItemStack(ItemStack item) {
+		toolItem = item;
+	}
+
 	public void addTag(String key, String value) {
 		toolItem = addTag(toolItem, key, value);
 	}

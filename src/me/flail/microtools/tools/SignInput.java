@@ -20,6 +20,9 @@ public class SignInput extends CraftSign {
 		super(block);
 
 		sign = (Sign) block.getState();
+		sign.setEditable(true);
+		sign.setBlockData(sign.getBlockData());
+		sign.update();
 	}
 
 
