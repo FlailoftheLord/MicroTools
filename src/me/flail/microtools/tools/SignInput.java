@@ -54,7 +54,14 @@ public class SignInput extends CraftSign {
 			Object packet = Reflection.getClass("PacketPlayOutOpenSignEditor").getConstructor(Reflection.getClass("BlockPosition"))
 					.newInstance(position);
 
-			connection.getClass().getDeclaredMethod("sendPacket", Reflection.getClass("Packet")).invoke(connection, packet);
+			plugin.scheduler.scheduleSyncDelayedTask(plugin, () -> {
+
+				try {
+					connection.getClass().getDeclaredMethod("sendPacket", Reflection.getClass("Packet")).invoke(connection, packet);
+				} catch (Throwable t) {
+
+				}
+			}, 3L);
 
 			return true;
 		} catch (Throwable t) {

@@ -11,13 +11,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.mct.mctool.MicroTool;
-import me.flail.microtools.mct.mctool.gui.ToolEditorGui;
+import me.flail.microtools.mct.mctool.ToolEditor;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
 import me.flail.microtools.user.User;
@@ -27,45 +26,27 @@ public class ToolListener extends Logger implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void invClick(InventoryClickEvent event) {
 		ItemStack item = event.getCurrentItem();
-		ClickType click = event.getClick();
-
 		User user = new User(event.getWhoClicked().getUniqueId());
-		MicroTool tool = null;
 
-		if (hasTag(item, "gui-item")) {
-			event.setCancelled(true);
+		if ((item != null) && !event.isCancelled()) {
+			ToolEditor listener = new ToolEditor(user);
 
-			for (ItemStack invItem : user.player().getInventory().getStorageContents()) {
-				if ((invItem != null) && hasTag(invItem, "editing")) {
-					tool = MicroTool.fromItem(invItem);
-					tool.updateItem();
-				}
+			if (hasTag(item, "gui-item")) {
+
+				listener.guiClick(item, event);
 			}
 
-			new ToolEditorGuiListener(user, tool, event.getInventory()).onClick(item, click);
-			return;
+			if (hasTag(item, "tool")) {
+
+				listener.toolClick(item, event);
+			}
+
 		}
 
+	}
 
-		if ((click == ClickType.SHIFT_RIGHT) || (click == ClickType.RIGHT)) {
-
-			if (hasTag(item, "tool") && !hasTag(item, "preview")) {
-
-				event.setCancelled(true);
-
-				tool = MicroTool.fromItem(item);
-
-				User owner = tool.owner();
-				if (owner == null) {
-					tool = tool.setOwner(user);
-					return;
-				}
-
-				if (owner.uuid().equals(user.uuid())) {
-
-					new ToolEditorGui(tool).open(owner);
-				} else {
-					if (owner.isOnline()) {
+	/*
+	  if (owner.isOnline()) {
 						user.player().getInventory().remove(tool.item());
 
 						if (owner.player().getInventory().firstEmpty() != -1) {
@@ -79,13 +60,7 @@ public class ToolListener extends Logger implements Listener {
 						new Message("StolenItemReturned").send(owner, null);
 					}
 
-				}
-
-			}
-
-		}
-
-	}
+	 */
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void invClose(InventoryCloseEvent event) {

@@ -28,9 +28,6 @@ public class ToolEditorGui extends Logger {
 	public static final Material ITEM_MANAGE_ENCHANTS = Material.ENCHANTED_BOOK;
 	public static final Material FILLER_ITEM = Material.GREEN_STAINED_GLASS_PANE;
 
-	public static Material infoItemType;
-
-
 	protected Inventory gui;
 	protected Map<Integer, ItemStack> items = new TreeMap<>();
 
@@ -39,7 +36,6 @@ public class ToolEditorGui extends Logger {
 	public ToolEditorGui(MicroTool tool) {
 		this.tool = tool;
 
-		infoItemType = tool.getMaterial();
 		gui = Bukkit.createInventory(null, 45, chat(MAIN_GUI_TITLE + tool.getName()));
 
 		generate();
