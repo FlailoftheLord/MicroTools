@@ -50,6 +50,7 @@ public class MicroTool extends MctData {
 		itemData = new MctData(toolItem);
 
 		createItem();
+		updateItem();
 	}
 
 	public static DataFile configuration() {

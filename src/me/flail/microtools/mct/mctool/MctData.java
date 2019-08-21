@@ -57,7 +57,7 @@ public class MctData extends Logger {
 
 			setLoreLine(chat(PREVIEW_TOOL_TEXT), -1);
 		} else if (!hasTag("owner")) {
-			addTag("unclaiemd", "true");
+			addTag("unclaimed", "true");
 
 			setLoreLine(chat(UNCLAIMED_TOOL_TEXT), -1);
 		} else {
@@ -117,7 +117,7 @@ public class MctData extends Logger {
 	 * Gets the displayname of this tool item.
 	 */
 	public String getName() {
-		if (toolItem.hasItemMeta()) {
+		if (toolItem.getItemMeta().hasDisplayName()) {
 			return toolItem.getItemMeta().getDisplayName();
 		}
 

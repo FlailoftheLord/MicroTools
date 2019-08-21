@@ -45,23 +45,6 @@ public class ToolListener extends Logger implements Listener {
 
 	}
 
-	/*
-	  if (owner.isOnline()) {
-						user.player().getInventory().remove(tool.item());
-
-						if (owner.player().getInventory().firstEmpty() != -1) {
-
-							owner.player().getInventory().addItem(tool.item());
-						} else {
-
-							owner.player().getWorld().dropItem(owner.player().getLocation(), tool.item());
-						}
-
-						new Message("StolenItemReturned").send(owner, null);
-					}
-
-	 */
-
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void invClose(InventoryCloseEvent event) {
 		for (ItemStack item : event.getPlayer().getInventory().getContents()) {
@@ -69,12 +52,12 @@ public class ToolListener extends Logger implements Listener {
 				MicroTool tool = MicroTool.fromItem(item);
 
 				tool.removeTag("editing");
-				tool.removeTag("preview");
 				tool.updateItem();
 			}
 
 		}
 
+		plugin.toolEditors.remove(event.getPlayer().getUniqueId());
 		((Player) event.getPlayer()).updateInventory();
 	}
 

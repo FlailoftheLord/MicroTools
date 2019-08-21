@@ -340,6 +340,10 @@ public class User extends UserData {
 	}
 
 	public boolean openToolNameEditor(MicroTool tool) {
+		if (tool == null) {
+			return false;
+		}
+
 		Block block = player().getLocation().getBlock();
 		block.setType(Material.OAK_SIGN);
 

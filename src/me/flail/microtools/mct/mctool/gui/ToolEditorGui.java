@@ -52,6 +52,7 @@ public class ToolEditorGui extends Logger {
 
 			tool.addTag("editing", "true");
 			user.player().openInventory(gui);
+			plugin.toolEditors.put(user.uuid(), tool);
 		}
 
 	}

@@ -3,6 +3,7 @@ package me.flail.microtools;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,6 +48,7 @@ public class MicroTools extends JavaPlugin {
 
 	public Map<UUID, Set<String>> msgCooldowns = new TreeMap<>();
 	public Map<UUID, Map<Location, MicroTool>> signInputs = new HashMap<>();
+	public Map<UUID, MicroTool> toolEditors = new LinkedHashMap<>();
 
 	public DataFile settings;
 
