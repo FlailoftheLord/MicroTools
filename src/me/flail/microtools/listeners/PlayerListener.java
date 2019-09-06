@@ -80,14 +80,16 @@ public class PlayerListener extends Logger implements Listener {
 					&& plugin.signInputs.get(user.uuid()).containsKey(sign.getLocation())) {
 
 				String inputValue = event.getLine(0);
-				MicroTool tool = plugin.signInputs.get(user.uuid()).get(sign.getLocation());
+				ItemStack toolItem = plugin.signInputs.get(user.uuid()).get(sign.getLocation());
+
+				MicroTool tool = MicroTool.fromItem(toolItem);
 
 				tool.setName(chat(inputValue));
 
 				plugin.signInputs.remove(user.uuid());
 				new Message("ToolNameChanged").replace("%tool%", tool.getName()).send(user, null);
 
-				new ToolEditorGui(tool).open(user);
+				new ToolEditorGui(tool.item()).open(user);
 
 				event.getBlock().setType(Material.AIR);
 			}

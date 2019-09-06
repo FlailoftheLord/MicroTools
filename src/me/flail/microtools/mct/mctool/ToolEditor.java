@@ -23,10 +23,11 @@ public class ToolEditor extends Logger {
 	}
 
 	public void guiClick(ItemStack item, InventoryClickEvent event) {
+		setTool();
 		setPreview(event.getInventory());
 
 		if (plugin.toolEditors.containsKey(operator.uuid())) {
-			if (hasTag(item, "tool") || hasTag(item, "gui-item")) {
+			if (hasTag(item, "tool") || hasTag(item, "gui-item") || hasTag(item, "editing")) {
 				event.setCancelled(true);
 			}
 		}
@@ -64,7 +65,7 @@ public class ToolEditor extends Logger {
 
 			if (event.getClick().equals(ClickType.RIGHT) || event.getClick().equals(ClickType.SHIFT_RIGHT)) {
 				if (owner.uuid().equals(operator.uuid())) {
-					new ToolEditorGui(tool).open(operator);
+					new ToolEditorGui(tool.item()).open(operator);
 
 					return;
 				}
@@ -91,8 +92,19 @@ public class ToolEditor extends Logger {
 
 	}
 
+	void setTool() {
+		for (ItemStack item : operator.player().getInventory().getContents()) {
+			if (hasTag(item, "editing")) {
+				tool = MicroTool.fromItem(item);
+
+				return;
+			}
+
+		}
+
+	}
+
 	void setPreview(Inventory eventInv) {
-		tool = plugin.toolEditors.get(operator.uuid());
 
 		if (eventInv != null) {
 			for (ItemStack item : eventInv.getContents()) {
@@ -111,7 +123,7 @@ public class ToolEditor extends Logger {
 	// apply the changes from the preview item to the real tool.
 	void applyChanges() {
 
-		tool.setItemStack(preview.item().clone());
+		tool = MicroTool.fromItem(preview.item().clone());
 
 		tool.removeTag("preview");
 		tool.removeTag("gui-item");

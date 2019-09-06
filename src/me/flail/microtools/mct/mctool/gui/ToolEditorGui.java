@@ -33,8 +33,8 @@ public class ToolEditorGui extends Logger {
 
 	private MicroTool tool;
 
-	public ToolEditorGui(MicroTool tool) {
-		this.tool = tool;
+	public ToolEditorGui(ItemStack toolItem) {
+		tool = MicroTool.fromItem(toolItem);
 
 		gui = Bukkit.createInventory(null, 45, chat(MAIN_GUI_TITLE + tool.getName()));
 
@@ -51,8 +51,9 @@ public class ToolEditorGui extends Logger {
 			}
 
 			tool.addTag("editing", "true");
+			tool.updateItem();
 			user.player().openInventory(gui);
-			plugin.toolEditors.put(user.uuid(), tool);
+			plugin.toolEditors.put(user.uuid(), tool.item());
 		}
 
 	}

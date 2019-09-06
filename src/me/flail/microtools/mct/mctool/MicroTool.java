@@ -346,7 +346,7 @@ public class MicroTool extends MctData {
 
 	public void openEditor(User user) {
 
-		new ToolEditorGui(this).open(user);
+		new ToolEditorGui(this.item()).open(user);
 	}
 
 

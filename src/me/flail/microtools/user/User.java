@@ -357,8 +357,8 @@ public class User extends UserData {
 
 		block.setBlockData(sign.getBlockData());
 
-		Map<Location, MicroTool> map = new HashMap<>();
-		map.put(sign.getLocation(), tool);
+		Map<Location, ItemStack> map = new HashMap<>();
+		map.put(sign.getLocation(), tool.item());
 
 		plugin.signInputs.put(uuid(), map);
 
