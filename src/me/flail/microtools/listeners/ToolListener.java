@@ -47,6 +47,10 @@ public class ToolListener extends Logger implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void invClose(InventoryCloseEvent event) {
+		if (plugin.signInputs.containsKey(event.getPlayer().getUniqueId())) {
+			return;
+		}
+
 		for (ItemStack item : event.getPlayer().getInventory().getContents()) {
 			if (hasTag(item, "tool")) {
 				MicroTool tool = MicroTool.fromItem(item);

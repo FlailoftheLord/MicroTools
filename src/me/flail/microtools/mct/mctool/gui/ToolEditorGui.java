@@ -22,6 +22,7 @@ public class ToolEditorGui extends Logger {
 	public static final String DISPLAY_CHANGE_NAME = "&e&lChange Name";
 	public static final String DISPLAY_MODIFY_OWNER = "&c&lModify Owner";
 	public static final String DISPLAY_MANAGE_ENCHANTS = "&d&lMange Enchants";
+	public static final String DISPLAY_UPGRADE_ITEM = "&a&lUpgrade to next Tier";
 
 	public static final Material ITEM_CHANGE_NAME = Material.NAME_TAG;
 	public static final Material ITEM_MODIFY_OWNER = Material.WRITABLE_BOOK;
@@ -117,6 +118,7 @@ public class ToolEditorGui extends Logger {
 
 		// Temporary item for upgrade testing.
 		ItemStack upgradeItem = new ItemStack(Material.ANVIL);
+		upgradeItem = setDisplayName(DISPLAY_UPGRADE_TOOL, upgradeItem);
 		upgradeItem = addTag(upgradeItem, "upgrade-trigger", "true");
 
 		// Close button item.

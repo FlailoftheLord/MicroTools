@@ -94,7 +94,8 @@ public class MctData extends Logger {
 	}
 
 	public void setItemStack(ItemStack item) {
-		toolItem = item;
+		setItemMeta(item.getItemMeta());
+		toolItem.setType(item.getType());
 	}
 
 	public void addTag(String key, String value) {

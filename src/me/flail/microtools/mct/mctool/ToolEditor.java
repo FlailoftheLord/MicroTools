@@ -123,7 +123,7 @@ public class ToolEditor extends Logger {
 	// apply the changes from the preview item to the real tool.
 	void applyChanges() {
 
-		tool = MicroTool.fromItem(preview.item().clone());
+		tool.setItemStack(preview.item());
 
 		tool.removeTag("preview");
 		tool.removeTag("gui-item");

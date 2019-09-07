@@ -103,7 +103,7 @@ public class MicroTool extends MctData {
 		updatePlaceholders(this.placeholders());
 	}
 
-	public void setColor(ColorType color) {
+	public void setArmorColor(ColorType color) {
 		if (toolItem.getItemMeta() instanceof LeatherArmorMeta) {
 			LeatherArmorMeta aMeta = (LeatherArmorMeta) toolItem.getItemMeta();
 			aMeta.setColor(ArmorType.getColor(color));
@@ -250,9 +250,20 @@ public class MicroTool extends MctData {
 				return;
 			}
 
+			addTag("previous-upgrade", upgrades.get(Integer.valueOf(upgradeLevel())));
 			addTag("upgrade", upgrades.get(Integer.valueOf(upgradeLevel() + 1)));
 			return;
 		}
+	}
+
+	public MicroTool downgrade() {
+		if (!hasTag("previous-upgrade") && hasOwner()) {
+			owner.sendMessage("&cThis tool has no available downgrades!");
+			return this;
+		}
+
+		setGrade("previous-upgrade");
+		return this;
 	}
 
 	/**
@@ -264,11 +275,17 @@ public class MicroTool extends MctData {
 			return this;
 		}
 
-		String upgradeType = getTag("upgrade");
+		setGrade("upgrade");
+		return this;
+	}
+
+	protected void setGrade(String keyValue) {
+
+		String upgradeType = getTag(keyValue);
 
 		if (upgradeType.equalsIgnoreCase("max")) {
 			console("Item is at max upgrades, and cannot be upgraded further: " + material().toString());
-			return this;
+			return;
 		}
 
 		int level = upgradeLevel();
@@ -280,8 +297,6 @@ public class MicroTool extends MctData {
 		if (upgradedMaterial != null) {
 			toolItem.setType(upgradedMaterial);
 		}
-
-		return this;
 	}
 
 	/**
