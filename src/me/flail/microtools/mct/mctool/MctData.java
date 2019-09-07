@@ -88,6 +88,7 @@ public class MctData extends Logger {
 
 		meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
 		setItemMeta(meta);
 

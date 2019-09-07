@@ -118,7 +118,7 @@ public class ToolEditorGui extends Logger {
 
 		// Temporary item for upgrade testing.
 		ItemStack upgradeItem = new ItemStack(Material.ANVIL);
-		upgradeItem = setDisplayName(DISPLAY_UPGRADE_TOOL, upgradeItem);
+		upgradeItem = setDisplayname(DISPLAY_UPGRADE_ITEM, upgradeItem);
 		upgradeItem = addTag(upgradeItem, "upgrade-trigger", "true");
 
 		// Close button item.
@@ -135,7 +135,7 @@ public class ToolEditorGui extends Logger {
 		items.put(21, modifyOwnerItem);
 		items.put(23, manageEnchantsItem);
 		items.put(36, closeButton);
-		items.put(8, upgradeItem);
+		items.put(25, upgradeItem);
 
 		fillEmptySpace();
 	}

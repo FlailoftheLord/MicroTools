@@ -32,6 +32,13 @@ public class ToolEditor extends Logger {
 			}
 		}
 
+		if (hasTag(item, "close-tool-editor")) {
+			plugin.toolEditors.remove(operator.uuid());
+
+			operator.player().closeInventory();
+			return;
+		}
+
 		if (hasTag(item, "preview")) {
 
 			applyChanges();
@@ -123,10 +130,18 @@ public class ToolEditor extends Logger {
 	// apply the changes from the preview item to the real tool.
 	void applyChanges() {
 
+		if (tool == null) {
+			setTool();
+			if (tool == null) {
+				console("&cTHERE'S AN ISSUE WITH TOOL EDITOR CHANGES NOT APPLYING. This is most likely a visual bug, Simply close your inventory and open it again.");
+			}
+			return;
+		}
 		tool.setItemStack(preview.item());
 
 		tool.removeTag("preview");
 		tool.removeTag("gui-item");
+		tool.addTag("editing", "true");
 		tool.updateItem();
 	}
 
