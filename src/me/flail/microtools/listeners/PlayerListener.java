@@ -2,6 +2,7 @@ package me.flail.microtools.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -9,11 +10,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
+import me.flail.microtools.mct.mctool.ArmorType;
+import me.flail.microtools.mct.mctool.MctMaterial;
 import me.flail.microtools.mct.mctool.MicroTool;
 import me.flail.microtools.mct.mctool.ToolType;
 import me.flail.microtools.mct.mctool.gui.ToolEditorGui;
@@ -28,18 +32,18 @@ public class PlayerListener extends Logger implements Listener {
 		ItemStack item = event.getCurrentItem();
 		User user = new User(((Player) event.getWhoClicked()).getUniqueId());
 
-		if (ToolType.materials().contains(item.getType())) {
-			if (!ToolType.isDefault(item.getType())) {
-				event.setCancelled(true);
-				user.player().closeInventory();
+		if (ToolType.materials().contains(item.getType()) || ArmorType.materials().contains(item.getType())) {
+			if (ToolType.isDefault(item.getType()) || ArmorType.isDefault(item.getType())) {
+				MicroTool tool = MicroTool.fromItem(item);
 
-				new Message("CantCraftMustUpgrade").send(user, null);
+				event.setCurrentItem(tool.item());
 				return;
 			}
-			MicroTool tool = MicroTool.fromItem(item);
 
-			event.setCurrentItem(tool.item());
+			event.setCancelled(true);
+			user.player().closeInventory();
 
+			new Message("CantCraftMustUpgrade").send(user, null);
 
 		}
 
@@ -54,7 +58,7 @@ public class PlayerListener extends Logger implements Listener {
 			List<ItemStack> keptItems = new ArrayList<>();
 			ItemStack[] items = event.getDrops().toArray(new ItemStack[] {});
 			for (ItemStack item : items) {
-				if (ToolType.isValid(item.getType())) {
+				if (MctMaterial.isValid(item)) {
 					keptItems.add(item);
 					event.getDrops().remove(item);
 				}
@@ -94,6 +98,21 @@ public class PlayerListener extends Logger implements Listener {
 				event.getBlock().setType(Material.AIR);
 			}
 
+		}
+
+	}
+
+	@EventHandler
+	public void signDestroy(BlockBreakEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
+
+		for (UUID id : plugin.signInputs.keySet()) {
+			if (plugin.signInputs.get(id).containsKey(event.getBlock().getLocation())) {
+				event.setCancelled(true);
+				return;
+			}
 		}
 
 	}

@@ -60,7 +60,7 @@ public class BaseUtilities extends LegacyUtils {
 	 *                 String tag to check for.
 	 * @return true if found, otherwise false.
 	 */
-	protected boolean hasTag(ItemStack item, String key) {
+	protected static boolean hasTag(ItemStack item, String key) {
 		return hasLegacyTag(item, key);
 	}
 

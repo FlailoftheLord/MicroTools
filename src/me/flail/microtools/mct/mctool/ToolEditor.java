@@ -63,14 +63,19 @@ public class ToolEditor extends Logger {
 		if (!hasTag(item, "editing") && hasTag(item, "tool") && !hasTag(item, "preview")) {
 			tool = MicroTool.fromItem(item);
 
-			if (!tool.hasOwner()) {
-				tool.setOwner(operator);
-				tool.updateItem();
-			}
-
-			owner = tool.owner();
-
 			if (event.getClick().equals(ClickType.RIGHT) || event.getClick().equals(ClickType.SHIFT_RIGHT)) {
+				if (!tool.hasOwner()) {
+					event.setCancelled(true);
+
+					tool.setOwner(operator);
+					tool.updateItem();
+
+					return;
+				}
+
+				owner = tool.owner();
+
+
 				if (owner.uuid().equals(operator.uuid())) {
 					new ToolEditorGui(tool.item()).open(operator);
 
@@ -78,18 +83,19 @@ public class ToolEditor extends Logger {
 				}
 			}
 
-			if (!owner.uuid().equals(operator.uuid())) {
+			if (!owner.uuid().equals(operator.uuid()) && !operator.playerGamemode().equals("creative")) {
 				if (owner.isOnline()) {
-					operator.player().getInventory().remove(tool.item());
 
 					if (owner.player().getInventory().firstEmpty() != -1) {
 
-						owner.player().getInventory().addItem(tool.item());
+						owner.player().getInventory().addItem(item);
 					} else {
 
-						owner.player().getWorld().dropItem(owner.player().getLocation(), tool.item());
+						owner.player().getWorld().dropItem(owner.player().getLocation(), item);
 					}
 
+					operator.player().setItemOnCursor(null);
+					operator.player().getInventory().removeItem(item);
 					new Message("StolenItemReturned").send(owner, null);
 				}
 

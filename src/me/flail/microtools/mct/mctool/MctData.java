@@ -32,6 +32,8 @@ public class MctData extends Logger {
 	public static final String GRADE_DISPLAY = "&aGrade&8: &7";
 	public static final String BLOCKS_DISPLAY = "&aBlocks Broken&8: &7";
 	public static final String KILLS_DISPLAY = "&aKills&8: &7";
+	public static final String USES_DISPLAY = "&aTimes Used&8: &7";
+	public static final String DAMAGE_ABSORBED_DISPLAY = "&aDamage Negated&8: &7";
 
 	protected MctData(ItemStack item) {
 		toolItem = item;
@@ -44,12 +46,23 @@ public class MctData extends Logger {
 
 		setLoreLine("", 0);
 		setLoreLine(chat(LEVEL_DISPLAY + "%level%"), 1);
-		setLoreLine(chat(GRADE_DISPLAY + "%tool-grade%"), 2);
-		setLoreLine(chat(BLOCKS_DISPLAY + "%blocks%"), 3);
-		setLoreLine(chat(KILLS_DISPLAY + "%kills%"), 4);
-		setLoreLine("", 5);
-		setLoreLine("", 6);
 
+		if (MicroType.isUpgradeable(toolItem.getType())) {
+			setLoreLine(chat(GRADE_DISPLAY + "%tool-grade%"), 2);
+		}
+
+		if (isTool()) {
+			setLoreLine(chat(BLOCKS_DISPLAY + "%blocks%"), 3);
+			setLoreLine(chat(KILLS_DISPLAY + "%kills%"), 4);
+		}
+
+		if (isArmor()) {
+			setLoreLine(chat(DAMAGE_ABSORBED_DISPLAY + "%damage-abs%"), 3);
+			setLoreLine("", 4);
+		}
+
+
+		setLoreLine("", 5);
 		if (hasTag("editing")) {
 
 			setLoreLine(chat(EDITING_TOOL_TEXT), -1);
@@ -65,6 +78,7 @@ public class MctData extends Logger {
 			setLoreLine(chat(MANAGE_TOOL_TEXT), -1);
 		}
 
+		this.purgeLore();
 
 		if (hasTag("tool")) {
 			return;
@@ -79,7 +93,7 @@ public class MctData extends Logger {
 		if (!hasTag("level")) {
 			addTag("level", "0");
 		}
-		if (hasTag("tool-grade")) {
+		if (!hasTag("tool-grade")) {
 			addTag("tool-grade", "BASIC");
 		}
 
@@ -142,7 +156,7 @@ public class MctData extends Logger {
 	}
 
 	public List<String> getLore() {
-		return getItemMeta().hasLore() ? getItemMeta().getLore() : new ArrayList<>(16);
+		return getItemMeta().hasLore() ? getItemMeta().getLore() : new ArrayList<>(8);
 	}
 
 	public boolean setLore(List<String> lore) {
@@ -150,6 +164,26 @@ public class MctData extends Logger {
 		meta.setLore(lore);
 
 		return setItemMeta(meta);
+	}
+
+	public void purgeLore() {
+		List<String> lore = getLore();
+		boolean wasLastEmpty = false;
+
+		for (String line : lore) {
+
+			if (line.equals("")) {
+				if (wasLastEmpty) {
+					lore.remove(line);
+
+					wasLastEmpty = false;
+					continue;
+				}
+
+				wasLastEmpty = true;
+			}
+		}
+
 	}
 
 	protected void addLoreLine(String value) {
@@ -161,7 +195,10 @@ public class MctData extends Logger {
 
 	public void removeLoreLine(int index) {
 		List<String> lore = getLore();
-		lore.remove(index);
+		try {
+			lore.remove(index);
+		} catch (Throwable t) {
+		}
 
 		setLore(lore);
 	}
@@ -169,14 +206,15 @@ public class MctData extends Logger {
 	public boolean setLoreLine(String value, int line) {
 		List<String> lore = getLore();
 
-		if (line < 0) {
-			line = lore.size() - 1;
-		}
-
-		if (line >= lore.size()) {
+		for (int i = lore.size(); i <= Math.abs(line); i++) {
 
 			lore.add("");
 		}
+
+		if (line < 0) {
+			line = lore.size() - Math.abs(line);
+		}
+
 
 		lore.set(line, value);
 		return setLore(lore);
@@ -191,7 +229,6 @@ public class MctData extends Logger {
 		lore.add(line, value);
 		return setLore(lore);
 	}
-
 
 	public ItemMeta getItemMeta() {
 		return toolItem.getItemMeta();
@@ -210,6 +247,27 @@ public class MctData extends Logger {
 		}
 
 		return ToolType.class;
+	}
+
+	/**
+	 * @return true if this {@link #material()} is a valid ArmorType. false otherwise.
+	 */
+	public boolean isArmor() {
+		return ArmorType.materials().contains(getMaterial());
+	}
+
+	/**
+	 * @return true if this {@link #material()} is a valid ToolType. false otherwise.
+	 */
+	public boolean isTool() {
+		return ToolType.materials().contains(getMaterial());
+	}
+
+	/**
+	 * @return true if, somehow, the type is neither Armor nor Tool.
+	 */
+	public boolean isMisc() {
+		return !isTool() && !isArmor() && MicroType.allMaterials().contains(getMaterial());
 	}
 
 	public MctData addEnchant(EnchantType type) {

@@ -1,78 +1,82 @@
 package me.flail.microtools.mct.mctool;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.mct.mctool.ArmorType.Armor.ColorType;
 import me.flail.microtools.tools.Logger;
 
 public class MctMaterial extends Logger {
 
-	public static final String FLINT_AND_STEEL = "FLINT_AND_STEEL";
-	public static final String BOW = "BOW";
-	public static final String CROSSBOW = "CROSSBOW";
-	public static final String SHEARS = "SHEARS";
-	public static final String FISHING_ROD = "FISHING_ROD";
-	public static final String TURTLE_HELMET = "TURTLE_HELMET";
-	public static final String SHIELD = "SHIELD";
+	public static final String[] types = { "FLINT_AND_STEEL",
+			"BOW",
+			"CROSSBOW",
+			"SHEARS",
+			"TRIDENT",
+			"FISHING_ROD",
+			"SHIELD",
+			"TURTLE_HELMET",
 
-	public static final String WOODEN_AXE = "WOODEN_AXE";
-	public static final String WOODEN_HOE = "WOODEN_HOE";
-	public static final String WOODEN_PICKAXE = "WOODEN_PICKAXE";
-	public static final String WOODEN_SHOVEL = "WOODEN_SHOVEL";
-	public static final String WOODEN_SWORD = "WOODEN_SWORD";
+			"WOODEN_AXE",
+			"WOODEN_HOE",
+			"WOODEN_PICKAXE",
+			"WOODEN_SHOVEL",
+			"WOODEN_SWORD",
 
-	public static final String STONE_AXE = "STONE_AXE";
-	public static final String STONE_HOE = "STONE_HOE";
-	public static final String STONE_PICKAXE = "STONE_PICKAXE";
-	public static final String STONE_SHOVEL = "STONE_SHOVEL";
-	public static final String STONE_SWORD = "STONE_SWORD";
+			"STONE_AXE",
+			"STONE_HOE",
+			"STONE_PICKAXE",
+			"STONE_SHOVEL",
+			"STONE_SWORD",
 
-	public static final String IRON_AXE = "IRON_AXE";
-	public static final String IRON_HOE = "IRON_HOE";
-	public static final String IRON_PICKAXE = "IRON_PICKAXE";
-	public static final String IRON_SHOVEL = "IRON_SHOVEL";
-	public static final String IRON_SWORD = "IRON_SWORD";
+			"IRON_AXE",
+			"IRON_HOE",
+			"IRON_PICKAXE",
+			"IRON_SHOVEL",
+			"IRON_SWORD",
 
-	public static final String GOLDEN_AXE = "GOLDEN_AXE";
-	public static final String GOLDEN_HOE = "GOLDEN_HOE";
-	public static final String GOLDEN_PICKAXE = "GOLDEN_PICKAXE";
-	public static final String GOLDEN_SHOVEL = "GOLDEN_SHOVEL";
-	public static final String GOLDEN_SWORD = "GOLDEN_SWORD";
+			"GOLDEN_AXE",
+			"GOLDEN_HOE",
+			"GOLDEN_PICKAXE",
+			"GOLDEN_SHOVEL",
+			"GOLDEN_SWORD",
 
-	public static final String DIAMOND_AXE = "DIAMOND_AXE";
-	public static final String DIAMOND_HOE = "DIAMOND_HOE";
-	public static final String DIAMOND_PICKAXE = "DIAMOND_PICKAXE";
-	public static final String DIAMOND_SHOVEL = "DIAMOND_SHOVEL";
-	public static final String DIAMOND_SWORD = "DIAMOND_SWORD";
+			"DIAMOND_AXE",
+			"DIAMOND_HOE",
+			"DIAMOND_PICKAXE",
+			"DIAMOND_SHOVEL",
+			"DIAMOND_SWORD",
 
-	public static final String LEATHER_HELMET = "LEATHER_HELMET";
-	public static final String LEATHER_CHESTPLATE = "LEATHER_CHESTPLATE";
-	public static final String LEATHER_LEGGINGS = "LEATHER_LEGGINGS";
-	public static final String LEATHER_BOOTS = "LEATHER_BOOTS";
+			"LEATHER_HELMET",
+			"LEATHER_CHESTPLATE",
+			"LEATHER_LEGGINGS",
+			"LEATHER_BOOTS",
 
-	public static final String CHAINMAIL_HELMET = "CHAINMAIL_HELMET";
-	public static final String CHAINMAIL_CHESTPLATE = "CHAINMAIL_CHESTPLATE";
-	public static final String CHAINMAIL_LEGGINGS = "CHAINMAIL_LEGGINGS";
-	public static final String CHAINMAIL_BOOTS = "CHAINMAIL_BOOTS";
+			"CHAINMAIL_HELMET",
+			"CHAINMAIL_CHESTPLATE",
+			"CHAINMAIL_LEGGINGS",
+			"CHAINMAIL_BOOTS",
 
-	public static final String IRON_HELMET = "IRON_HELMET";
-	public static final String IRON_CHESTPLATE = "IRON_CHESTPLATE";
-	public static final String IRON_LEGGINGS = "IRON_LEGGINGS";
-	public static final String IRON_BOOTS = "IRON_BOOTS";
+			"IRON_HELMET",
+			"IRON_CHESTPLATE",
+			"IRON_LEGGINGS",
+			"IRON_BOOTS",
 
 
-	public static final String GOLDEN_HELMET = "GOLDEN_HELMET";
-	public static final String GOLDEN_CHESTPLATE = "GOLDEN_CHESTPLATE";
-	public static final String GOLDEN_LEGGINGS = "GOLDEN_LEGGINGS";
-	public static final String GOLDEN_BOOTS = "GOLDEN_BOOTS";
+			"GOLDEN_HELMET",
+			"GOLDEN_CHESTPLATE",
+			"GOLDEN_LEGGINGS",
+			"GOLDEN_BOOTS",
 
-	public static final String DIAMOND_HELMET = "DIAMOND_HELMET";
-	public static final String DIAMOND_CHESTPLATE = "DIAMOND_CHESTPLATE";
-	public static final String DIAMOND_LEGGINGS = "DIAMOND_LEGGINGS";
-	public static final String DIAMOND_BOOTS = "DIAMOND_BOOTS";
+			"DIAMOND_HELMET",
+			"DIAMOND_CHESTPLATE",
+			"DIAMOND_LEGGINGS",
+	"DIAMOND_BOOTS" };
 
 	/**
 	 * Get a colored Helmet.
@@ -118,8 +122,52 @@ public class MctMaterial extends Logger {
 		return color.toString() + "_BOOTS";
 	}
 
+	public static String[] values() {
+		return types.clone();
+	}
+
+	public static String[] toolTypes() {
+		List<String> types = new ArrayList<>();
+		for (String s : values()) {
+			if (s.contains("SWORD") || s.contains("SHOVEL") || s.contains("HOE") || s.contains("AXE")) {
+				types.add(s);
+			}
+		}
+
+		for (int t = 0; t < 7; t++) {
+			types.add(MctMaterial.types[t]);
+		}
+
+		return types.toArray(new String[] {});
+	}
+
+	public static String[] armorTypes() {
+		List<String> types = new ArrayList<>();
+		for (String s : values()) {
+			if (s.contains("HELMET") || s.contains("CHESTPLATE") || s.contains("LEGGINGS") || s.contains("BOOTS")) {
+				types.add(s);
+			}
+		}
+
+		for (ColorType t : ColorType.values()) {
+
+			types.add(t.toString() + "_HELMET");
+			types.add(t.toString() + "_CHESTPLATE");
+			types.add(t.toString() + "_LEGGINGS");
+			types.add(t.toString() + "_BOOTS");
+		}
+
+		types.add(MctMaterial.types[7]);
+
+		return types.toArray(new String[] {});
+	}
+
 	public static String friendlyName(Material material) {
 		return enumName(material);
+	}
+
+	public static boolean isValid(ItemStack item) {
+		return hasTag(item, "material");
 	}
 
 	public interface MicroType {
@@ -127,16 +175,26 @@ public class MctMaterial extends Logger {
 		/**
 		 * @return A full list of all Materials, both ArmorType and ToolType
 		 */
-		static List<Material> allMaterials() {
-			List<Material> list = new ArrayList<>();
+		static Set<String> allMaterials() {
+			Set<String> list = new HashSet<>();
 
-			list.addAll(ToolType.materials());
-			list.addAll(ArmorType.materials());
+			for (String a : armorTypes()) {
+
+				list.add(a);
+			}
+			for (String t : toolTypes()) {
+
+				list.add(t);
+			}
 
 			return list;
 		}
 
 		static boolean isUpgradeable(Material material) {
+			if (material.toString().contains("TURTLE")) {
+				return false;
+			}
+
 			String[] upgradeables = { "axe", "hoe", "pickaxe", "shovel", "sword", "helmet", "chestplate", "leggings", "boots" };
 			for (String s : upgradeables) {
 				if (material.toString().toLowerCase().contains("_" + s)) {

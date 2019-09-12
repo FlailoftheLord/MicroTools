@@ -87,7 +87,7 @@ public class ToolListener extends Logger implements Listener {
 				return;
 			}
 			if (tool.hasOwner() && !tool.getTag("owner").equalsIgnoreCase(user.id())) {
-				event.getItem().setPickupDelay(1);
+				event.setCancelled(true);
 
 				new Message("CannotPickupTool").send(user, null);
 				user.setMessageCooldown("CannotPickupTool", 16);

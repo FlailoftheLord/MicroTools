@@ -81,6 +81,27 @@ public enum ArmorType implements MicroType {
 		return list;
 	}
 
+	public static boolean isDefault(Material type) {
+		for (ArmorType t : values()) {
+			if (type == Material.matchMaterial(t.toString())) {
+				return true;
+			}
+
+		}
+
+		for (Material m : defaultArmor()) {
+			if (m == type) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isValid(Material type) {
+		return materials().contains(type);
+	}
+
 	public static List<Material> materials() {
 		List<Material> list = new LinkedList<>();
 

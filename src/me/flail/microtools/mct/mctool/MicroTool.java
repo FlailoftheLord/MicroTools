@@ -202,27 +202,6 @@ public class MicroTool extends MctData {
 	}
 
 	/**
-	 * @return true if this {@link #material()} is a valid ArmorType. false otherwise.
-	 */
-	public boolean isArmor() {
-		return ArmorType.materials().contains(material());
-	}
-
-	/**
-	 * @return true if this {@link #material()} is a valid ToolType. false otherwise.
-	 */
-	public boolean isTool() {
-		return ToolType.materials().contains(material());
-	}
-
-	/**
-	 * @return true if, somehow, the type is neither Armor nor Tool.
-	 */
-	public boolean isMisc() {
-		return !isTool() && !isArmor() && MicroType.allMaterials().contains(material());
-	}
-
-	/**
 	 * Proxy method for {@link #getMaterial()}
 	 */
 	public Material material() {

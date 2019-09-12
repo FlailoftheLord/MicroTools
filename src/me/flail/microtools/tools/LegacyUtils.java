@@ -8,7 +8,7 @@ import org.bukkit.persistence.PersistentDataType;
 import me.flail.microtools.MicroTools;
 
 public class LegacyUtils {
-	protected MicroTools plugin = MicroTools.instance;
+	protected static MicroTools plugin = MicroTools.instance;
 
 	protected ItemStack addLegacyTag(ItemStack item, String key, String tag) {
 		ItemMeta meta = item.getItemMeta();
@@ -41,7 +41,7 @@ public class LegacyUtils {
 		return "null";
 	}
 
-	protected boolean hasLegacyTag(ItemStack item, String key) {
+	protected static boolean hasLegacyTag(ItemStack item, String key) {
 		if ((item != null) && item.hasItemMeta()) {
 
 			ItemMeta meta = item.getItemMeta();
