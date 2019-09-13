@@ -4,6 +4,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -13,6 +14,8 @@ import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import me.flail.microtools.mct.mctool.MicroTool;
@@ -118,9 +121,9 @@ public class ToolListener extends Logger implements Listener {
 				MicroTool tool = MicroTool.fromItem(item);
 
 				if (tool.isTool()) {
-					tool.addBlocksBroken(1);
+					tool.addStat("blocks", 1);
 
-					tool.updateBlocksBrokenDisplay();
+					tool.updateItem();
 				}
 
 			}
@@ -146,9 +149,9 @@ public class ToolListener extends Logger implements Listener {
 
 					if (tool.isTool()) {
 						if (damage >= entity.getHealth()) {
-							tool.addEntityKill(1);
+							tool.addStat("kills", 1);
 
-							tool.updateEntityKillDisplay();
+							tool.updateItem();
 						}
 
 					}
@@ -156,6 +159,34 @@ public class ToolListener extends Logger implements Listener {
 				}
 
 			}
+
+		}
+
+	}
+
+	@EventHandler
+	public void onToolUse(PlayerInteractEvent event) {
+		if (!event.getHand().equals(EquipmentSlot.HAND)) {
+			return;
+		}
+
+		if (event.useItemInHand().equals(Result.DENY) && event.useInteractedBlock().equals(Result.DENY)) {
+			return;
+		}
+
+		switch (event.getAction()) {
+		case RIGHT_CLICK_BLOCK:
+			String blockType = event.getClickedBlock().getType().toString();
+			String itemType = event.getItem().getType().toString();
+			if (itemType.contains("_AXE")) {
+				if (blockType.contains("_LOG") || blockType.contains("_WOOD")) {
+
+				}
+			}
+
+			break;
+		default:
+			break;
 
 		}
 

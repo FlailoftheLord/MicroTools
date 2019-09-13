@@ -24,8 +24,8 @@ import me.flail.microtools.tools.Logger;
 public class MctData extends Logger {
 	private ItemStack toolItem;
 
-	public static final String UNCLAIMED_TOOL_TEXT = "&7This tool is unclaimed, right-click to claim.";
-	public static final String MANAGE_TOOL_TEXT = "&8right-click to manage item.";
+	public static final String UNCLAIMED_TOOL_TEXT = "&7This tool is unclaimed, left-click to claim.";
+	public static final String MANAGE_TOOL_TEXT = "&8left-click to manage item.";
 	public static final String PREVIEW_TOOL_TEXT = "&eclick to apply upgrades";
 	public static final String EDITING_TOOL_TEXT = "&eyou are currently editing this tool!";
 	public static final String LEVEL_DISPLAY = "&aLevel&8: &7";
@@ -43,26 +43,33 @@ public class MctData extends Logger {
 	 * Generates the new Tool from the provided ItemStack.
 	 */
 	protected void create() {
+		setLore(null);
 
 		setLoreLine("", 0);
 		setLoreLine(chat(LEVEL_DISPLAY + "%level%"), 1);
 
-		if (MicroType.isUpgradeable(toolItem.getType())) {
-			setLoreLine(chat(GRADE_DISPLAY + "%tool-grade%"), 2);
-		}
-
 		if (isTool()) {
-			setLoreLine(chat(BLOCKS_DISPLAY + "%blocks%"), 3);
-			setLoreLine(chat(KILLS_DISPLAY + "%kills%"), 4);
+			setLoreLine(chat(BLOCKS_DISPLAY + "%blocks%"), 2);
+			setLoreLine(chat(KILLS_DISPLAY + "%kills%"), 3);
+			setLoreLine("", 4);
+			setLoreLine("", 5);
 		}
 
 		if (isArmor()) {
-			setLoreLine(chat(DAMAGE_ABSORBED_DISPLAY + "%damage-abs%"), 3);
+			setLoreLine(chat(DAMAGE_ABSORBED_DISPLAY + "%damage-abs%"), 2);
+			setLoreLine("", 3);
 			setLoreLine("", 4);
 		}
 
+		if (MctMaterial.isUseable(toolItem)) {
+			insertLoreLine(chat(USES_DISPLAY + "%times-used%"), 3);
+		}
 
-		setLoreLine("", 5);
+		if (MicroType.isUpgradeable(toolItem.getType())) {
+			insertLoreLine(chat(GRADE_DISPLAY + "%tool-grade%"), 2);
+		}
+
+
 		if (hasTag("editing")) {
 
 			setLoreLine(chat(EDITING_TOOL_TEXT), -1);
@@ -77,8 +84,6 @@ public class MctData extends Logger {
 
 			setLoreLine(chat(MANAGE_TOOL_TEXT), -1);
 		}
-
-		this.purgeLore();
 
 		if (hasTag("tool")) {
 			return;
@@ -170,7 +175,7 @@ public class MctData extends Logger {
 		List<String> lore = getLore();
 		boolean wasLastEmpty = false;
 
-		for (String line : lore) {
+		for (String line : lore.toArray(new String[] {})) {
 
 			if (line.equals("")) {
 				if (wasLastEmpty) {
@@ -223,9 +228,15 @@ public class MctData extends Logger {
 	public boolean insertLoreLine(String value, int line) {
 		List<String> lore = getLore();
 
-		if (line < 0) {
-			line = lore.size() - 1;
+		for (int i = lore.size(); i <= Math.abs(line); i++) {
+
+			lore.add("");
 		}
+
+		if (line < 0) {
+			line = lore.size() - Math.abs(line);
+		}
+
 		lore.add(line, value);
 		return setLore(lore);
 	}

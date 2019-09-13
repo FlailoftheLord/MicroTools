@@ -75,13 +75,18 @@ public class ToolEditor extends Logger {
 
 				owner = tool.owner();
 
-
 				if (owner.uuid().equals(operator.uuid())) {
 					new ToolEditorGui(tool.item()).open(operator);
 
 					return;
 				}
 			}
+
+			if (!tool.hasOwner()) {
+				return;
+			}
+
+			owner = tool.owner();
 
 			if (!owner.uuid().equals(operator.uuid()) && !operator.playerGamemode().equals("creative")) {
 				if (owner.isOnline()) {

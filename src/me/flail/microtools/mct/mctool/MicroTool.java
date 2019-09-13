@@ -278,65 +278,23 @@ public class MicroTool extends MctData {
 		}
 	}
 
-	/**
-	 * Adds the new amount to the current amount of blocks broken.
-	 * Enter a negative number to subtract blocks.
-	 */
-	public void addBlocksBroken(int amount) {
-		if (!hasTag("blocks")) {
-			addTag("blocks", amount + "");
+	public void addStat(String key, double value) {
+		if (!hasTag(key)) {
+			addTag(key, value + "");
 			return;
 		}
-		int blocksBroken = Integer.parseInt(getTag("blocks"));
+		int statValue = getStat(key);
 
-		blocksBroken += amount;
+		statValue += value;
+		removeTag(key);
+		addTag(key, statValue + "");
 
-		removeTag("blocks");
-		addTag("blocks", blocksBroken + "");
 	}
 
-	public int getBlocksBroken() {
-		return hasTag("blocks") ? Integer.parseInt(getTag("blocks").replaceAll("[^0-9]", "")) : 0;
+	public int getStat(String key) {
+
+		return hasTag(key) ? (int) Double.parseDouble(getTag(key).replaceAll("[^0-9\\.\\-]", "")) : 0;
 	}
-
-	/**
-	 * Update the display lore on the Tool item.
-	 */
-	public void updateBlocksBrokenDisplay() {
-		if (!getLore().get(3).isEmpty()) {
-			removeLoreLine(3);
-		}
-		this.setLoreLine(BLOCKS_DISPLAY + "%blocks%", 3);
-
-		updatePlaceholders(this.placeholders());
-	}
-
-	public void addEntityKill(int amount) {
-		if (!hasTag("kills")) {
-			addTag("kills", amount + "");
-			return;
-		}
-		int killCount = Integer.parseInt(getTag("kills"));
-
-		killCount += amount;
-
-		removeTag("kills");
-		addTag("kills", killCount + "");
-	}
-
-	public int getEntitiesKilled() {
-		return hasTag("kills") ? Integer.parseInt(getTag("kills").replaceAll("[^0-9]", "")) : 0;
-	}
-
-	public void updateEntityKillDisplay() {
-		if (!getLore().get(4).isEmpty()) {
-			removeLoreLine(4);
-		}
-		this.setLoreLine(KILLS_DISPLAY + "%kills%", 4);
-
-		updatePlaceholders(this.placeholders());
-	}
-
 
 	public void openEditor(User user) {
 
@@ -357,8 +315,10 @@ public class MicroTool extends MctData {
 		map.put("%tool-grade%", gradeLevel() + "");
 		map.put("%tool%", this.getName());
 		map.put("%item%", material().toString());
-		map.put("%blocks%", getBlocksBroken() + "");
-		map.put("%kills%", getEntitiesKilled() + "");
+		map.put("%blocks%", getStat("blocks") + "");
+		map.put("%kills%", getStat("kills") + "");
+		map.put("%damage-abs%", getStat("damage-taken") + "");
+		map.put("%times-used%", getStat("uses") + "");
 
 		return map;
 	}

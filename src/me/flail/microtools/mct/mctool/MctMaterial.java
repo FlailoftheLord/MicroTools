@@ -170,6 +170,19 @@ public class MctMaterial extends Logger {
 		return hasTag(item, "material");
 	}
 
+	public static boolean isUseable(ItemStack item) {
+		String[] useables = { "_hoe", "shears", "shield", "_axe", "_shovel" };
+
+		for (String u : useables) {
+			if (item.getType().toString().toLowerCase().contains(u)) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public interface MicroType {
 
 		/**
