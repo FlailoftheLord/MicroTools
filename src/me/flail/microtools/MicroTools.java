@@ -53,6 +53,8 @@ public class MicroTools extends JavaPlugin {
 
 	private List<Material> disabledRecipes = new ArrayList<>();
 
+	public static boolean blockBreakingInCreative = false;
+
 	@Override
 	public void onLoad() {
 		instance = this;
@@ -62,6 +64,8 @@ public class MicroTools extends JavaPlugin {
 
 		sManager.load();
 		sManager.loadEnchantsFile();
+
+		blockBreakingInCreative = settings.getBoolean("General.BlockTrackingInCreativeMode");
 
 	}
 

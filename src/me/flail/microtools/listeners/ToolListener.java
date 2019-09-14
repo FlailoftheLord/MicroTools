@@ -1,5 +1,6 @@
 package me.flail.microtools.listeners;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -14,10 +15,12 @@ import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import me.flail.microtools.MicroTools;
+import me.flail.microtools.mct.mctool.MctMaterial;
 import me.flail.microtools.mct.mctool.MicroTool;
 import me.flail.microtools.mct.mctool.ToolEditor;
 import me.flail.microtools.tools.Logger;
@@ -115,6 +118,10 @@ public class ToolListener extends Logger implements Listener {
 	public void blockBreak(BlockBreakEvent event) {
 		if (!event.isCancelled()) {
 			User user = new User(event.getPlayer().getUniqueId());
+			if (user.gamemode().equalsIgnoreCase("creative") && !MicroTools.blockBreakingInCreative) {
+				return;
+			}
+
 			ItemStack item = user.player().getInventory().getItemInMainHand();
 
 			if (hasTag(item, "tool")) {
@@ -164,31 +171,83 @@ public class ToolListener extends Logger implements Listener {
 
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void toolUseOnEntity(PlayerInteractAtEntityEvent event) {
+
+
+
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onToolUse(PlayerInteractEvent event) {
-		if (!event.getHand().equals(EquipmentSlot.HAND)) {
-			return;
-		}
 
 		if (event.useItemInHand().equals(Result.DENY) && event.useInteractedBlock().equals(Result.DENY)) {
 			return;
 		}
 
+		ItemStack item = event.getItem();
+
 		switch (event.getAction()) {
 		case RIGHT_CLICK_BLOCK:
-			String blockType = event.getClickedBlock().getType().toString();
-			String itemType = event.getItem().getType().toString();
-			if (itemType.contains("_AXE")) {
-				if (blockType.contains("_LOG") || blockType.contains("_WOOD")) {
+
+			if (!MctMaterial.isUseable(item)) {
+				return;
+			}
+
+			MicroTool tool = MicroTool.fromItem(item);
+
+			Location loc = event.getClickedBlock().getLocation();
+			String blockType = loc.getBlock().getType().toString();
+			String itemType = item.getType().toString();
+
+			plugin.scheduler.scheduleSyncDelayedTask(plugin, () -> {
+				boolean wasUsedOnce = false;
+
+				if (itemType.contains("_AXE") && !blockType.contains("STRIPPED_")) {
+					if (blockType.contains("_LOG") || blockType.contains("_WOOD")) {
+
+						if (loc.getBlock().getType().toString().contains("STRIPPED_")) {
+							wasUsedOnce = true;
+						}
+					}
+				}
+
+				if (itemType.contains("_SHOVEL")) {
+					if (blockType.contains("GRASS_BLOCK")) {
+
+						if (loc.getBlock().getType().toString().contains("GRASS_PATH")) {
+							wasUsedOnce = true;
+						}
+					}
+				}
+
+				if (itemType.contains("_HOE")) {
+					if (blockType.contains("MYCELIUM") || blockType.contains("PODZOL") || blockType.contains("DIRT")
+							|| blockType.contains("GRASS_")) {
+
+						if (loc.getBlock().getType().toString().contains("FARMLAND")) {
+							wasUsedOnce = true;
+						}
+					}
 
 				}
-			}
+
+				if (wasUsedOnce) {
+
+					tool.addStat("uses", 1);
+					tool.updateItem();
+				}
+
+			}, 1L);
+
+
 
 			break;
 		default:
-			break;
-
+			;
 		}
+
+
 
 	}
 

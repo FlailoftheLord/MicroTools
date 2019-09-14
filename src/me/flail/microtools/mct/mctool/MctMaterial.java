@@ -171,6 +171,10 @@ public class MctMaterial extends Logger {
 	}
 
 	public static boolean isUseable(ItemStack item) {
+		if ((item == null) || item.getType().equals(Material.AIR)) {
+			return false;
+		}
+
 		String[] useables = { "_hoe", "shears", "shield", "_axe", "_shovel" };
 
 		for (String u : useables) {
