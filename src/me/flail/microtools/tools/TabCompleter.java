@@ -9,13 +9,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.flail.microtools.MicroTools;
 import me.flail.microtools.user.User;
 
-public class TabCompleter extends ArrayList<String> {
+public class TabCompleter {
 	private MicroTools plugin;
 
-	/**
-	 * UID
-	 */
-	private static final long serialVersionUID = 43097891222L;
 	private Command command;
 
 	public TabCompleter(Command command) {
@@ -23,18 +19,52 @@ public class TabCompleter extends ArrayList<String> {
 		this.command = command;
 	}
 
-	public TabCompleter construct(String label, String[] args) {
-		if (command.getName().equalsIgnoreCase("microtools")) {
-			List<String> baseArgs = new ArrayList<>();
-			boolean completed = false;
+	public List<String> construct(String label, String[] args) {
+		List<String> baseArgs = new ArrayList<>();
+		if (!command.getName().equalsIgnoreCase("microtools")) {
+			return baseArgs;
+		}
 
+		switch (args.length) {
+		case 1:
+			baseArgs.add("levelpoints");
+			break;
+		case 2:
+			if (args[0].equalsIgnoreCase("levelpoints")) {
+				baseArgs.add("get");
+				baseArgs.add("add");
+				baseArgs.add("remove");
+			}
+
+			break;
+		case 3:
+			if (args[0].equalsIgnoreCase("levelpoints")) {
+				switch (args[1].toLowerCase()) {
+				case "add":
+					for (int n = 0; n <= plugin.maxLevelPoints; n++) {
+						baseArgs.add(n + "");
+					}
+
+					break;
+
+				}
+
+			}
 
 		}
 
-		return this;
+		for (String s : baseArgs.toArray(new String[] {})) {
+			if (!s.startsWith(args[args.length - 1].toLowerCase())) {
+
+				baseArgs.remove(s);
+			}
+
+		}
+
+		return baseArgs;
 	}
 
-	private List<String> usernames() {
+	protected List<String> usernames() {
 		List<String> names = new ArrayList<>();
 		for (User user : plugin.userMap.values()) {
 			names.add(user.name());

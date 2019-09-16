@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
 import me.flail.microtools.mct.mctool.MicroTool;
 import me.flail.microtools.mct.mctool.ToolType;
 import me.flail.microtools.tools.DataFile;
@@ -28,8 +29,8 @@ public class MctHandler extends Logger {
 		List<ItemStack> toolItems = new ArrayList<>();
 		List<Material> materials = new ArrayList<>();
 
-		for (Material m : ToolType.materials()) {
-			toolItems.add(new ItemStack(m));
+		for (String m : MicroType.allMaterials()) {
+			toolItems.add(new ItemStack(Material.matchMaterial(m)));
 		}
 
 		for (ItemStack item : toolItems) {

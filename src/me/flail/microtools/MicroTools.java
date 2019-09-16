@@ -27,6 +27,7 @@ import me.flail.microtools.mct.MctHandler;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Settings;
+import me.flail.microtools.tools.TabCompleter;
 import me.flail.microtools.user.User;
 
 /**
@@ -54,6 +55,7 @@ public class MicroTools extends JavaPlugin {
 	private List<Material> disabledRecipes = new ArrayList<>();
 
 	public static boolean blockBreakingInCreative = false;
+	public int maxLevelPoints = 100;
 
 	@Override
 	public void onLoad() {
@@ -66,6 +68,7 @@ public class MicroTools extends JavaPlugin {
 		sManager.loadEnchantsFile();
 
 		blockBreakingInCreative = settings.getBoolean("General.BlockTrackingInCreativeMode");
+		maxLevelPoints = settings.getNumber("General.MaxLevelPoints");
 
 	}
 
@@ -93,6 +96,7 @@ public class MicroTools extends JavaPlugin {
 	private void registerCommands() {
 		for (String cmd : getDescription().getCommands().keySet()) {
 			getCommand(cmd).setExecutor(this);
+			getCommand(cmd).setTabCompleter(this);
 		}
 
 	}
@@ -129,6 +133,11 @@ public class MicroTools extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		return new MctCommand(sender, command).run(args);
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		return new TabCompleter(command).construct(label, args);
 	}
 
 }

@@ -93,6 +93,7 @@ public class MicroTool extends MctData {
 
 	protected void createItem() {
 		setNextUpgrade();
+		addLevelPoints(0);
 
 		updateItem();
 	}
@@ -118,6 +119,10 @@ public class MicroTool extends MctData {
 	 */
 	public boolean isValid() {
 		return ToolType.materials().contains(material()) || ArmorType.materials().contains(material());
+	}
+
+	public static boolean isValid(ItemStack item) {
+		return hasTag(item, "tool");
 	}
 
 	/**
@@ -208,11 +213,29 @@ public class MicroTool extends MctData {
 		return getMaterial();
 	}
 
+	public void addLevelPoints(int points) {
+		if (hasTag("lp")) {
+			addTag("lp", Integer.parseInt(getTag("lp")) + points + "");
+			return;
+		}
+
+		addTag("lp", points + "");
+	}
+
+	public void removeLevelPoints(int points) {
+		if (hasTag("lp")) {
+			int newPoints = Integer.parseInt(getTag("lp")) - points;
+
+			addTag("lp", newPoints + "");
+		}
+
+	}
+
 	public int upgradeLevel() {
 		return hasTag("level") ? Integer.parseInt(getTag("level").replaceAll("[^0-9]", "")) : 0;
 	}
 
-	public String gradeLevel() {
+	public String getGrade() {
 		return hasTag("grade") ? getTag("grade").replaceAll("[0-9]", "") : "BASIC";
 	}
 
@@ -304,7 +327,7 @@ public class MicroTool extends MctData {
 
 	public Map<String, String> placeholders() {
 		Map<String, String> map = new HashMap<>();
-		map.put("%level%", upgradeLevel() + "");
+		map.put("%level%", this.romanNumeral(upgradeLevel()));
 		if (owner == null) {
 			map.put("%owner%", UNCLAIMED_TOOL_TEXT);
 			map.put("%owner-uuid%", "");
@@ -312,7 +335,10 @@ public class MicroTool extends MctData {
 			map.put("%owner%", owner.name());
 			map.put("%owner-uuid%", owner.id());
 		}
-		map.put("%tool-grade%", gradeLevel() + "");
+
+		map.put("%lp%", getLevelPoints() + "");
+		map.put("%max-lp%", plugin.maxLevelPoints + "");
+		map.put("%tool-grade%", getGrade() + "");
 		map.put("%tool%", this.getName());
 		map.put("%item%", material().toString());
 		map.put("%blocks%", getStat("blocks") + "");

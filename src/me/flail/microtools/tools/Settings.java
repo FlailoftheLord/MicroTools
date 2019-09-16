@@ -35,6 +35,7 @@ public class Settings extends Logger {
 		values.put("General.AddEnchantsAtLevel", "1");
 		values.put("General.UpgradeEnchantsBeforeLevel", Boolean.valueOf(true));
 		values.put("General.BlockTrackingInCreativeMode", Boolean.valueOf(false));
+		values.put("General.MaxLevelPoints", "100");
 
 		values.put("Tools.EnchantUpgradePerType", Boolean.valueOf(true));
 

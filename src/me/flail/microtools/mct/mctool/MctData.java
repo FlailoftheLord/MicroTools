@@ -61,6 +61,11 @@ public class MctData extends Logger {
 			setLoreLine("", 4);
 		}
 
+		if (!hasTag("preview")) {
+			setLoreLine(getLevelPointsDisplay() + " &8(&7%lp%&8/&e%max-lp%&8)", -1);
+			addLoreLine("");
+		}
+
 		if (MctMaterial.isUseable(toolItem)) {
 			insertLoreLine(chat(USES_DISPLAY + "%times-used%"), 3);
 		}
@@ -118,17 +123,7 @@ public class MctData extends Logger {
 		toolItem.setType(item.getType());
 	}
 
-	public void addTag(String key, String value) {
-		toolItem = addTag(toolItem, key, value);
-	}
 
-	public void removeTag(String key) {
-		toolItem = removeTag(toolItem, key);
-	}
-
-	public String getTag(String key) {
-		return getTag(toolItem, key);
-	}
 
 	public Material getMaterial() {
 		return toolItem.getType();
@@ -261,24 +256,17 @@ public class MctData extends Logger {
 	}
 
 	/**
-	 * @return true if this {@link #material()} is a valid ArmorType. false otherwise.
+	 * @return true if this {@link #getMaterial()} is a valid ArmorType. false otherwise.
 	 */
 	public boolean isArmor() {
 		return ArmorType.materials().contains(getMaterial());
 	}
 
 	/**
-	 * @return true if this {@link #material()} is a valid ToolType. false otherwise.
+	 * @return true if this {@link #getMaterial()} is a valid ToolType. false otherwise.
 	 */
 	public boolean isTool() {
 		return ToolType.materials().contains(getMaterial());
-	}
-
-	/**
-	 * @return true if, somehow, the type is neither Armor nor Tool.
-	 */
-	public boolean isMisc() {
-		return !isTool() && !isArmor() && MicroType.allMaterials().contains(getMaterial());
 	}
 
 	public MctData addEnchant(EnchantType type) {
@@ -311,6 +299,58 @@ public class MctData extends Logger {
 		}
 
 		return map;
+	}
+
+	/*
+	 *******************************************8
+	 */
+
+	public int getLevelPoints() {
+		return hasTag("lp") ? Integer.parseInt(getTag("lp")) : 0;
+	}
+
+	public String getLevelPointsDisplay() {
+		char display = '¦';
+
+		String line = "";
+		if (hasTag("lp")) {
+			int maxLP = plugin.maxLevelPoints;
+			int points = getLevelPoints();
+
+			int displayMax = 48;
+			int displayLP = 0;
+
+			int diff = maxLP/displayMax;
+			displayLP = (points / diff) - 1;
+
+			for (int lp = 0; (lp <= displayMax); lp++) {
+
+				if (lp <= displayLP) {
+					line += "&e" + display;
+
+					continue;
+				}
+
+				line += "&7" + display;
+			}
+
+
+
+		}
+
+		return chat(line);
+	}
+
+	public void addTag(String key, String value) {
+		toolItem = addTag(toolItem, key, value);
+	}
+
+	public void removeTag(String key) {
+		toolItem = removeTag(toolItem, key);
+	}
+
+	public String getTag(String key) {
+		return getTag(toolItem, key);
 	}
 
 	public boolean hasTag(String key) {

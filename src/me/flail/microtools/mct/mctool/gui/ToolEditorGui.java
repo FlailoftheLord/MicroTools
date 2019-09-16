@@ -69,6 +69,7 @@ public class ToolEditorGui extends Logger {
 		ItemStack infoItem = tool.item().clone();
 		infoItem = addTag(infoItem, "preview", " ");
 		infoItem = removeTag(infoItem, "editing");
+		MicroTool preview = MicroTool.fromItem(infoItem);
 
 
 		// Item for modifying the Tool's displayname.
@@ -130,7 +131,7 @@ public class ToolEditorGui extends Logger {
 		modifyOwnerItem = addTag(modifyOwnerItem, "change-tool-owner", " ");
 		manageEnchantsItem = addTag(manageEnchantsItem, "change-tool-enchants", " ");
 
-		items.put(4, infoItem);
+		items.put(4, preview.item());
 		items.put(19, changeNameItem);
 		items.put(21, modifyOwnerItem);
 		items.put(23, manageEnchantsItem);
