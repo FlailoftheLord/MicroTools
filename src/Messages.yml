@@ -1,5 +1,6 @@
 # Customize all messages here.
 Prefix: "&8(&2&lTools&8)"
+PluginReloaded: "&aMicroTools settings reloaded successfully."
 CantCraftMustUpgrade: "%prefix% &cYou can't craft this item directly! You must upgrade your base tools/armor to get to this level!"
 CannotPickupTool: "%prefix% &cYou can't pickup this item!"
 CannotUpgradeMax: "%prefix% &cThis item is already at max upgrades!"
@@ -8,3 +9,10 @@ StolenItemReturned: "%prefix% &3Another player was caught using your item! It ha
 ToolNameChanged: "%prefix% &aYou've changed the name of your MicroTool to&8: &7%tool%"
 NoPermissionForCommand: "%prefix% &cYou don't have permission! &8(&7/%command%&8)"
 ItemNotATool: "%prefix% &cThat item isn't a valid MicroTool! &7Please put one in your hand and try again."
+CommandHelp:
+- "&a&lMicroTools Command Help &8&m|------------"
+- " &7/mct levelpoints <get:add:remove> [amount]"
+- " &7/mct <give:get> <type> [player]"
+- ""
+- "&8&m--------------------------------------"
+NewToolRecieved: "%prefix% &aYou have recieved a new Tool &8(&7%type%&8)"

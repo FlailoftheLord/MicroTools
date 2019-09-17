@@ -162,6 +162,32 @@ public class MctMaterial extends Logger {
 		return types.toArray(new String[] {});
 	}
 
+	public static ItemStack fromMctMaterial(String type) {
+		boolean isColored = false;
+		ColorType color = ColorType.MAROON;
+
+		for (ColorType t : ColorType.values()) {
+			if (type.toUpperCase().startsWith(t.toString().toUpperCase())) {
+				isColored = true;
+				color = t;
+				break;
+			}
+		}
+
+		if (isColored) {
+			String t = "LEATHER_" + type.split("_")[1];
+			Material tempType = Material.matchMaterial(t);
+			MicroTool tempTool = MicroTool.fromMaterial(tempType);
+
+			tempTool.setArmorColor(color);
+			tempTool.updateItem();
+
+			return tempTool.item();
+		}
+
+		return new ItemStack(Material.matchMaterial(type));
+	}
+
 	public static String friendlyName(Material material) {
 		return enumName(material);
 	}

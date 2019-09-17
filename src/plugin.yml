@@ -12,3 +12,17 @@ commands:
   microtools:
     description: main command
     aliases: [mtools, mct]
+    
+CommandList:
+- "mct help"
+- "mct give [type] [player]"
+- "mct get [type]"
+- "mct levelpoints [get:add:remove] [amount]"
+- "mct reload"    
+    
+PermissionList:
+- "microtools.command"
+- "microtools.command.<sub-cmd>"
+- "microtools.bypass"
+- "microtools.bypass.pickup"
+- "microtools.bypass.invcheck"

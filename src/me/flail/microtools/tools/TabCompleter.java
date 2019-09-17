@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.flail.microtools.MicroTools;
+import me.flail.microtools.mct.mctool.MctMaterial;
 import me.flail.microtools.user.User;
 
 public class TabCompleter {
@@ -28,17 +29,26 @@ public class TabCompleter {
 		switch (args.length) {
 		case 1:
 			baseArgs.add("levelpoints");
+			baseArgs.add("help");
+			baseArgs.add("give");
+			baseArgs.add("get");
 			break;
 		case 2:
-			if (args[0].equalsIgnoreCase("levelpoints")) {
+			String arg0 = args[0].toLowerCase();
+
+			if (arg0.equals("levelpoints")) {
 				baseArgs.add("get");
 				baseArgs.add("add");
 				baseArgs.add("remove");
+			} else if (arg0.equals("give") || arg0.equals("get")) {
+				baseArgs.addAll(microToolTypes());
 			}
 
 			break;
 		case 3:
-			if (args[0].equalsIgnoreCase("levelpoints")) {
+			arg0 = args[0].toLowerCase();
+
+			if (arg0.equals("levelpoints")) {
 				switch (args[1].toLowerCase()) {
 				case "add":
 					for (int n = 0; n <= plugin.maxLevelPoints; n++) {
@@ -49,6 +59,10 @@ public class TabCompleter {
 
 				}
 
+				break;
+			} else if (arg0.equals("give")) {
+
+				baseArgs.addAll(usernames());
 			}
 
 		}
@@ -62,6 +76,15 @@ public class TabCompleter {
 		}
 
 		return baseArgs;
+	}
+
+	protected List<String> microToolTypes() {
+		List<String> list = new ArrayList<>();
+		for (String m : MctMaterial.values()) {
+			list.add(m.toLowerCase());
+		}
+
+		return list;
 	}
 
 	protected List<String> usernames() {

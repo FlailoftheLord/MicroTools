@@ -91,6 +91,11 @@ public class MicroTool extends MctData {
 		return tool;
 	}
 
+	public static MicroTool newTool(String material) {
+
+		return MicroTool.fromItem(MctMaterial.fromMctMaterial(material));
+	}
+
 	protected void createItem() {
 		setNextUpgrade();
 		addLevelPoints(0);

@@ -10,11 +10,13 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
@@ -85,6 +87,27 @@ public class MicroTools extends JavaPlugin {
 		registerCommands();
 
 		logger.console("&7MicroTools is Enabled &8(&7took " + (System.currentTimeMillis() - startTime) + "ms&8)");
+	}
+
+	public void reload() {
+		long start = System.currentTimeMillis();
+
+		onDisable();
+
+		onLoad();
+		onEnable();
+
+		new Logger().nl();
+		new Logger().console("&aMicroTools reloaded &8(&7" + (System.currentTimeMillis() - start) + "ms&8)");
+	}
+
+	public void setupPlayers() {
+		userMap.clear();
+
+		for (Player p : Bukkit.getOnlinePlayers()) {
+
+			userMap.put(p.getUniqueId(), new User(p.getUniqueId()));
+		}
 	}
 
 	private void registerListeners() {

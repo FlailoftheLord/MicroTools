@@ -34,6 +34,25 @@ public class MctCommand extends Logger {
 			break;
 		case 1:
 			switch (arg0) {
+			case "help":
+				if (sender.hasPermission("microtools.command")) {
+					new Message("CommandHelp").send(sender, sender);
+
+					break;
+				}
+
+				new Message("NoPermissionForCommand").replace("%command%", command.getName() + " " + arg0).send(sender, sender);
+				break;
+			case "reload":
+				if (sender.hasPermission("microtools.command.reload")) {
+					plugin.reload();
+
+					new Message("PluginReloaded").send(sender, sender);
+					break;
+				}
+
+				new Message("NoPermissionForCommand").replace("%command%", command.getName() + " " + arg0).send(sender, sender);
+				break;
 			case "numeral":
 				sender.sendMessage(chat("&c/mct numeral [number]"));
 
@@ -42,7 +61,17 @@ public class MctCommand extends Logger {
 				levelPointsCommand(args);
 
 				break;
+			case "get":
+				sender.sendMessage(chat("&c/mct get [type]"));
 
+				break;
+			case "give":
+				sender.sendMessage(chat("&c/mct give [type] [player]"));
+
+				break;
+			default:
+
+				sender.sendMessage(chat("&c/mct help"));
 			}
 
 		case 2:
@@ -55,6 +84,17 @@ public class MctCommand extends Logger {
 			case "levelpoints":
 				levelPointsCommand(args);
 				break;
+			case "get":
+				if (sender.hasPermission("microtools.command.get")) {
+
+					break;
+				}
+
+				new Message("NoPermissionForCommand").replace("%command%", command.getName() + " " + arg0).send(sender, sender);
+				break;
+			default:
+
+				sender.sendMessage(chat("&c/mct help"));
 			}
 
 			break;
@@ -63,6 +103,12 @@ public class MctCommand extends Logger {
 			case "levelpoints":
 				levelPointsCommand(args);
 				break;
+			case "give":
+
+				break;
+			default:
+
+				sender.sendMessage(chat("&c/mct help"));
 
 			}
 
@@ -90,7 +136,7 @@ public class MctCommand extends Logger {
 		User operator = new User(((Player) sender).getUniqueId());
 
 		if (!sender.hasPermission("microtools.command.levelpoints")) {
-			new Message("NoPermissionForCommand").replace("%command%", command.getName() + arg0).send(operator, null);
+			new Message("NoPermissionForCommand").replace("%command%", command.getName() + " " + arg0).send(operator, null);
 
 			return;
 		}

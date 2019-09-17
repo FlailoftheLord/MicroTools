@@ -30,7 +30,11 @@ public class MctHandler extends Logger {
 		List<Material> materials = new ArrayList<>();
 
 		for (String m : MicroType.allMaterials()) {
-			toolItems.add(new ItemStack(Material.matchMaterial(m)));
+			try {
+				toolItems.add(new ItemStack(Material.matchMaterial(m)));
+			} catch (Exception e) {
+				continue;
+			}
 		}
 
 		for (ItemStack item : toolItems) {

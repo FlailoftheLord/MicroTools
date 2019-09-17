@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import org.bukkit.command.CommandSender;
+
 import me.flail.microtools.user.User;
 
 public class Message extends Logger {
@@ -32,6 +34,7 @@ public class Message extends Logger {
 				message = file.getList(this.key);
 				return;
 			}
+
 			message.add(file.getValue(this.key));
 			return;
 		}
@@ -44,6 +47,25 @@ public class Message extends Logger {
 
 	public static Message construct(String... value) {
 		return new Message(false, value);
+	}
+
+	public void send(CommandSender recipient, @Nullable CommandSender operator) {
+		if (!message.isEmpty() && (message.get(0) != null)) {
+			for (String msg : message) {
+				if (operator != null) {
+					msg = msg.replace("%operator%", operator.getName());
+				}
+
+				recipient.sendMessage(chat(msg));
+			}
+
+			return;
+		}
+
+		console("&cThe following message doesn't exist in your &7Messages.yml &cfile.  &f" + key);
+		console("&cPlease be sure to add it to your Messages.yml file!");
+		console("&cAdd this:  &7" + key + ": \"message goes inside these quotes\"");
+
 	}
 
 	/**
@@ -63,21 +85,11 @@ public class Message extends Logger {
 				return;
 			}
 
-			if (!message.isEmpty() && (message.get(0) != null)) {
-				for (String msg : message) {
-					if (operator != null) {
-						msg = msg.replace("%operator%", operator.name());
-					}
-
-					recipient.player().sendMessage(chat(msg));
-				}
-
-				return;
+			try {
+				send(recipient.player(), operator.player());
+			} catch (Exception e) {
+				send(recipient.player(), null);
 			}
-
-			console("&cThe following message doesn't exist in your &7Messages.yml &cfile.  &f" + key);
-			console("&cPlease be sure to add it to your Messages.yml file!");
-			console("&cAdd this:  &7" + key + ": \"message goes inside these quotes\"");
 
 		}
 
