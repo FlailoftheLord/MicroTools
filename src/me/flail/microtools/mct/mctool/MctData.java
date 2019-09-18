@@ -46,52 +46,59 @@ public class MctData extends Logger {
 		setLore(null);
 
 		setLoreLine("", 0);
-		setLoreLine(chat(LEVEL_DISPLAY + "%level%"), 1);
+		setLoreLine(LEVEL_DISPLAY + "%level%", 1);
 
 		if (isTool()) {
-			setLoreLine(chat(BLOCKS_DISPLAY + "%blocks%"), 2);
-			setLoreLine(chat(KILLS_DISPLAY + "%kills%"), 3);
+			setLoreLine(BLOCKS_DISPLAY + "%blocks%", 2);
+			setLoreLine(KILLS_DISPLAY + "%kills%", 3);
 			setLoreLine("", 4);
 			setLoreLine("", 5);
 		}
 
 		if (isArmor()) {
-			setLoreLine(chat(DAMAGE_ABSORBED_DISPLAY + "%damage-abs%"), 2);
+			setLoreLine(DAMAGE_ABSORBED_DISPLAY + "%damage-abs%", 2);
 			setLoreLine("", 3);
 			setLoreLine("", 4);
 		}
 
-		if (!hasTag("preview")) {
-			setLoreLine(getLevelPointsDisplay() + " &8(&7%lp%&8/&e%max-lp%&8)", -1);
-			addLoreLine("");
+		setLoreLine(getLevelPointsDisplay() + " &8(&7%lp%&8/&e%max-lp%&8)", -1);
+		if (hasTag("preview")) {
+			setLoreLine("&3&lLevelPoints &8(&7%lp%&8)", -1);
 		}
 
+		addLoreLine("");
+
 		if (MctMaterial.isUseable(toolItem)) {
-			insertLoreLine(chat(USES_DISPLAY + "%times-used%"), 3);
+			insertLoreLine(USES_DISPLAY + "%times-used%", 3);
 		}
 
 		if (MicroType.isUpgradeable(toolItem.getType())) {
-			insertLoreLine(chat(GRADE_DISPLAY + "%tool-grade%"), 2);
+			insertLoreLine(GRADE_DISPLAY + "%tool-grade%", 2);
 		}
 
+		if (hasEnchants()) {
+
+			for (EnchantType e : this.enchants().keySet()) {
+
+				setLoreLine("&7" + e.friendlyName(e) + " " + romanNumeral(enchants().get(e).intValue()), -1);
+			}
+
+			addLoreLine("");
+		}
 
 		if (hasTag("editing")) {
 
-			setLoreLine(chat(EDITING_TOOL_TEXT), -1);
+			setLoreLine(EDITING_TOOL_TEXT, -1);
 		} else if (hasTag("preview")) {
 
-			setLoreLine(chat(PREVIEW_TOOL_TEXT), -1);
+			setLoreLine(PREVIEW_TOOL_TEXT, -1);
 		} else if (!hasTag("owner")) {
 			addTag("unclaimed", "true");
 
-			setLoreLine(chat(UNCLAIMED_TOOL_TEXT), -1);
+			setLoreLine(UNCLAIMED_TOOL_TEXT, -1);
 		} else {
 
-			setLoreLine(chat(MANAGE_TOOL_TEXT), -1);
-		}
-
-		if (hasTag("tool")) {
-			return;
+			setLoreLine(MANAGE_TOOL_TEXT, -1);
 		}
 
 		String name = MctMaterial.friendlyName(toolItem.getType());
@@ -113,6 +120,7 @@ public class MctData extends Logger {
 		meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
 		setItemMeta(meta);
 
@@ -270,16 +278,16 @@ public class MctData extends Logger {
 	}
 
 	public MctData addEnchant(EnchantType type) {
-		if (hasEnchants() && enchants().containsKey(type)) {
-			String errorWhileEnchanting = "%prefix% &cthis tool already has enchantment&8: &7" + type.toString()
-			+ " &cto upgrade it use the upgrade option in the menu &8&o(#upgradeEnchant(type))";
+		int level = 0;
+		ItemMeta meta = getItemMeta();
 
-			console(errorWhileEnchanting);
-			return this;
+		if (meta.hasEnchant(EnchantType.toEnchantment(type))) {
+
+			level = meta.getEnchantLevel(EnchantType.toEnchantment(type));
 		}
 
-		ItemMeta meta = getItemMeta();
-		meta.addEnchant(EnchantType.toEnchantment(type), 1, true);
+		meta.removeEnchant(EnchantType.toEnchantment(type));
+		meta.addEnchant(EnchantType.toEnchantment(type), level + 1, true);
 		setItemMeta(meta);
 		return this;
 	}

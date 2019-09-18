@@ -19,7 +19,11 @@ import org.bukkit.ChatColor;
 public class Logger extends CommonUtilities {
 
 	public void console(String string) {
-		plugin.server.getConsoleSender().sendMessage(chat("[" + plugin.getDescription().getPrefix() + "] " + string));
+		sendConsole(string);
+	}
+
+	public static void sendConsole(String message) {
+		plugin.server.getConsoleSender().sendMessage(formatString("[" + plugin.getDescription().getPrefix() + "] " + message));
 	}
 
 	public Logger nl() {

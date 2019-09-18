@@ -1,5 +1,8 @@
 package me.flail.microtools;
 
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,10 +24,20 @@ public class MctCommand extends Logger {
 	}
 
 	public boolean run(String[] args) {
+		boolean noPermission = false;
 
 		String arg0 = "";
 		if (args.length > 0) {
 			arg0 = args[0].toLowerCase();
+		}
+
+		if (args.length > 1) {
+			if (args[0].equalsIgnoreCase("numeral")) {
+				int number = Integer.parseInt(args[1].replaceAll("[^0-9]", "0"));
+
+				sender.sendMessage(this.romanNumeral(number));
+			}
+
 		}
 
 		switch (args.length) {
@@ -41,7 +54,7 @@ public class MctCommand extends Logger {
 					break;
 				}
 
-				new Message("NoPermissionForCommand").replace("%command%", command.getName() + " " + arg0).send(sender, sender);
+				noPermission = true;
 				break;
 			case "reload":
 				if (sender.hasPermission("microtools.command.reload")) {
@@ -51,7 +64,7 @@ public class MctCommand extends Logger {
 					break;
 				}
 
-				new Message("NoPermissionForCommand").replace("%command%", command.getName() + " " + arg0).send(sender, sender);
+				noPermission = false;
 				break;
 			case "numeral":
 				sender.sendMessage(chat("&c/mct numeral [number]"));
@@ -76,21 +89,17 @@ public class MctCommand extends Logger {
 
 		case 2:
 			switch (arg0) {
-			case "numeral":
-				int number = Integer.parseInt(args[1].replaceAll("[^0-9]", "0"));
-
-				sender.sendMessage(this.romanNumeral(number));
-				break;
 			case "levelpoints":
 				levelPointsCommand(args);
 				break;
 			case "get":
 				if (sender.hasPermission("microtools.command.get")) {
+					giveUserTool(args[1], sender.getName(), sender);
 
 					break;
 				}
 
-				new Message("NoPermissionForCommand").replace("%command%", command.getName() + " " + arg0).send(sender, sender);
+				noPermission = true;
 				break;
 			default:
 
@@ -104,7 +113,13 @@ public class MctCommand extends Logger {
 				levelPointsCommand(args);
 				break;
 			case "give":
+				if (sender.hasPermission("microtools.command.give")) {
+					this.giveUserTool(args[1].toUpperCase(), args[2], sender);
 
+					break;
+				}
+
+				noPermission = true;
 				break;
 			default:
 
@@ -114,11 +129,12 @@ public class MctCommand extends Logger {
 
 		}
 
-		if (args.length > 1) {
-			if (args[0].equalsIgnoreCase("numeral")) {
 
-			}
 
+
+
+		if (noPermission) {
+			new Message("NoPermissionForCommand").replace("%command%", command.getName() + " " + arg0).send(sender, sender);
 		}
 
 		return true;
@@ -204,6 +220,47 @@ public class MctCommand extends Logger {
 		}
 
 		tool.updateItem();
+	}
+
+	private void giveUserTool(String type, String username, CommandSender operator) {
+		MicroTool tool = MicroTool.newTool(type);
+		Player subject = null;
+
+		if ((operator instanceof Player) && operator.getName().equalsIgnoreCase(username)) {
+			subject = (Player) operator;
+
+			subject.getInventory().addItem(tool.item());
+			tool.setOwner(new User(subject.getUniqueId()));
+			tool.updateItem();
+
+			new Message("NewToolRecieved").replace("%type%", type).send(operator, operator);
+			return;
+		}
+
+		for (UUID uuid : plugin.userMap.keySet()) {
+			subject = Bukkit.getPlayer(uuid);
+
+			if (!subject.getName().equalsIgnoreCase(username)) {
+				subject = null;
+			}
+
+		}
+
+		if (subject != null) {
+			if (subject.getInventory().firstEmpty() >= 0) {
+
+				subject.getInventory().addItem(tool.item());
+			} else {
+
+				subject.getWorld().dropItem(subject.getLocation(), tool.item());
+			}
+
+			new Message("NewToolRecieved").replace("%type%", type).send(subject, null);
+
+			operator.sendMessage(chat("%prefix% &aGave a new MicroTool to &7" + subject.getName()));
+
+		}
+
 	}
 
 }

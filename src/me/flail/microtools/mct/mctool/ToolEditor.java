@@ -5,6 +5,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import me.flail.microtools.mct.mctool.gui.EnchantEditorGui;
 import me.flail.microtools.mct.mctool.gui.ToolEditorGui;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Message;
@@ -53,6 +54,13 @@ public class ToolEditor extends Logger {
 
 		if (hasTag(item, "change-tool-name")) {
 			operator.openToolNameEditor(preview);
+
+			return;
+		}
+
+		if (hasTag(item, "change-tool-enchants")) {
+			operator.player().closeInventory();
+			new EnchantEditorGui(tool.item()).open(operator);
 
 			return;
 		}
@@ -144,7 +152,11 @@ public class ToolEditor extends Logger {
 		if (tool == null) {
 			setTool();
 			if (tool == null) {
-				console("&cTHERE'S AN ISSUE WITH TOOL EDITOR CHANGES NOT APPLYING. This is most likely a visual bug, Simply close your inventory and open it again.");
+				operator.sendMessage(
+						"%prefix% &cThere was a problem updating the tool. "
+								+ "Re-open your inventory and open the tool editor again.");
+
+				operator.player().closeInventory();
 			}
 			return;
 		}

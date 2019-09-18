@@ -43,7 +43,7 @@ public class ToolEditorGui extends Logger {
 	}
 
 	public void open(User user) {
-		if (user.isOnline()) {
+		if (user.isOnline() && !plugin.toolEditors.containsKey(user.uuid())) {
 			for (Integer i : items.keySet()) {
 				ItemStack item = items.get(i);
 				item = addTag(item, "gui-item", "true");
