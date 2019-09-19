@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.mct.mctool.MicroTool;
-import me.flail.microtools.user.User;
 
 public class ToolEditorGui extends EditorGui {
 
@@ -27,41 +25,17 @@ public class ToolEditorGui extends EditorGui {
 	public ToolEditorGui(ItemStack toolItem) {
 		super(MicroTool.fromItem(toolItem));
 
-		createInv(MAIN_GUI_TITLE, 45);
+		createInv(MAIN_GUI_TITLE + tool.getName(), 45);
 
 		this.generate();
 	}
 
-	public void open(User user) {
-		if (user.isOnline() && !plugin.toolEditors.containsKey(user.uuid())) {
-			for (Integer i : items.keySet()) {
-				ItemStack item = items.get(i);
-				item = addTag(item, "gui-item", "true");
-
-				gui.setItem(i.intValue(), item);
-			}
-
-			tool.addTag("editing", "true");
-			tool.updateItem();
-			user.player().openInventory(gui);
-			plugin.toolEditors.put(user.uuid(), tool.item());
-		}
-
-	}
-
-
-	/**
-	 * Creates all the items to put into the Inventory.
-	 */
 	@Override
 	protected void generate() {
 		List<String> lore = new ArrayList<>();
 
-		ItemStack infoItem = tool.item().clone();
-		infoItem = addTag(infoItem, "preview", " ");
-		infoItem = removeTag(infoItem, "editing");
-		MicroTool preview = MicroTool.fromItem(infoItem);
-
+		generatePreview();
+		closeButton(36);
 
 		// Item for modifying the Tool's displayname.
 		ItemStack changeNameItem = new ItemStack(ITEM_CHANGE_NAME);
@@ -113,45 +87,17 @@ public class ToolEditorGui extends EditorGui {
 		upgradeItem = setDisplayname(DISPLAY_UPGRADE_ITEM, upgradeItem);
 		upgradeItem = addTag(upgradeItem, "upgrade-trigger", "true");
 
-		// Close button item.
-		ItemStack closeButton = new ItemStack(Material.BARRIER);
-		closeButton = setDisplayname("&c&l&nClose", closeButton);
-		closeButton = addTag(closeButton, "close-tool-editor", "true");
-
 		changeNameItem = addTag(changeNameItem, "change-tool-name", " ");
 		modifyOwnerItem = addTag(modifyOwnerItem, "change-tool-owner", " ");
 		manageEnchantsItem = addTag(manageEnchantsItem, "change-tool-enchants", " ");
 
-		items.put(4, preview.item());
 		items.put(19, changeNameItem);
 		items.put(21, modifyOwnerItem);
 		items.put(23, manageEnchantsItem);
-		items.put(36, closeButton);
 		items.put(25, upgradeItem);
 
 		fillEmptySpace(new ItemStack(Material.GREEN_STAINED_GLASS_PANE));
 	}
 
-
-
-	private ItemStack setDisplayname(String name, ItemStack item) {
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(chat(name));
-		item.setItemMeta(meta);
-
-		return item;
-	}
-
-	private ItemStack setLore(List<String> lore, ItemStack item) {
-		ItemMeta meta = item.getItemMeta();
-		for (String line : lore.toArray(new String[] {})) {
-			lore.set(lore.indexOf(line), chat(line));
-		}
-
-		meta.setLore(lore);
-		item.setItemMeta(meta);
-
-		return item;
-	}
 
 }

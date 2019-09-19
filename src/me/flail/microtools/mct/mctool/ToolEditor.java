@@ -33,6 +33,13 @@ public class ToolEditor extends Logger {
 			}
 		}
 
+		if (hasTag(item, "back-to-tool-editor")) {
+			operator.player().closeInventory();
+
+			new ToolEditorGui(tool.item()).open(operator);
+			return;
+		}
+
 		if (hasTag(item, "close-tool-editor")) {
 			plugin.toolEditors.remove(operator.uuid());
 
@@ -43,6 +50,12 @@ public class ToolEditor extends Logger {
 		if (hasTag(item, "preview")) {
 
 			applyChanges();
+			return;
+		}
+
+		if (hasTag(item, "tool-enchant")) {
+			this.enchantTool(item);
+
 			return;
 		}
 
@@ -166,6 +179,10 @@ public class ToolEditor extends Logger {
 		tool.removeTag("gui-item");
 		tool.addTag("editing", "true");
 		tool.updateItem();
+	}
+
+	void enchantTool(ItemStack clickedItem) {
+
 	}
 
 }

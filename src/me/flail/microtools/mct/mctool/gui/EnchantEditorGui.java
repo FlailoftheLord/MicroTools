@@ -10,7 +10,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.flail.microtools.mct.Enchants;
 import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.mct.mctool.MicroTool;
-import me.flail.microtools.user.User;
 
 public class EnchantEditorGui extends EditorGui {
 
@@ -19,34 +18,14 @@ public class EnchantEditorGui extends EditorGui {
 	public EnchantEditorGui(ItemStack toolItem) {
 		super(MicroTool.fromItem(toolItem));
 
-		createInv(ENCHANT_GUI_TITLE, 45);
+		createInv(ENCHANT_GUI_TITLE + tool.getName(), 45);
 		this.generate();
-	}
-
-	public void open(User user) {
-		if (user.isOnline() && !plugin.toolEditors.containsKey(user.uuid())) {
-			for (Integer i : items.keySet()) {
-				ItemStack item = items.get(i);
-				item = addTag(item, "gui-item", "true");
-
-				gui.setItem(i.intValue(), item);
-			}
-
-			tool.addTag("editing", "true");
-			tool.updateItem();
-			user.player().openInventory(gui);
-			plugin.toolEditors.put(user.uuid(), tool.item());
-		}
-
 	}
 
 	@Override
 	protected void generate() {
-		ItemStack preview = tool.item().clone();
-		preview = addTag(preview, "preview", "yes");
-		preview = removeTag(preview, "editing");
-
-		items.put(4, preview);
+		generatePreview();
+		mainMenuButton(36);
 
 		for (EnchantType e : Enchants.enchantsFor(tool)) {
 			ItemStack eDisplay = new ItemStack(Material.ENCHANTED_BOOK);
