@@ -2,21 +2,16 @@ package me.flail.microtools.mct.mctool.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.mct.mctool.MicroTool;
-import me.flail.microtools.tools.Logger;
 import me.flail.microtools.user.User;
 
-public class ToolEditorGui extends Logger {
+public class ToolEditorGui extends EditorGui {
 
 	public static final String MAIN_GUI_TITLE = "&2&lEditor&7: &8&l";
 	public static final String DISPLAY_CHANGE_NAME = "&e&lChange Name";
@@ -29,17 +24,12 @@ public class ToolEditorGui extends Logger {
 	public static final Material ITEM_MANAGE_ENCHANTS = Material.ENCHANTED_BOOK;
 	public static final Material FILLER_ITEM = Material.GREEN_STAINED_GLASS_PANE;
 
-	protected Inventory gui;
-	protected Map<Integer, ItemStack> items = new TreeMap<>();
-
-	private MicroTool tool;
-
 	public ToolEditorGui(ItemStack toolItem) {
-		tool = MicroTool.fromItem(toolItem);
+		super(MicroTool.fromItem(toolItem));
 
-		gui = Bukkit.createInventory(null, 45, chat(MAIN_GUI_TITLE + tool.getName()));
+		createInv(MAIN_GUI_TITLE, 45);
 
-		generate();
+		this.generate();
 	}
 
 	public void open(User user) {
@@ -63,7 +53,8 @@ public class ToolEditorGui extends Logger {
 	/**
 	 * Creates all the items to put into the Inventory.
 	 */
-	private void generate() {
+	@Override
+	protected void generate() {
 		List<String> lore = new ArrayList<>();
 
 		ItemStack infoItem = tool.item().clone();
@@ -138,23 +129,10 @@ public class ToolEditorGui extends Logger {
 		items.put(36, closeButton);
 		items.put(25, upgradeItem);
 
-		fillEmptySpace();
+		fillEmptySpace(new ItemStack(Material.GREEN_STAINED_GLASS_PANE));
 	}
 
-	private void fillEmptySpace() {
-		ItemStack fillerItem = new ItemStack(FILLER_ITEM);
 
-		ItemMeta meta = fillerItem.getItemMeta();
-		meta.setDisplayName(" ");
-		fillerItem.setItemMeta(meta);
-
-		for (int i = 0; i < gui.getSize(); i++) {
-			if (!items.containsKey(Integer.valueOf(i))) {
-				items.put(Integer.valueOf(i), fillerItem);
-			}
-		}
-
-	}
 
 	private ItemStack setDisplayname(String name, ItemStack item) {
 		ItemMeta meta = item.getItemMeta();

@@ -17,6 +17,9 @@ public class Enchants extends Logger {
 
 	public static EnchantType[] enchantsFor(MicroTool tool) {
 		List<EnchantType> list = new ArrayList<>();
+		if (tool == null) {
+			return list.toArray(new EnchantType[] {});
+		}
 
 		String type = tool.getMaterial().toString().toLowerCase();
 		String[] ts = tool.getMaterial().toString().split("_");
@@ -28,7 +31,7 @@ public class Enchants extends Logger {
 		String toolType = "Armor";
 
 		if (tool.isTool()) {
-			toolType = "Tool";
+			toolType = "Tools";
 		}
 
 		String key = toolType + ".Enchants." + type;
