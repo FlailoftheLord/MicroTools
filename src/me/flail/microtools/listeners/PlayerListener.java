@@ -12,6 +12,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -113,6 +115,16 @@ public class PlayerListener extends Logger implements Listener {
 				event.setCancelled(true);
 				return;
 			}
+		}
+
+	}
+
+	@EventHandler
+	public void playerDamage(EntityDamageByEntityEvent event) {
+		DamageCause cause = event.getCause();
+
+		if (cause.equals(DamageCause.ENTITY_ATTACK)) {
+
 		}
 
 	}
