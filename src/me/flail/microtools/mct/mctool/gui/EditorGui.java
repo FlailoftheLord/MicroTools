@@ -26,7 +26,7 @@ public class EditorGui extends Logger {
 	}
 
 	public void open(User user) {
-		if (user.isOnline() && !plugin.toolEditors.containsKey(user.uuid())) {
+		if (user.isOnline()) {
 			for (Integer i : items.keySet()) {
 				ItemStack item = items.get(i);
 				item = addTag(item, "gui-item", "true");

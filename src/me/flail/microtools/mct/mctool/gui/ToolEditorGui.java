@@ -86,6 +86,10 @@ public class ToolEditorGui extends EditorGui {
 		ItemStack upgradeItem = new ItemStack(Material.ANVIL);
 		upgradeItem = setDisplayname(DISPLAY_UPGRADE_ITEM, upgradeItem);
 		upgradeItem = addTag(upgradeItem, "upgrade-trigger", "true");
+		lore.clear();
+		lore.add("");
+		lore.add("&7Cost&8: &e" + plugin.maxLevelPoints + "&7&lLP");
+		upgradeItem = setLore(lore, upgradeItem);
 
 		changeNameItem = addTag(changeNameItem, "change-tool-name", " ");
 		modifyOwnerItem = addTag(modifyOwnerItem, "change-tool-owner", " ");

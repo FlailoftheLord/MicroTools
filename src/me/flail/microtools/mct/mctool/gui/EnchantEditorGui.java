@@ -36,7 +36,7 @@ public class EnchantEditorGui extends EditorGui {
 
 			List<String> lore = new ArrayList<>();
 			lore.add(chat(" "));
-			lore.add(chat(" &7Enchantments will stack."));
+			lore.add(chat(" &7Cost&8: "));
 
 			meta.setLore(lore);
 			eDisplay.setItemMeta(meta);
