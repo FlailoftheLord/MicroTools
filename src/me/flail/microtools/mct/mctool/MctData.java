@@ -61,7 +61,9 @@ public class MctData extends Logger {
 			setLoreLine("", 4);
 		}
 
-		setLoreLine(getLevelPointsDisplay() + " &8(&7%lp%&8/&e%max-lp%&8)", -1);
+		setLoreLine(plugin.toolConfig.getValue("PointDisplay.Prefix") + getLevelPointsDisplay()
+		+ plugin.toolConfig.getValue("PointDisplay.Suffix"), -1);
+
 		if (hasTag("preview")) {
 			setLoreLine("&3&lLevelPoints &8(&7%lp%&8)", -1);
 		}
@@ -318,7 +320,7 @@ public class MctData extends Logger {
 	}
 
 	public String getLevelPointsDisplay() {
-		char display = '¦';
+		String display = plugin.toolConfig.getValue("PointDisplay.Icon");
 
 		String line = "";
 		if (hasTag("lp")) {
@@ -334,12 +336,12 @@ public class MctData extends Logger {
 			for (int lp = 0; (lp <= displayMax); lp++) {
 
 				if (lp <= displayLP) {
-					line += "&e" + display;
+					line += plugin.toolConfig.getValue("PointDisplay.FullColor") + display;
 
 					continue;
 				}
 
-				line += "&7" + display;
+				line += plugin.toolConfig.getValue("PointDisplay.EmptyColor") + display;
 			}
 
 

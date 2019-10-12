@@ -53,6 +53,7 @@ public class MicroTools extends JavaPlugin {
 	public Map<UUID, ItemStack> toolEditors = new LinkedHashMap<>();
 
 	public DataFile settings;
+	public DataFile toolConfig;
 
 	private List<Material> disabledRecipes = new ArrayList<>();
 
@@ -65,6 +66,7 @@ public class MicroTools extends JavaPlugin {
 		Settings sManager = new Settings();
 
 		settings = new DataFile("Settings.yml");
+		toolConfig = new DataFile("Configuration.yml");
 
 		sManager.load();
 		sManager.loadEnchantsFile();

@@ -1,9 +1,10 @@
 # Stuff
-Display:
-  PointDisplay:
-    Icon: '•'
-    FullColor: '&9'
-    EmptyColor: '&7'
+PointDisplay:
+  Prefix: ""
+  Suffix: " &8(&7%lp%&8/&e%max-lp%&8)"
+  Icon: '•'
+  FullColor: '&9'
+  EmptyColor: '&7'
     
 Stats:
   Item:
