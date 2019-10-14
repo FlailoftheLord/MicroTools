@@ -26,6 +26,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import me.flail.microtools.listeners.PlayerListener;
 import me.flail.microtools.listeners.ToolListener;
 import me.flail.microtools.mct.MctHandler;
+import me.flail.microtools.mct.mctool.MctData;
 import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 import me.flail.microtools.tools.Settings;
@@ -84,6 +85,8 @@ public class MicroTools extends JavaPlugin {
 		MctHandler tManager = new MctHandler();
 
 		tManager.disableRecipes();
+
+		MctData.updateDisplayValues();
 
 		registerListeners();
 		registerCommands();

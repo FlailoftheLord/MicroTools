@@ -5,10 +5,35 @@ PointDisplay:
   Icon: '•'
   FullColor: '&9'
   EmptyColor: '&7'
+  PreviewText: "&3&lLevelPoints &8(&7%lp%&8)"
+  
+DataDisplay:
+  BlocksBroken: "&aBlocks Broken&8: &7%blocks%"
+  EntityKills: "&aKills&8: &7%kills%"
+  DamageAbsorbed: "&aDamage Negated&8: &7%damage-abs%"
+  ItemUses: "&aTimes Used&8: &7%times-used%"
+  ToolGrade: "&aGrade&8: &7%tool-grade%"
+  ToolLevel: "&aLevel&8: &7%level%"
+
+  Status:
+    Claimed: "&7this tool is unclaimed, left-click to claim"
+    Unclaimed: "&8left-click to manage item"
+    Editing: "&eyou are currently editing this tool"
+    Previewing: "&eclick to apply upgrades"
+  
     
+EditorUI:
+  MainTitle: "&2&lEditor&7: &8&l"
+  
+  Main:
+    ModifyName: "&e&lChange Name"
+    ModifyOwner: "&c&lModify Owner"
+    ModifyEnchants: "&d&lMange Enchants"
+    UpgradeItem: "&a&lUpgrade to next Tier" 
+     
 Stats:
   Item:
-    Damage:
+    Attack:
       Display: "&9Attack Damage"
       ScalePerLevel: 1.0
     Armor:
@@ -19,19 +44,6 @@ Stats:
       ScalePerLevel: 0.1
     MovementSpeed:
       Display: "&bMovement Speed"
-      ScalePerLevel: 0.1
-  Skills:
-    LootBonus:
-      Display: "&eLoot Bonus Percent"
-      ScalePerLevel: 0.2
-    IgniteOnHit:
-      Display: "&6Target Ignite Chance"
-      ScalePerLevel: 0.5
-    SpeedOnHit:
-      Display: "&cRage"
-      ScalePerLevel: 0.1
-    DamageStacking:
-      Display: "&cFury"
       ScalePerLevel: 0.1
     
       

@@ -69,11 +69,11 @@ public class MicroTool extends MctData {
 		return new MicroTool(item);
 	}
 
-	public static MicroTool fromMaterial(Material m) {
+	public static MicroTool fromMaterial(@NotNull Material m) {
 		return fromMaterial(m, null);
 	}
 
-	public static MicroTool fromMaterial(@NotNull Material m, @Nullable Armor.ColorType color) {
+	public static MicroTool fromMaterial(Material m, @Nullable Armor.ColorType color) {
 		ItemStack item = new ItemStack(m);
 
 		if ((color != null) && item.hasItemMeta()) {

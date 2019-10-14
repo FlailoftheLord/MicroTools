@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.flail.microtools.mct.Enchants.EnchantType;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
+import me.flail.microtools.tools.DataFile;
 import me.flail.microtools.tools.Logger;
 
 /**
@@ -24,19 +25,36 @@ import me.flail.microtools.tools.Logger;
 public class MctData extends Logger {
 	private ItemStack toolItem;
 
-	public static final String UNCLAIMED_TOOL_TEXT = "&7This tool is unclaimed, left-click to claim.";
-	public static final String MANAGE_TOOL_TEXT = "&8left-click to manage item.";
-	public static final String PREVIEW_TOOL_TEXT = "&eclick to apply upgrades";
-	public static final String EDITING_TOOL_TEXT = "&eyou are currently editing this tool!";
-	public static final String LEVEL_DISPLAY = "&aLevel&8: &7";
-	public static final String GRADE_DISPLAY = "&aGrade&8: &7";
-	public static final String BLOCKS_DISPLAY = "&aBlocks Broken&8: &7";
-	public static final String KILLS_DISPLAY = "&aKills&8: &7";
-	public static final String USES_DISPLAY = "&aTimes Used&8: &7";
-	public static final String DAMAGE_ABSORBED_DISPLAY = "&aDamage Negated&8: &7";
+	public static String UNCLAIMED_TOOL_TEXT = "&7this tool is unclaimed, left-click to claim";
+	public static String MANAGE_TOOL_TEXT = "&8left-click to manage item";
+	public static String PREVIEW_TOOL_TEXT = "&eclick to apply upgrades";
+	public static String EDITING_TOOL_TEXT = "&eyou are currently editing this tool";
+	public static String LEVEL_DISPLAY = "&aLevel&8: &7%level%";
+	public static String GRADE_DISPLAY = "&aGrade&8: &7%tool-grade%";
+	public static String BLOCKS_DISPLAY = "&aBlocks Broken&8: &7%blocks%";
+	public static String KILLS_DISPLAY = "&aKills&8: &7%kills%";
+	public static String USES_DISPLAY = "&aTimes Used&8: &7%times-used%";
+	public static String DAMAGE_ABSORBED_DISPLAY = "&aDamage Negated&8: &7%damage-abs%";
 
 	protected MctData(ItemStack item) {
 		toolItem = item;
+		updateDisplayValues();
+	}
+
+	public static void updateDisplayValues() {
+		DataFile c = plugin.toolConfig;
+
+		UNCLAIMED_TOOL_TEXT = c.getValue("DataDisplay.Status.Unclaimed");
+		MANAGE_TOOL_TEXT = c.getValue("DataDisplay.Status.Claimed");
+		PREVIEW_TOOL_TEXT = c.getValue("DataDisplay.Status.Preview");
+		EDITING_TOOL_TEXT = c.getValue("DataDisplay.Status.Editing");
+		LEVEL_DISPLAY = c.getValue("DataDisplay.ToolLevel");
+		GRADE_DISPLAY = c.getValue("DataDisplay.ToolGrade");
+		BLOCKS_DISPLAY = c.getValue("DataDisplay.BlocksBroken");
+		KILLS_DISPLAY = c.getValue("DataDisplay.EntityKills");
+		USES_DISPLAY = c.getValue("DataDisplay.ItemUses");
+		DAMAGE_ABSORBED_DISPLAY = c.getValue("DataDisplay.DamageAbsorbed");
+
 	}
 
 	/**
@@ -46,17 +64,17 @@ public class MctData extends Logger {
 		setLore(null);
 
 		setLoreLine("", 0);
-		setLoreLine(LEVEL_DISPLAY + "%level%", 1);
+		setLoreLine(LEVEL_DISPLAY, 1);
 
 		if (isTool()) {
-			setLoreLine(BLOCKS_DISPLAY + "%blocks%", 2);
-			setLoreLine(KILLS_DISPLAY + "%kills%", 3);
+			setLoreLine(BLOCKS_DISPLAY, 2);
+			setLoreLine(KILLS_DISPLAY, 3);
 			setLoreLine("", 4);
 			setLoreLine("", 5);
 		}
 
 		if (isArmor()) {
-			setLoreLine(DAMAGE_ABSORBED_DISPLAY + "%damage-abs%", 2);
+			setLoreLine(DAMAGE_ABSORBED_DISPLAY, 2);
 			setLoreLine("", 3);
 			setLoreLine("", 4);
 		}
@@ -65,17 +83,17 @@ public class MctData extends Logger {
 		+ plugin.toolConfig.getValue("PointDisplay.Suffix"), -1);
 
 		if (hasTag("preview")) {
-			setLoreLine("&3&lLevelPoints &8(&7%lp%&8)", -1);
+			setLoreLine(plugin.toolConfig.getValue("PointDisplay.PreviewText"), -1);
 		}
 
 		addLoreLine("");
 
 		if (MctMaterial.isUseable(toolItem)) {
-			insertLoreLine(USES_DISPLAY + "%times-used%", 3);
+			insertLoreLine(USES_DISPLAY, 3);
 		}
 
 		if (MicroType.isUpgradeable(toolItem.getType())) {
-			insertLoreLine(GRADE_DISPLAY + "%tool-grade%", 2);
+			insertLoreLine(GRADE_DISPLAY, 2);
 		}
 
 		if (hasEnchants()) {

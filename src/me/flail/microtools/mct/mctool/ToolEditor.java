@@ -81,50 +81,58 @@ public class ToolEditor extends Logger {
 	}
 
 	public void toolClick(ItemStack item, InventoryClickEvent event) {
-		if (!hasTag(item, "editing") && hasTag(item, "tool") && !hasTag(item, "preview")) {
-			tool = MicroTool.fromItem(item);
 
-			if (event.getClick().equals(ClickType.RIGHT) || event.getClick().equals(ClickType.SHIFT_RIGHT)) {
-				if (!tool.hasOwner()) {
-					event.setCancelled(true);
+		if (hasTag(item, "editing") || hasTag(item, "preview")) {
+			event.setCancelled(true);
 
-					tool.setOwner(operator);
-					tool.updateItem();
+			return;
+		}
 
-					return;
-				}
+		if (!hasTag(item, "tool")) {
+			return;
+		}
 
-				owner = tool.owner();
+		tool = MicroTool.fromItem(item);
 
-				if (owner.uuid().equals(operator.uuid())) {
-					new ToolEditorGui(tool.item()).open(operator);
-
-					return;
-				}
-			}
-
+		if (event.getClick().equals(ClickType.RIGHT) || event.getClick().equals(ClickType.SHIFT_RIGHT)) {
 			if (!tool.hasOwner()) {
+				event.setCancelled(true);
+
+				tool.setOwner(operator);
+				tool.updateItem();
+
 				return;
 			}
 
 			owner = tool.owner();
 
-			if (!owner.uuid().equals(operator.uuid()) && !operator.playerGamemode().equals("creative")) {
-				if (owner.isOnline()) {
+			if (owner.uuid().equals(operator.uuid())) {
+				new ToolEditorGui(tool.item()).open(operator);
 
-					if (owner.player().getInventory().firstEmpty() != -1) {
+				return;
+			}
+		}
 
-						owner.player().getInventory().addItem(item);
-					} else {
+		if (!tool.hasOwner()) {
+			return;
+		}
 
-						owner.player().getWorld().dropItem(owner.player().getLocation(), item);
-					}
+		owner = tool.owner();
 
-					operator.player().setItemOnCursor(null);
-					operator.player().getInventory().removeItem(item);
-					new Message("StolenItemReturned").send(owner, null);
+		if (!owner.uuid().equals(operator.uuid()) && !operator.playerGamemode().equals("creative")) {
+			if (owner.isOnline()) {
+
+				if (owner.player().getInventory().firstEmpty() != -1) {
+
+					owner.player().getInventory().addItem(item);
+				} else {
+
+					owner.player().getWorld().dropItem(owner.player().getLocation(), item);
 				}
 
+				operator.player().setItemOnCursor(null);
+				operator.player().getInventory().removeItem(item);
+				new Message("StolenItemReturned").send(owner, null);
 			}
 
 		}
