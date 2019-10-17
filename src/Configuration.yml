@@ -2,7 +2,6 @@
 PointDisplay:
   Prefix: ""
   Suffix: " &8(&7%lp%&8/&e%max-lp%&8)"
-  Icon: '•'
   FullColor: '&9'
   EmptyColor: '&7'
   PreviewText: "&3&lLevelPoints &8(&7%lp%&8)"
@@ -16,10 +15,10 @@ DataDisplay:
   ToolLevel: "&aLevel&8: &7%level%"
 
   Status:
-    Claimed: "&7this tool is unclaimed, left-click to claim"
-    Unclaimed: "&8left-click to manage item"
+    Unclaimed: "&7this tool is unclaimed, left-click to claim"
+    Claimed: "&8left-click to manage item"
     Editing: "&eyou are currently editing this tool"
-    Previewing: "&eclick to apply upgrades"
+    Preview: "&eclick to apply upgrades"
   
     
 EditorUI:

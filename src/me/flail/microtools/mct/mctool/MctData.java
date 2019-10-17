@@ -338,20 +338,20 @@ public class MctData extends Logger {
 	}
 
 	public String getLevelPointsDisplay() {
-		String display = plugin.toolConfig.getValue("PointDisplay.Icon");
+		String display = "•";
 
 		String line = "";
 		if (hasTag("lp")) {
 			int maxLP = plugin.maxLevelPoints;
 			int points = getLevelPoints();
 
-			int displayMax = 48;
+			int displayMax = 24;
 			int displayLP = 0;
 
 			int diff = maxLP/displayMax;
 			displayLP = (points / diff) - 1;
 
-			for (int lp = 0; (lp <= displayMax); lp++) {
+			for (int lp = 0; (lp <= (displayMax - 1)); lp++) {
 
 				if (lp <= displayLP) {
 					line += plugin.toolConfig.getValue("PointDisplay.FullColor") + display;

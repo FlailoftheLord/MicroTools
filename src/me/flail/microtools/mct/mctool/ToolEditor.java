@@ -25,7 +25,7 @@ public class ToolEditor extends Logger {
 
 	public void guiClick(ItemStack item, InventoryClickEvent event) {
 		setTool();
-		setPreview(event.getInventory());
+		setPreview(event.getClickedInventory());
 
 		if (plugin.toolEditors.containsKey(operator.uuid())) {
 			if (hasTag(item, "tool") || hasTag(item, "gui-item") || hasTag(item, "editing")) {

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import me.flail.microtools.mct.mctool.ArmorType;
 import me.flail.microtools.mct.mctool.MctMaterial.MicroType;
 import me.flail.microtools.mct.mctool.MicroTool;
 import me.flail.microtools.mct.mctool.ToolType;
@@ -38,7 +39,7 @@ public class MctHandler extends Logger {
 		}
 
 		for (ItemStack item : toolItems) {
-			if ((item != null) && !ToolType.isDefault(item.getType())) {
+			if ((item != null) && !ToolType.isDefault(item.getType()) && !ArmorType.isDefault(item.getType())) {
 				plugin.removeRecipe(item);
 				materials.add(item.getType());
 			}

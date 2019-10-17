@@ -88,7 +88,7 @@ public class ToolEditorGui extends EditorGui {
 		upgradeItem = addTag(upgradeItem, "upgrade-trigger", "true");
 		lore.clear();
 		lore.add("");
-		lore.add("&7Cost&8: &e" + plugin.maxLevelPoints + "&7&lLP");
+		lore.add("&7Cost&8: &9" + plugin.maxLevelPoints + " &7&lLP");
 		upgradeItem = setLore(lore, upgradeItem);
 
 		changeNameItem = addTag(changeNameItem, "change-tool-name", " ");

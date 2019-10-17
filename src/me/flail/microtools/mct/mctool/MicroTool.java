@@ -220,7 +220,12 @@ public class MicroTool extends MctData {
 
 	public void addLevelPoints(int points) {
 		if (hasTag("lp")) {
-			addTag("lp", Integer.parseInt(getTag("lp")) + points + "");
+			int newPoints = Integer.parseInt(getTag("lp")) + points;
+			if (newPoints > plugin.maxLevelPoints) {
+				newPoints = plugin.maxLevelPoints;
+			}
+
+			addTag("lp", newPoints + "");
 			return;
 		}
 
@@ -230,13 +235,16 @@ public class MicroTool extends MctData {
 	public void removeLevelPoints(int points) {
 		if (hasTag("lp")) {
 			int newPoints = Integer.parseInt(getTag("lp")) - points;
+			if (newPoints < 0) {
+				newPoints = 0;
+			}
 
 			addTag("lp", newPoints + "");
 		}
 
 	}
 
-	public int upgradeLevel() {
+	public int getUpgradeLevel() {
 		return hasTag("level") ? Integer.parseInt(getTag("level").replaceAll("[^0-9]", "")) : 0;
 	}
 
@@ -252,13 +260,13 @@ public class MicroTool extends MctData {
 				upgrades = ArmorType.Armor.upgradeOrder();
 			}
 
-			if ((upgradeLevel() + 1) >= upgrades.size()) {
+			if ((getUpgradeLevel() + 1) >= upgrades.size()) {
 				addTag("upgrade", "max");
 				return;
 			}
 
-			addTag("previous-upgrade", upgrades.get(Integer.valueOf(upgradeLevel())));
-			addTag("upgrade", upgrades.get(Integer.valueOf(upgradeLevel() + 1)));
+			addTag("previous-upgrade", upgrades.get(Integer.valueOf(getUpgradeLevel())));
+			addTag("upgrade", upgrades.get(Integer.valueOf(getUpgradeLevel() + 1)));
 			return;
 		}
 	}
@@ -281,7 +289,6 @@ public class MicroTool extends MctData {
 			owner.sendMessage("&cThis tool has no available upgrades!");
 			return this;
 		}
-
 		setGrade("upgrade");
 		return this;
 	}
@@ -295,7 +302,7 @@ public class MicroTool extends MctData {
 			return;
 		}
 
-		int level = upgradeLevel();
+		int level = getUpgradeLevel();
 		removeTag("level");
 		addTag("level", level + 1 + "");
 
@@ -332,7 +339,7 @@ public class MicroTool extends MctData {
 
 	public Map<String, String> placeholders() {
 		Map<String, String> map = new HashMap<>();
-		map.put("%level%", this.romanNumeral(upgradeLevel()));
+		map.put("%level%", this.romanNumeral(getUpgradeLevel()));
 		if (owner == null) {
 			map.put("%owner%", UNCLAIMED_TOOL_TEXT);
 			map.put("%owner-uuid%", "");

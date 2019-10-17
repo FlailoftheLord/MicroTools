@@ -40,13 +40,11 @@ public class ToolListener extends Logger implements Listener {
 			if (hasTag(item, "gui-item")) {
 
 				listener.guiClick(item, event);
-				return;
 			}
 
 			if (hasTag(item, "tool")) {
 
 				listener.toolClick(item, event);
-				return;
 			}
 
 		}
